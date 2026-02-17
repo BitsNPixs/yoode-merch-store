@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 
 <head>
     <meta charset="UTF-8">
@@ -17,24 +17,188 @@
             box-sizing: border-box;
         }
 
+        /* ════════════════════════════════════
+     THEME TOKENS
+  ════════════════════════════════════ */
         :root {
-            --ink: #0a0a0a;
-            --cream: #f5f0e8;
-            --warm: #e8dfd0;
-            --gold: #c9a84c;
-            --rust: #c0410a;
-            --teal: #1a6b7a;
-            --rose: #d4637a;
-            --violet: #6b4fa0;
-            --sky: #2196d4;
-            --mint: #2da86c;
             --dtg: #e84393;
             --coloreel: #ff6b2b;
             --embroidery: #7c3aed;
             --dtf: #0ea5e9;
             --screen: #16a34a;
+            --gold: #c9a84c;
+            --transition: 0.45s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        [data-theme="dark"] {
+            --bg: #0a0a0a;
+            --surface: #161616;
+            --border: rgba(255, 255, 255, 0.07);
+            --text: #f5f0e8;
+            --text-dim: rgba(245, 240, 232, 0.55);
+            --text-dimmer: rgba(245, 240, 232, 0.32);
+            --grid-line: rgba(245, 240, 232, 0.04);
+            --bar-track: rgba(255, 255, 255, 0.1);
+            --use-tag-bg: rgba(255, 255, 255, 0.07);
+            --use-tag-bd: rgba(255, 255, 255, 0.1);
+            --tooltip-bg: rgba(10, 10, 10, 0.92);
+            --comp-hover: rgba(255, 255, 255, 0.03);
+            --shadow: rgba(0, 0, 0, 0.7);
+            --hero-glow1: rgba(201, 168, 76, 0.12);
+            --hero-glow2: rgba(212, 99, 122, 0.10);
+            --dtg-bg: #0d0d14;
+            --dtg-vis: rgba(45, 9, 64, 0.6);
+            --col-bg: #0e0b06;
+            --col-vis: rgba(42, 18, 0, 0.6);
+            --emb-bg: #080810;
+            --emb-vis: rgba(26, 8, 56, 0.6);
+            --dtf-bg: #060e16;
+            --dtf-vis: rgba(0, 24, 48, 0.6);
+            --scr-bg: #060d06;
+            --scr-vis: rgba(0, 26, 8, 0.6);
+            --cmp-bg: #0a0a0a;
+            --shirt-dtg: #1a0030;
+            --shirt-col: #1a1008;
+            --shirt-emb: #0c0818;
+            --shirt-dtf: #061226;
+            --shirt-scr: #080f08;
+            --title-from: #f5f0e8;
+        }
+
+        [data-theme="light"] {
+            --bg: #f5f1ea;
+            --surface: #ffffff;
+            --border: rgba(0, 0, 0, 0.09);
+            --text: #18130e;
+            --text-dim: rgba(24, 19, 14, 0.58);
+            --text-dimmer: rgba(24, 19, 14, 0.33);
+            --grid-line: rgba(24, 19, 14, 0.05);
+            --bar-track: rgba(0, 0, 0, 0.1);
+            --use-tag-bg: rgba(0, 0, 0, 0.05);
+            --use-tag-bd: rgba(0, 0, 0, 0.1);
+            --tooltip-bg: rgba(255, 252, 248, 0.97);
+            --comp-hover: rgba(0, 0, 0, 0.025);
+            --shadow: rgba(0, 0, 0, 0.16);
+            --hero-glow1: rgba(201, 168, 76, 0.2);
+            --hero-glow2: rgba(212, 99, 122, 0.13);
+            --dtg-bg: #fdf0f8;
+            --dtg-vis: rgba(248, 195, 230, 0.55);
+            --col-bg: #fff6ee;
+            --col-vis: rgba(255, 214, 178, 0.5);
+            --emb-bg: #f3f0ff;
+            --emb-vis: rgba(210, 195, 255, 0.55);
+            --dtf-bg: #edf6ff;
+            --dtf-vis: rgba(190, 225, 255, 0.55);
+            --scr-bg: #edfaf3;
+            --scr-vis: rgba(185, 240, 210, 0.55);
+            --cmp-bg: #f5f1ea;
+            --shirt-dtg: #f8eaf5;
+            --shirt-col: #fff3ea;
+            --shirt-emb: #ece8ff;
+            --shirt-dtf: #e6f3ff;
+            --shirt-scr: #e6f7ed;
+            --title-from: #18130e;
+        }
+
+        /* ════════════════════════════════════
+     THEME TOGGLE
+  ════════════════════════════════════ */
+        #theme-toggle {
+            position: fixed;
+            top: 1.25rem;
+            right: 1.25rem;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            background: var(--tooltip-bg);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 100px;
+            padding: 7px 14px 7px 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 28px var(--shadow);
+            transition: background var(--transition), border var(--transition), box-shadow var(--transition);
+            user-select: none;
+        }
+
+        #theme-toggle:hover {
+            box-shadow: 0 8px 36px var(--shadow);
+            transform: translateY(-1px);
+        }
+
+        .t-icons {
+            display: flex;
+            gap: 3px;
+            align-items: center;
+        }
+
+        .t-icon {
+            font-size: 0.85rem;
+            line-height: 1;
+            transition: opacity 0.3s;
+        }
+
+        .t-moon {
+            opacity: 1;
+        }
+
+        .t-sun {
+            opacity: 0.32;
+        }
+
+        [data-theme="light"] .t-moon {
+            opacity: 0.32;
+        }
+
+        [data-theme="light"] .t-sun {
+            opacity: 1;
+        }
+
+        .t-track {
+            width: 40px;
+            height: 22px;
+            border-radius: 100px;
+            background: var(--bar-track);
+            border: 1px solid var(--border);
+            position: relative;
+            flex-shrink: 0;
+            transition: background 0.35s;
+        }
+
+        [data-theme="light"] .t-track {
+            background: var(--gold);
+        }
+
+        .t-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--text);
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.35s;
+        }
+
+        [data-theme="light"] .t-thumb {
+            transform: translateX(18px);
+        }
+
+        .t-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            transition: color var(--transition);
+            min-width: 30px;
+        }
+
+        /* ════════════════════════════════════
+     GLOBAL
+  ════════════════════════════════════ */
         html {
             scroll-behavior: smooth;
             scroll-snap-type: y mandatory;
@@ -42,12 +206,15 @@
 
         body {
             font-family: 'DM Mono', monospace;
-            background: var(--ink);
-            color: var(--cream);
+            background: var(--bg);
+            color: var(--text);
             overflow-x: hidden;
+            transition: background var(--transition), color var(--transition);
         }
 
-        /* ── HERO ── */
+        /* ════════════════════════════════════
+     HERO
+  ════════════════════════════════════ */
         #hero {
             height: 100vh;
             scroll-snap-align: start;
@@ -57,7 +224,8 @@
             justify-content: center;
             position: relative;
             overflow: hidden;
-            background: var(--ink);
+            background: var(--bg);
+            transition: background var(--transition);
         }
 
         #hero::before {
@@ -65,16 +233,17 @@
             position: absolute;
             inset: 0;
             background:
-                radial-gradient(ellipse 80% 50% at 20% 40%, rgba(201, 168, 76, 0.12) 0%, transparent 60%),
-                radial-gradient(ellipse 60% 80% at 80% 60%, rgba(212, 99, 122, 0.10) 0%, transparent 50%);
+                radial-gradient(ellipse 80% 50% at 20% 40%, var(--hero-glow1) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 80% at 80% 60%, var(--hero-glow2) 0%, transparent 50%);
+            transition: background var(--transition);
         }
 
         .hero-grid {
             position: absolute;
             inset: 0;
             background-image:
-                linear-gradient(rgba(245, 240, 232, 0.04) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(245, 240, 232, 0.04) 1px, transparent 1px);
+                linear-gradient(var(--grid-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
             background-size: 60px 60px;
             animation: gridPulse 8s ease-in-out infinite;
         }
@@ -83,16 +252,15 @@
 
             0%,
             100% {
-                opacity: 0.5;
+                opacity: .5
             }
 
             50% {
-                opacity: 1;
+                opacity: 1
             }
         }
 
         .hero-label {
-            font-family: 'DM Mono', monospace;
             font-size: 0.7rem;
             letter-spacing: 0.4em;
             color: var(--gold);
@@ -114,20 +282,22 @@
 
         .hero-title span {
             display: block;
-            background: linear-gradient(135deg, var(--cream) 30%, var(--gold));
+            background: linear-gradient(135deg, var(--title-from) 30%, var(--gold));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            transition: background 0.4s;
         }
 
         .hero-sub {
             font-family: 'Cormorant Garamond', serif;
             font-style: italic;
             font-size: clamp(1rem, 2.5vw, 1.5rem);
-            color: rgba(245, 240, 232, 0.6);
+            color: var(--text-dim);
             text-align: center;
             margin-top: 2rem;
             animation: fadeUp 1s 0.4s ease both;
+            transition: color var(--transition);
         }
 
         .hero-nav {
@@ -144,12 +314,12 @@
         .hero-nav a {
             text-decoration: none;
             padding: 0.5rem 1.2rem;
-            border: 1px solid rgba(245, 240, 232, 0.2);
+            border: 1px solid var(--border);
             border-radius: 2px;
             font-size: 0.65rem;
             letter-spacing: 0.2em;
             text-transform: uppercase;
-            color: var(--cream);
+            color: var(--text);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
@@ -159,7 +329,7 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: var(--cream);
+            background: var(--text);
             transform: scaleX(0);
             transform-origin: left;
             transition: transform 0.3s ease;
@@ -170,7 +340,7 @@
         }
 
         .hero-nav a:hover {
-            color: var(--ink);
+            color: var(--bg);
         }
 
         .hero-nav a span {
@@ -190,7 +360,48 @@
             }
         }
 
-        /* ── TECHNIQUE SECTIONS ── */
+        .scroll-hint {
+            position: absolute;
+            bottom: 2.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0.35;
+            animation: bobble 2s ease-in-out infinite;
+            color: var(--text-dim);
+        }
+
+        .scroll-hint span {
+            font-size: 0.55rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--text), transparent);
+            transition: background var(--transition);
+        }
+
+        @keyframes bobble {
+
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            50% {
+                transform: translateX(-50%) translateY(8px);
+            }
+        }
+
+        /* ════════════════════════════════════
+     TECHNIQUE SECTIONS
+  ════════════════════════════════════ */
         .technique-section {
             min-height: 100vh;
             scroll-snap-align: start;
@@ -198,6 +409,7 @@
             grid-template-columns: 1fr 1fr;
             position: relative;
             overflow: hidden;
+            transition: background var(--transition);
         }
 
         @media (max-width: 900px) {
@@ -210,7 +422,6 @@
             }
         }
 
-        /* ── LEFT PANEL ── */
         .technique-info {
             display: flex;
             flex-direction: column;
@@ -218,14 +429,16 @@
             padding: clamp(2rem, 6vw, 6rem);
             position: relative;
             z-index: 2;
+            transition: background var(--transition);
         }
 
         .tech-number {
             font-family: 'Bebas Neue', sans-serif;
             font-size: 0.9rem;
             letter-spacing: 0.3em;
-            opacity: 0.35;
+            color: var(--text-dimmer);
             margin-bottom: 1rem;
+            transition: color var(--transition);
         }
 
         .tech-tag {
@@ -237,6 +450,7 @@
             border-radius: 100px;
             margin-bottom: 1.5rem;
             width: fit-content;
+            transition: all var(--transition);
         }
 
         .tech-name {
@@ -251,17 +465,19 @@
             font-family: 'Cormorant Garamond', serif;
             font-style: italic;
             font-size: 1rem;
-            opacity: 0.5;
+            color: var(--text-dim);
             margin-bottom: 1.5rem;
+            transition: color var(--transition);
         }
 
         .tech-desc {
             font-family: 'Cormorant Garamond', serif;
             font-size: clamp(1rem, 1.5vw, 1.2rem);
             line-height: 1.7;
-            opacity: 0.8;
+            color: var(--text-dim);
             margin-bottom: 2rem;
             max-width: 420px;
+            transition: color var(--transition);
         }
 
         .tech-specs {
@@ -271,20 +487,19 @@
             margin-bottom: 2rem;
         }
 
-        .spec-item {}
-
         .spec-label {
             font-size: 0.6rem;
             letter-spacing: 0.25em;
             text-transform: uppercase;
-            opacity: 0.4;
+            color: var(--text-dimmer);
             margin-bottom: 0.3rem;
+            transition: color var(--transition);
         }
 
         .spec-value {
             font-size: 0.85rem;
-            font-weight: 400;
-            opacity: 0.9;
+            color: var(--text);
+            transition: color var(--transition);
         }
 
         .quality-bar {
@@ -304,629 +519,32 @@
             font-size: 0.6rem;
             letter-spacing: 0.15em;
             text-transform: uppercase;
-            opacity: 0.5;
+            color: var(--text-dimmer);
             width: 90px;
             flex-shrink: 0;
+            transition: color var(--transition);
         }
 
         .bar-track {
             flex: 1;
             height: 3px;
-            background: rgba(255, 255, 255, 0.1);
+            background: var(--bar-track);
             border-radius: 10px;
             overflow: hidden;
+            transition: background var(--transition);
         }
 
         .bar-fill {
             height: 100%;
             border-radius: 10px;
-            transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
             width: 0;
+            transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .bar-fill.animated {
             width: var(--w);
         }
 
-        /* ── RIGHT VISUAL ── */
-        .technique-visual {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        /* FABRIC CANVAS */
-        .fabric-canvas {
-            width: min(460px, 90%);
-            aspect-ratio: 3/4;
-            position: relative;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.7);
-        }
-
-        /* T-shirt silhouette drawn in CSS */
-        .tshirt-wrap {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .tshirt-svg {
-            width: 80%;
-            height: 80%;
-            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
-            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .fabric-canvas:hover .tshirt-svg {
-            transform: scale(1.04) rotate(1deg);
-        }
-
-        /* ═══════════════════════
-     DTG SECTION
-  ═══════════════════════ */
-        #dtg {
-            background: #0d0d14;
-        }
-
-        #dtg .technique-info {
-            background: linear-gradient(135deg, #0d0d14 60%, #1a0d24);
-        }
-
-        #dtg .technique-visual {
-            background: radial-gradient(ellipse at center, #2d0940 0%, #0d0d14 70%);
-        }
-
-        #dtg .tech-tag {
-            background: rgba(232, 67, 147, 0.15);
-            color: var(--dtg);
-            border: 1px solid rgba(232, 67, 147, 0.3);
-        }
-
-        #dtg .tech-name {
-            color: var(--dtg);
-        }
-
-        #dtg .bar-fill {
-            background: linear-gradient(90deg, var(--dtg), #ff80c0);
-        }
-
-        .dtg-fabric {
-            background: linear-gradient(135deg, #1a0030 0%, #0d1a3a 100%);
-        }
-
-        .dtg-print {
-            position: absolute;
-            inset: 15%;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .dtg-gradient-art {
-            width: 100%;
-            height: 100%;
-            background:
-                radial-gradient(circle at 30% 30%, rgba(255, 100, 200, 0.95) 0%, transparent 45%),
-                radial-gradient(circle at 70% 20%, rgba(100, 100, 255, 0.9) 0%, transparent 40%),
-                radial-gradient(circle at 50% 70%, rgba(255, 200, 50, 0.85) 0%, transparent 45%),
-                radial-gradient(circle at 80% 80%, rgba(50, 220, 180, 0.8) 0%, transparent 35%),
-                radial-gradient(circle at 20% 80%, rgba(255, 80, 80, 0.85) 0%, transparent 40%);
-            animation: dtgPulse 4s ease-in-out infinite;
-        }
-
-        @keyframes dtgPulse {
-
-            0%,
-            100% {
-                filter: saturate(1.2) brightness(1);
-            }
-
-            50% {
-                filter: saturate(1.5) brightness(1.1);
-            }
-        }
-
-        .dtg-overlay {
-            position: absolute;
-            inset: 0;
-            background:
-                linear-gradient(45deg, transparent 48%, rgba(255, 255, 255, 0.03) 50%, transparent 52%),
-                linear-gradient(-45deg, transparent 48%, rgba(255, 255, 255, 0.03) 50%, transparent 52%);
-            background-size: 8px 8px;
-        }
-
-        .dtg-pixel-reveal {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 0;
-            background: linear-gradient(to top, #1a0030 0%, transparent 100%);
-            animation: dtgReveal 3s ease-in-out infinite alternate;
-        }
-
-        @keyframes dtgReveal {
-            0% {
-                height: 0%;
-                opacity: 0;
-            }
-
-            100% {
-                height: 8%;
-                opacity: 0.6;
-            }
-        }
-
-        /* ═══════════════════════
-     COLOREEL SECTION
-  ═══════════════════════ */
-        #coloreel {
-            background: #0e0b06;
-        }
-
-        #coloreel .technique-info {
-            background: linear-gradient(135deg, #0e0b06 60%, #1f0e00);
-        }
-
-        #coloreel .technique-visual {
-            background: radial-gradient(ellipse at center, #2a1200 0%, #0e0b06 70%);
-        }
-
-        #coloreel .tech-tag {
-            background: rgba(255, 107, 43, 0.12);
-            color: var(--coloreel);
-            border: 1px solid rgba(255, 107, 43, 0.3);
-        }
-
-        #coloreel .tech-name {
-            color: var(--coloreel);
-        }
-
-        #coloreel .bar-fill {
-            background: linear-gradient(90deg, var(--coloreel), #ffdd44);
-        }
-
-        .coloreel-fabric {
-            background: #1a1008;
-        }
-
-        .coloreel-thread-wrap {
-            position: absolute;
-            inset: 0;
-            overflow: hidden;
-        }
-
-        .coloreel-thread-wrap svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        @keyframes threadDraw {
-            to {
-                stroke-dashoffset: 0;
-            }
-        }
-
-        @keyframes colorShift {
-            0% {
-                stroke: #ff6b2b;
-            }
-
-            16% {
-                stroke: #ff3b8e;
-            }
-
-            33% {
-                stroke: #8b5cf6;
-            }
-
-            50% {
-                stroke: #06b6d4;
-            }
-
-            66% {
-                stroke: #22c55e;
-            }
-
-            83% {
-                stroke: #eab308;
-            }
-
-            100% {
-                stroke: #ff6b2b;
-            }
-        }
-
-        /* ═══════════════════════
-     EMBROIDERY SECTION
-  ═══════════════════════ */
-        #embroidery {
-            background: #080810;
-        }
-
-        #embroidery .technique-info {
-            background: linear-gradient(135deg, #080810 60%, #100820);
-        }
-
-        #embroidery .technique-visual {
-            background: radial-gradient(ellipse at center, #1a0838 0%, #080810 70%);
-        }
-
-        #embroidery .tech-tag {
-            background: rgba(124, 58, 237, 0.12);
-            color: var(--embroidery);
-            border: 1px solid rgba(124, 58, 237, 0.3);
-        }
-
-        #embroidery .tech-name {
-            color: var(--embroidery);
-        }
-
-        #embroidery .bar-fill {
-            background: linear-gradient(90deg, var(--embroidery), #a78bfa);
-        }
-
-        .embroidery-fabric {
-            background: #0c0818;
-        }
-
-        .stitch-canvas {
-            position: absolute;
-            inset: 0;
-        }
-
-        @keyframes stitchAppear {
-            from {
-                stroke-dashoffset: var(--len);
-                opacity: 0;
-            }
-
-            to {
-                stroke-dashoffset: 0;
-                opacity: 1;
-            }
-        }
-
-        /* ═══════════════════════
-     DTF SECTION
-  ═══════════════════════ */
-        #dtf {
-            background: #060e16;
-        }
-
-        #dtf .technique-info {
-            background: linear-gradient(135deg, #060e16 60%, #00152a);
-        }
-
-        #dtf .technique-visual {
-            background: radial-gradient(ellipse at center, #001830 0%, #060e16 70%);
-        }
-
-        #dtf .tech-tag {
-            background: rgba(14, 165, 233, 0.12);
-            color: var(--dtf);
-            border: 1px solid rgba(14, 165, 233, 0.3);
-        }
-
-        #dtf .tech-name {
-            color: var(--dtf);
-        }
-
-        #dtf .bar-fill {
-            background: linear-gradient(90deg, var(--dtf), #60d9f5);
-        }
-
-        .dtf-fabric {
-            background: #061226;
-        }
-
-        .dtf-film-container {
-            position: absolute;
-            inset: 10%;
-            border-radius: 4px;
-            overflow: visible;
-        }
-
-        .dtf-peel {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 40%);
-            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-            animation: peel 4s ease-in-out infinite;
-            transform-origin: bottom right;
-        }
-
-        @keyframes peel {
-
-            0%,
-            70%,
-            100% {
-                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-                opacity: 1;
-            }
-
-            40% {
-                clip-path: polygon(0 0, 100% 0, 100% 70%, 80% 100%, 0 100%);
-                opacity: 0.8;
-            }
-        }
-
-        .dtf-design {
-            position: absolute;
-            inset: 5%;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .dtf-art {
-            width: 100%;
-            height: 100%;
-            background:
-                repeating-linear-gradient(0deg,
-                    transparent,
-                    transparent 2px,
-                    rgba(14, 165, 233, 0.06) 2px,
-                    rgba(14, 165, 233, 0.06) 4px),
-                conic-gradient(from 0deg at 50% 50%,
-                    #0ea5e9 0deg, #38bdf8 60deg,
-                    #7dd3fc 120deg, #0284c7 180deg,
-                    #0369a1 240deg, #0c4a6e 300deg,
-                    #0ea5e9 360deg);
-            animation: dtfSpin 12s linear infinite;
-        }
-
-        @keyframes dtfSpin {
-            from {
-                filter: hue-rotate(0deg) brightness(1.1);
-            }
-
-            to {
-                filter: hue-rotate(360deg) brightness(1.1);
-            }
-        }
-
-        /* ═══════════════════════
-     SCREEN PRINTING SECTION
-  ═══════════════════════ */
-        #screenprint {
-            background: #060d06;
-        }
-
-        #screenprint .technique-info {
-            background: linear-gradient(135deg, #060d06 60%, #001a04);
-        }
-
-        #screenprint .technique-visual {
-            background: radial-gradient(ellipse at center, #001a08 0%, #060d06 70%);
-        }
-
-        #screenprint .tech-tag {
-            background: rgba(22, 163, 74, 0.12);
-            color: var(--screen);
-            border: 1px solid rgba(22, 163, 74, 0.3);
-        }
-
-        #screenprint .tech-name {
-            color: var(--screen);
-        }
-
-        #screenprint .bar-fill {
-            background: linear-gradient(90deg, var(--screen), #86efac);
-        }
-
-        .screenprint-fabric {
-            background: #080f08;
-        }
-
-        .screen-layers {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .screen-layer {
-            position: absolute;
-            border-radius: 4px;
-            animation: screenReg 3s ease-in-out infinite;
-        }
-
-        @keyframes screenReg {
-
-            0%,
-            100% {
-                transform: translate(0, 0);
-            }
-
-            33% {
-                transform: translate(-2px, 1px);
-            }
-
-            66% {
-                transform: translate(1px, -2px);
-            }
-        }
-
-        /* ── COMPARISON SECTION ── */
-        #comparison {
-            min-height: 100vh;
-            scroll-snap-align: start;
-            background: var(--ink);
-            padding: clamp(3rem, 8vw, 6rem) clamp(1.5rem, 5vw, 5rem);
-            position: relative;
-            overflow: hidden;
-        }
-
-        #comparison::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image:
-                linear-gradient(rgba(245, 240, 232, 0.025) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(245, 240, 232, 0.025) 1px, transparent 1px);
-            background-size: 40px 40px;
-        }
-
-        .comparison-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(2.5rem, 6vw, 5rem);
-            text-align: center;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, var(--cream), var(--gold));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .comparison-sub {
-            font-family: 'Cormorant Garamond', serif;
-            font-style: italic;
-            text-align: center;
-            opacity: 0.5;
-            margin-bottom: 3rem;
-            font-size: 1.1rem;
-        }
-
-        .comparison-table {
-            width: 100%;
-            max-width: 1000px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        .comp-row {
-            display: grid;
-            grid-template-columns: 1.2fr repeat(5, 1fr);
-            gap: 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-        }
-
-        .comp-header .comp-cell {
-            padding: 1rem 0.5rem;
-            font-size: 0.6rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            opacity: 0.5;
-            text-align: center;
-        }
-
-        .comp-header .comp-cell:first-child {
-            text-align: left;
-        }
-
-        .comp-row:not(.comp-header) .comp-cell {
-            padding: 0.9rem 0.5rem;
-            font-size: 0.75rem;
-            text-align: center;
-            transition: background 0.3s;
-        }
-
-        .comp-row:not(.comp-header):hover .comp-cell {
-            background: rgba(255, 255, 255, 0.03);
-        }
-
-        .comp-row .comp-cell:first-child {
-            text-align: left;
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 0.95rem;
-            opacity: 0.7;
-            padding-left: 0;
-        }
-
-        .dot {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            margin: 0 auto;
-        }
-
-        .star-rating {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 2px;
-            font-size: 0.7rem;
-            letter-spacing: -0.05em;
-        }
-
-        /* ── TOOLTIP ── */
-        .tech-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.65rem;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            padding: 0.3rem 0.8rem;
-            border-radius: 2px;
-            margin-bottom: 0.5rem;
-        }
-
-        /* ── SCROLL INDICATOR ── */
-        .scroll-hint {
-            position: absolute;
-            bottom: 2.5rem;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            opacity: 0.4;
-            animation: bobble 2s ease-in-out infinite;
-        }
-
-        .scroll-hint span {
-            font-size: 0.55rem;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-        }
-
-        .scroll-line {
-            width: 1px;
-            height: 40px;
-            background: linear-gradient(to bottom, var(--cream), transparent);
-        }
-
-        @keyframes bobble {
-
-            0%,
-            100% {
-                transform: translateX(-50%) translateY(0);
-            }
-
-            50% {
-                transform: translateX(-50%) translateY(8px);
-            }
-        }
-
-        /* ── SECTION SEPARATOR ── */
-        .section-edge {
-            position: absolute;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
-        }
-
-        .section-edge.top {
-            top: 0;
-        }
-
-        .section-edge.bottom {
-            bottom: 0;
-        }
-
-        /* ── USE CASES ── */
         .use-cases {
             display: flex;
             flex-wrap: wrap;
@@ -940,32 +558,75 @@
             text-transform: uppercase;
             padding: 0.25rem 0.65rem;
             border-radius: 2px;
-            background: rgba(255, 255, 255, 0.07);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            opacity: 0.75;
+            background: var(--use-tag-bg);
+            border: 1px solid var(--use-tag-bd);
+            color: var(--text-dim);
+            transition: all var(--transition);
         }
 
-        /* ── HOVER ZOOM ── */
-        .technique-visual:hover .fabric-canvas {
-            box-shadow: 0 60px 120px rgba(0, 0, 0, 0.8);
+        /* ════════════════════════════════════
+     VISUAL PANEL
+  ════════════════════════════════════ */
+        .technique-visual {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: background var(--transition);
         }
 
-        /* ── TOOLTIP POPUP ── */
+        .fabric-canvas {
+            width: min(460px, 90%);
+            aspect-ratio: 3/4;
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 40px 100px var(--shadow);
+            transition: box-shadow var(--transition);
+        }
+
+        .fabric-canvas:hover {
+            box-shadow: 0 60px 120px var(--shadow);
+        }
+
+        .tshirt-wrap {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tshirt-svg {
+            width: 80%;
+            height: 80%;
+            filter: drop-shadow(0 20px 40px var(--shadow));
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .fabric-canvas:hover .tshirt-svg {
+            transform: scale(1.04) rotate(1deg);
+        }
+
         .info-tooltip {
             position: absolute;
             bottom: 1.5rem;
             left: 1.5rem;
             right: 1.5rem;
-            background: rgba(10, 10, 10, 0.9);
+            background: var(--tooltip-bg);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
             border-radius: 6px;
             padding: 1rem 1.2rem;
             font-size: 0.7rem;
             line-height: 1.6;
+            color: var(--text);
             opacity: 0;
             transform: translateY(10px);
-            transition: all 0.3s ease;
+            transition: opacity 0.3s, transform 0.3s, background var(--transition), color var(--transition);
             pointer-events: none;
             z-index: 10;
         }
@@ -981,12 +642,362 @@
             letter-spacing: 0.2em;
             text-transform: uppercase;
             margin-bottom: 0.3rem;
-            opacity: 0.6;
+            color: var(--text-dim);
+        }
+
+        .section-edge {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 1px;
+        }
+
+        .section-edge.top {
+            top: 0;
+            background: linear-gradient(90deg, transparent, var(--border), transparent);
+        }
+
+        .section-edge.bottom {
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, var(--border), transparent);
+        }
+
+        /* ════════════════════════════════════
+     PER-SECTION THEMING
+  ════════════════════════════════════ */
+        #dtg {
+            background: var(--dtg-bg);
+        }
+
+        #coloreel {
+            background: var(--col-bg);
+        }
+
+        #embroidery {
+            background: var(--emb-bg);
+        }
+
+        #dtf {
+            background: var(--dtf-bg);
+        }
+
+        #screenprint {
+            background: var(--scr-bg);
+        }
+
+        #dtg .technique-info {
+            background: var(--dtg-bg);
+        }
+
+        #coloreel .technique-info {
+            background: var(--col-bg);
+        }
+
+        #embroidery .technique-info {
+            background: var(--emb-bg);
+        }
+
+        #dtf .technique-info {
+            background: var(--dtf-bg);
+        }
+
+        #screenprint .technique-info {
+            background: var(--scr-bg);
+        }
+
+        #dtg .technique-visual {
+            background: radial-gradient(ellipse at center, var(--dtg-vis) 0%, var(--dtg-bg) 70%);
+        }
+
+        #coloreel .technique-visual {
+            background: radial-gradient(ellipse at center, var(--col-vis) 0%, var(--col-bg) 70%);
+        }
+
+        #embroidery .technique-visual {
+            background: radial-gradient(ellipse at center, var(--emb-vis) 0%, var(--emb-bg) 70%);
+        }
+
+        #dtf .technique-visual {
+            background: radial-gradient(ellipse at center, var(--dtf-vis) 0%, var(--dtf-bg) 70%);
+        }
+
+        #screenprint .technique-visual {
+            background: radial-gradient(ellipse at center, var(--scr-vis) 0%, var(--scr-bg) 70%);
+        }
+
+        #dtg .tech-name {
+            color: var(--dtg);
+        }
+
+        #coloreel .tech-name {
+            color: var(--coloreel);
+        }
+
+        #embroidery .tech-name {
+            color: var(--embroidery);
+        }
+
+        #dtf .tech-name {
+            color: var(--dtf);
+        }
+
+        #screenprint .tech-name {
+            color: var(--screen);
+        }
+
+        #dtg .tech-tag {
+            background: rgba(232, 67, 147, 0.12);
+            color: var(--dtg);
+            border: 1px solid rgba(232, 67, 147, 0.25);
+        }
+
+        #coloreel .tech-tag {
+            background: rgba(255, 107, 43, 0.12);
+            color: var(--coloreel);
+            border: 1px solid rgba(255, 107, 43, 0.25);
+        }
+
+        #embroidery .tech-tag {
+            background: rgba(124, 58, 237, 0.12);
+            color: var(--embroidery);
+            border: 1px solid rgba(124, 58, 237, 0.25);
+        }
+
+        #dtf .tech-tag {
+            background: rgba(14, 165, 233, 0.12);
+            color: var(--dtf);
+            border: 1px solid rgba(14, 165, 233, 0.25);
+        }
+
+        #screenprint .tech-tag {
+            background: rgba(22, 163, 74, 0.12);
+            color: var(--screen);
+            border: 1px solid rgba(22, 163, 74, 0.25);
+        }
+
+        #dtg .bar-fill {
+            background: linear-gradient(90deg, var(--dtg), #ff80c0);
+        }
+
+        #coloreel .bar-fill {
+            background: linear-gradient(90deg, var(--coloreel), #ffdd44);
+        }
+
+        #embroidery .bar-fill {
+            background: linear-gradient(90deg, var(--embroidery), #a78bfa);
+        }
+
+        #dtf .bar-fill {
+            background: linear-gradient(90deg, var(--dtf), #60d9f5);
+        }
+
+        #screenprint .bar-fill {
+            background: linear-gradient(90deg, var(--screen), #86efac);
+        }
+
+        /* Shirt fills */
+        .sb-dtg {
+            fill: var(--shirt-dtg);
+            transition: fill var(--transition);
+        }
+
+        .sb-col {
+            fill: var(--shirt-col);
+            transition: fill var(--transition);
+        }
+
+        .sb-emb {
+            fill: var(--shirt-emb);
+            transition: fill var(--transition);
+        }
+
+        .sb-dtf {
+            fill: var(--shirt-dtf);
+            transition: fill var(--transition);
+        }
+
+        .sb-scr {
+            fill: var(--shirt-scr);
+            transition: fill var(--transition);
+        }
+
+        .sb-edge {
+            stroke: var(--border);
+            transition: stroke var(--transition);
+        }
+
+        /* ════════════════════════════════════
+     COMPARISON
+  ════════════════════════════════════ */
+        #comparison {
+            min-height: 100vh;
+            scroll-snap-align: start;
+            background: var(--cmp-bg);
+            padding: clamp(3rem, 8vw, 6rem) clamp(1.5rem, 5vw, 5rem);
+            position: relative;
+            overflow: hidden;
+            transition: background var(--transition);
+        }
+
+        #comparison::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(var(--grid-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .comparison-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            text-align: center;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--title-from), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .comparison-sub {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            text-align: center;
+            color: var(--text-dim);
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+            transition: color var(--transition);
+        }
+
+        .comparison-table {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .comp-row {
+            display: grid;
+            grid-template-columns: 1.2fr repeat(5, 1fr);
+            border-bottom: 1px solid var(--border);
+            transition: border-color var(--transition);
+        }
+
+        .comp-header .comp-cell {
+            padding: 1rem 0.5rem;
+            font-size: 0.6rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--text-dimmer);
+            text-align: center;
+        }
+
+        .comp-header .comp-cell:first-child {
+            text-align: left;
+        }
+
+        .comp-row:not(.comp-header) .comp-cell {
+            padding: 0.9rem 0.5rem;
+            font-size: 0.75rem;
+            text-align: center;
+            color: var(--text);
+            transition: background 0.3s, color var(--transition);
+        }
+
+        .comp-row:not(.comp-header):hover .comp-cell {
+            background: var(--comp-hover);
+        }
+
+        .comp-row .comp-cell:first-child {
+            text-align: left;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.95rem;
+            color: var(--text-dim);
+            padding-left: 0;
+        }
+
+        .site-footer {
+            text-align: center;
+            margin-top: 4rem;
+            color: var(--text-dimmer);
+            transition: color var(--transition);
+        }
+
+        .site-footer .f-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            letter-spacing: 0.1em;
+        }
+
+        .site-footer .f-sub {
+            font-size: 0.6rem;
+            letter-spacing: 0.3em;
+            margin-top: 0.5rem;
+        }
+
+        /* ════════════════════════════════════
+     ANIMATIONS
+  ════════════════════════════════════ */
+        @keyframes drawThread {
+            0% {
+                stroke-dashoffset: var(--len, 500);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            80% {
+                stroke-dashoffset: 0;
+                opacity: 1;
+            }
+
+            100% {
+                stroke-dashoffset: 0;
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes dtgPulse {
+
+            0%,
+            100% {
+                filter: saturate(1.2) brightness(1);
+            }
+
+            50% {
+                filter: saturate(1.5) brightness(1.1);
+            }
+        }
+
+        @keyframes dtfSpin {
+            from {
+                filter: hue-rotate(0deg) brightness(1.1);
+            }
+
+            to {
+                filter: hue-rotate(360deg) brightness(1.1);
+            }
         }
     </style>
 </head>
 
 <body>
+
+    <!-- ═══ THEME TOGGLE ═══ -->
+    <div id="theme-toggle" onclick="toggleTheme()" title="Switch theme">
+        <div class="t-icons">
+            <span class="t-icon t-moon">🌙</span>
+            <span class="t-icon t-sun">☀️</span>
+        </div>
+        <div class="t-track">
+            <div class="t-thumb"></div>
+        </div>
+        <span class="t-label" id="t-label">Dark</span>
+    </div>
 
     <!-- ═══════ HERO ═══════ -->
     <section id="hero">
@@ -1018,33 +1029,28 @@
             <div class="tech-tag">Digital Technology</div>
             <h2 class="tech-name">DTG</h2>
             <p class="tech-fullname">Direct-to-Garment Printing</p>
-            <p class="tech-desc">
-                Inkjet printing technology applied directly onto fabric — pixel-perfect reproduction of photographic
-                images, gradients, and complex artwork with unlimited color depth on cotton and blended fabrics.
-            </p>
+            <p class="tech-desc">Inkjet printing technology applied directly onto fabric — pixel-perfect reproduction of
+                photographic images, gradients, and complex artwork with unlimited color depth on cotton and blended
+                fabrics.</p>
             <div class="quality-bar">
-                <div class="bar-row">
-                    <span class="bar-label">Color Depth</span>
+                <div class="bar-row"><span class="bar-label">Color Depth</span>
                     <div class="bar-track">
-                        <div class="bar-fill" style="--w:95%;" data-target="95"></div>
+                        <div class="bar-fill" style="--w:95%"></div>
                     </div>
                 </div>
-                <div class="bar-row">
-                    <span class="bar-label">Detail</span>
+                <div class="bar-row"><span class="bar-label">Detail</span>
                     <div class="bar-track">
-                        <div class="bar-fill" style="--w:90%;" data-target="90"></div>
+                        <div class="bar-fill" style="--w:90%"></div>
                     </div>
                 </div>
-                <div class="bar-row">
-                    <span class="bar-label">Wash Durability</span>
+                <div class="bar-row"><span class="bar-label">Wash Durability</span>
                     <div class="bar-track">
-                        <div class="bar-fill" style="--w:65%;" data-target="65"></div>
+                        <div class="bar-fill" style="--w:65%"></div>
                     </div>
                 </div>
-                <div class="bar-row">
-                    <span class="bar-label">Cost Efficiency</span>
+                <div class="bar-row"><span class="bar-label">Cost Efficiency</span>
                     <div class="bar-track">
-                        <div class="bar-fill" style="--w:75%;" data-target="75"></div>
+                        <div class="bar-fill" style="--w:75%"></div>
                     </div>
                 </div>
             </div>
@@ -1067,74 +1073,51 @@
                 </div>
             </div>
             <div class="use-cases">
-                <span class="use-tag">Photo Prints</span>
-                <span class="use-tag">Art Merch</span>
-                <span class="use-tag">Small Runs</span>
-                <span class="use-tag">Custom Gifts</span>
+                <span class="use-tag">Photo Prints</span><span class="use-tag">Art Merch</span>
+                <span class="use-tag">Small Runs</span><span class="use-tag">Custom Gifts</span>
             </div>
         </div>
         <div class="technique-visual">
-            <div class="fabric-canvas dtg-fabric">
+            <div class="fabric-canvas">
                 <div class="tshirt-wrap">
-                    <svg class="tshirt-svg" viewBox="0 0 300 360" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Fabric texture -->
+                    <svg class="tshirt-svg" viewBox="0 0 300 360" fill="none">
                         <defs>
-                            <filter id="dtgFabric">
-                                <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" result="noise" />
-                                <feColorMatrix type="saturate" values="0" result="gray" />
-                                <feBlend in="SourceGraphic" in2="gray" mode="multiply" result="blend" />
-                                <feComposite in="blend" in2="SourceGraphic" operator="in" />
-                            </filter>
-                            <clipPath id="tshirtClip">
+                            <clipPath id="c1">
                                 <path
                                     d="M90 20 L60 10 L10 60 L50 80 L50 340 L250 340 L250 80 L290 60 L240 10 L210 20 Q200 50 150 50 Q100 50 90 20Z" />
                             </clipPath>
-                        </defs>
-
-                        <!-- Main shirt body -->
-                        <path
-                            d="M90 20 L60 10 L10 60 L50 80 L50 340 L250 340 L250 80 L290 60 L240 10 L210 20 Q200 50 150 50 Q100 50 90 20Z"
-                            fill="#1a0030" stroke="rgba(255,255,255,0.06)" stroke-width="1" />
-
-                        <!-- The DTG print area (colorful gradient) -->
-                        <g clip-path="url(#tshirtClip)">
-                            <!-- Photographic-style gradient design -->
-                            <ellipse cx="120" cy="200" rx="80" ry="90" fill="url(#dtg1)" opacity="0.9" />
-                            <ellipse cx="200" cy="170" rx="70" ry="80" fill="url(#dtg2)" opacity="0.85" />
-                            <ellipse cx="150" cy="260" rx="90" ry="60" fill="url(#dtg3)" opacity="0.75" />
-                            <ellipse cx="90" cy="140" rx="50" ry="55" fill="url(#dtg4)" opacity="0.8" />
-
-                            <!-- Noise overlay for ink feel -->
-                            <rect x="50" y="80" width="200" height="260" fill="url(#noiseGrad)" opacity="0.06"
-                                style="mix-blend-mode: overlay" />
-
-                            <!-- Highlight streaks -->
-                            <line x1="70" y1="100" x2="140" y2="320" stroke="rgba(255,255,255,0.07)"
-                                stroke-width="30" />
-                        </g>
-
-                        <defs>
-                            <radialGradient id="dtg1" cx="50%" cy="50%" r="50%">
+                            <radialGradient id="g1a">
                                 <stop offset="0%" stop-color="#ff64c8" />
                                 <stop offset="100%" stop-color="#8b40ff" stop-opacity="0" />
                             </radialGradient>
-                            <radialGradient id="dtg2" cx="50%" cy="50%" r="50%">
+                            <radialGradient id="g1b">
                                 <stop offset="0%" stop-color="#60a5ff" />
                                 <stop offset="100%" stop-color="#00e0ff" stop-opacity="0" />
                             </radialGradient>
-                            <radialGradient id="dtg3" cx="50%" cy="50%" r="50%">
+                            <radialGradient id="g1c">
                                 <stop offset="0%" stop-color="#ffdd40" />
                                 <stop offset="100%" stop-color="#ff6040" stop-opacity="0" />
                             </radialGradient>
-                            <radialGradient id="dtg4" cx="50%" cy="50%" r="50%">
+                            <radialGradient id="g1d">
                                 <stop offset="0%" stop-color="#50ffc0" />
                                 <stop offset="100%" stop-color="#00c0ff" stop-opacity="0" />
                             </radialGradient>
-                            <linearGradient id="noiseGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="white" />
-                                <stop offset="100%" stop-color="black" />
-                            </linearGradient>
                         </defs>
+                        <path class="sb-dtg sb-edge"
+                            d="M90 20 L60 10 L10 60 L50 80 L50 340 L250 340 L250 80 L290 60 L240 10 L210 20 Q200 50 150 50 Q100 50 90 20Z"
+                            stroke-width="1" />
+                        <g clip-path="url(#c1)">
+                            <ellipse cx="120" cy="200" rx="80" ry="90" fill="url(#g1a)" opacity="0.9"
+                                style="animation:dtgPulse 4s ease-in-out infinite" />
+                            <ellipse cx="200" cy="170" rx="70" ry="80" fill="url(#g1b)" opacity="0.85"
+                                style="animation:dtgPulse 4s 1s ease-in-out infinite" />
+                            <ellipse cx="150" cy="260" rx="90" ry="60" fill="url(#g1c)" opacity="0.75"
+                                style="animation:dtgPulse 4s 2s ease-in-out infinite" />
+                            <ellipse cx="90" cy="140" rx="50" ry="55" fill="url(#g1d)" opacity="0.8"
+                                style="animation:dtgPulse 4s 0.5s ease-in-out infinite" />
+                            <line x1="70" y1="100" x2="140" y2="320" stroke="rgba(255,255,255,0.05)"
+                                stroke-width="30" />
+                        </g>
                     </svg>
                 </div>
                 <div class="info-tooltip">
@@ -1155,33 +1138,28 @@
             <div class="tech-tag">Innovative Thread Tech</div>
             <h2 class="tech-name">COLOREEL</h2>
             <p class="tech-fullname">Instant Thread Coloring System</p>
-            <p class="tech-desc">
-                A groundbreaking Swedish innovation that dyes embroidery thread in real-time, enabling infinite color
-                gradients and transitions mid-stitch — impossible with traditional thread-based methods.
+            <p class="tech-desc">A groundbreaking Swedish innovation that dyes embroidery thread in real-time, enabling
+                infinite color gradients and transitions mid-stitch — impossible with traditional thread-based methods.
             </p>
             <div class="quality-bar">
-                <div class="bar-row">
-                    <span class="bar-label">Color Range</span>
+                <div class="bar-row"><span class="bar-label">Color Range</span>
                     <div class="bar-track">
-                        <div class="bar-fill" style="--w:98%;" data-target="98"></div>
+                        <div class="bar-fill" style="--w:98%"></div>
                     </div>
                 </div>
-                <div class="bar-row">
-                    <span class="bar-label">Gradient</span>
+                <div class="bar-row"><span class="bar-label">Gradient</span>
                     <div class="bar-track">
-                        <div class="bar-fill" style="--w:100%;" data-target="100"></div>
+                        <div class="bar-fill" style="--w:100%"></div>
                     </div>
                 </div>
-                <div class="bar-row">
-                    <span class="bar-label">Wash Durability</span>
+                <div class="bar-row"><span class="bar-label">Wash Durability</span>
                     <div class="bar-track">
-                        <div class="bar-fill" style="--w:92%;" data-target="92"></div>
+                        <div class="bar-fill" style="--w:92%"></div>
                     </div>
                 </div>
-                <div class="bar-row">
-                    <span class="bar-label">Cost Efficiency</span>
+                <div class="bar-row"><span class="bar-label">Cost Efficiency</span>
                     <div class="bar-track">
-                        <div class="bar-fill" style="--w:55%;" data-target="55"></div>
+                        <div class="bar-fill" style="--w:55%"></div>
                     </div>
                 </div>
             </div>
@@ -1204,90 +1182,70 @@
                 </div>
             </div>
             <div class="use-cases">
-                <span class="use-tag">Premium Apparel</span>
-                <span class="use-tag">Sportswear</span>
-                <span class="use-tag">Haute Couture</span>
-                <span class="use-tag">Logos</span>
+                <span class="use-tag">Premium Apparel</span><span class="use-tag">Sportswear</span>
+                <span class="use-tag">Haute Couture</span><span class="use-tag">Logos</span>
             </div>
         </div>
         <div class="technique-visual" style="direction:ltr;">
-            <div class="fabric-canvas coloreel-fabric">
+            <div class="fabric-canvas">
                 <div class="tshirt-wrap">
-                    <svg class="tshirt-svg" viewBox="0 0 300 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="tshirt-svg" viewBox="0 0 300 360" fill="none">
                         <defs>
-                            <clipPath id="coloreelClip">
+                            <clipPath id="c2">
                                 <path
                                     d="M90 20 L60 10 L10 60 L50 80 L50 340 L250 340 L250 80 L290 60 L240 10 L210 20 Q200 50 150 50 Q100 50 90 20Z" />
                             </clipPath>
-                        </defs>
-
-                        <path
-                            d="M90 20 L60 10 L10 60 L50 80 L50 340 L250 340 L250 80 L290 60 L240 10 L210 20 Q200 50 150 50 Q100 50 90 20Z"
-                            fill="#1a1008" stroke="rgba(255,255,255,0.06)" stroke-width="1" />
-
-                        <!-- Coloreel thread art: flowing gradient stitches -->
-                        <g clip-path="url(#coloreelClip)">
-                            <!-- Thread paths with gradient colors representing real-time dye -->
-                            <path
-                                d="M80 120 Q150 100 220 140 Q160 180 100 160 Q160 200 220 190 Q160 230 80 210 Q150 250 220 240 Q160 280 80 260"
-                                stroke="url(#threadGrad1)" stroke-width="3.5" fill="none" stroke-linecap="round"
-                                stroke-dasharray="400" stroke-dashoffset="400"
-                                style="animation: drawThread 3s linear infinite; animation-delay: 0s;" />
-                            <path
-                                d="M100 135 Q150 115 200 145 Q155 185 105 175 Q155 215 205 200 Q155 240 95 225 Q155 260 205 250"
-                                stroke="url(#threadGrad2)" stroke-width="3" fill="none" stroke-linecap="round"
-                                stroke-dasharray="350" stroke-dashoffset="350"
-                                style="animation: drawThread 3s linear infinite; animation-delay: 0.2s;" />
-                            <path d="M120 150 Q150 130 180 155 Q155 195 120 190 Q155 225 185 215"
-                                stroke="url(#threadGrad3)" stroke-width="2.5" fill="none" stroke-linecap="round"
-                                stroke-dasharray="250" stroke-dashoffset="250"
-                                style="animation: drawThread 3s linear infinite; animation-delay: 0.4s;" />
-                            <!-- More threads to build density -->
-                            <path
-                                d="M75 130 Q150 108 225 135 Q165 175 90 155 Q160 200 225 185 Q160 235 75 215 Q160 260 225 248"
-                                stroke="url(#threadGrad4)" stroke-width="2" fill="none" stroke-linecap="round"
-                                opacity="0.7" stroke-dasharray="450" stroke-dashoffset="450"
-                                style="animation: drawThread 3s linear infinite; animation-delay: 0.6s;" />
-                        </g>
-
-                        <defs>
-                            <linearGradient id="threadGrad1" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse"
-                                x1="70" y1="120" x2="220" y2="260">
+                            <linearGradient id="tg1" x1="70" y1="120" x2="220" y2="260" gradientUnits="userSpaceOnUse">
                                 <stop offset="0%" stop-color="#ff6b2b" />
-                                <stop offset="20%" stop-color="#ff3b8e" />
-                                <stop offset="40%" stop-color="#8b5cf6" />
-                                <stop offset="60%" stop-color="#06b6d4" />
-                                <stop offset="80%" stop-color="#22c55e" />
-                                <stop offset="100%" stop-color="#eab308" />
+                                <stop offset="25%" stop-color="#ff3b8e" />
+                                <stop offset="50%" stop-color="#8b5cf6" />
+                                <stop offset="75%" stop-color="#06b6d4" />
+                                <stop offset="100%" stop-color="#22c55e" />
                             </linearGradient>
-                            <linearGradient id="threadGrad2" x1="90" y1="130" x2="210" y2="260"
-                                gradientUnits="userSpaceOnUse">
+                            <linearGradient id="tg2" x1="90" y1="130" x2="210" y2="260" gradientUnits="userSpaceOnUse">
                                 <stop offset="0%" stop-color="#eab308" />
-                                <stop offset="25%" stop-color="#ff6b2b" />
-                                <stop offset="50%" stop-color="#ec4899" />
-                                <stop offset="75%" stop-color="#6366f1" />
-                                <stop offset="100%" stop-color="#06b6d4" />
+                                <stop offset="33%" stop-color="#ff6b2b" />
+                                <stop offset="66%" stop-color="#ec4899" />
+                                <stop offset="100%" stop-color="#6366f1" />
                             </linearGradient>
-                            <linearGradient id="threadGrad3" x1="110" y1="145" x2="200" y2="220"
-                                gradientUnits="userSpaceOnUse">
+                            <linearGradient id="tg3" x1="110" y1="145" x2="200" y2="220" gradientUnits="userSpaceOnUse">
                                 <stop offset="0%" stop-color="#06b6d4" />
                                 <stop offset="50%" stop-color="#22c55e" />
                                 <stop offset="100%" stop-color="#ff6b2b" />
                             </linearGradient>
-                            <linearGradient id="threadGrad4" x1="65" y1="125" x2="235" y2="255"
-                                gradientUnits="userSpaceOnUse">
+                            <linearGradient id="tg4" x1="65" y1="125" x2="235" y2="255" gradientUnits="userSpaceOnUse">
                                 <stop offset="0%" stop-color="#f43f5e" />
                                 <stop offset="33%" stop-color="#8b5cf6" />
                                 <stop offset="66%" stop-color="#0ea5e9" />
                                 <stop offset="100%" stop-color="#10b981" />
                             </linearGradient>
                         </defs>
+                        <path class="sb-col sb-edge"
+                            d="M90 20 L60 10 L10 60 L50 80 L50 340 L250 340 L250 80 L290 60 L240 10 L210 20 Q200 50 150 50 Q100 50 90 20Z"
+                            stroke-width="1" />
+                        <g clip-path="url(#c2)">
+                            <path
+                                d="M80 120 Q150 100 220 140 Q160 180 100 160 Q160 200 220 190 Q160 230 80 210 Q150 250 220 240 Q160 280 80 260"
+                                stroke="url(#tg1)" stroke-width="3.5" fill="none" stroke-linecap="round"
+                                style="stroke-dasharray:500;stroke-dashoffset:500;animation:drawThread 3s linear infinite" />
+                            <path
+                                d="M100 135 Q150 115 200 145 Q155 185 105 175 Q155 215 205 200 Q155 240 95 225 Q155 260 205 250"
+                                stroke="url(#tg2)" stroke-width="3" fill="none" stroke-linecap="round"
+                                style="stroke-dasharray:450;stroke-dashoffset:450;animation:drawThread 3s 0.3s linear infinite" />
+                            <path d="M120 150 Q150 130 180 155 Q155 195 120 190 Q155 225 185 215" stroke="url(#tg3)"
+                                stroke-width="2.5" fill="none" stroke-linecap="round"
+                                style="stroke-dasharray:300;stroke-dashoffset:300;animation:drawThread 3s 0.6s linear infinite" />
+                            <path
+                                d="M75 130 Q150 108 225 135 Q165 175 90 155 Q160 200 225 185 Q160 235 75 215 Q160 260 225 248"
+                                stroke="url(#tg4)" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.7"
+                                style="stroke-dasharray:550;stroke-dashoffset:550;animation:drawThread 3s 0.9s linear infinite" />
+                        </g>
                     </svg>
                 </div>
                 <div class="info-tooltip">
                     <strong>How Coloreel Works</strong>
-                    White thread passes through a compact dye unit attached to the embroidery head. Micro-dosing CMYK
-                    inks mix in real-time, creating seamless gradient shifts impossible by hand.
+                    White thread passes through a compact dye unit on the embroidery head. Micro-dosing CMYK inks mix in
+                    real-time, creating seamless gradient shifts impossible by hand.
                 </div>
             </div>
         </div>
@@ -1302,34 +1260,28 @@
             <div class="tech-tag">Traditional Craft</div>
             <h2 class="tech-name">EMBROIDER</h2>
             <p class="tech-fullname">Machine Embroidery</p>
-            <p class="tech-desc">
-                Thread stitched directly into fabric using multi-needle embroidery machines. Creates a premium
-                three-dimensional texture with unmatched tactile quality — the gold standard for corporate and luxury
-                branding.
-            </p>
+            <p class="tech-desc">Thread stitched directly into fabric using multi-needle embroidery machines. Creates a
+                premium three-dimensional texture with unmatched tactile quality — the gold standard for corporate and
+                luxury branding.</p>
             <div class="quality-bar">
-                <div class="bar-row">
-                    <span class="bar-label">Durability</span>
+                <div class="bar-row"><span class="bar-label">Durability</span>
                     <div class="bar-track">
-                        <div class="bar-fill" style="--w:98%;" data-target="98"></div>
+                        <div class="bar-fill" style="--w:98%"></div>
                     </div>
                 </div>
-                <div class="bar-row">
-                    <span class="bar-label">Texture/Feel</span>
+                <div class="bar-row"><span class="bar-label">Texture/Feel</span>
                     <div class="bar-track">
-                        <div class="bar-fill" style="--w:100%;" data-target="100"></div>
+                        <div class="bar-fill" style="--w:100%"></div>
                     </div>
                 </div>
-                <div class="bar-row">
-                    <span class="bar-label">Fine Detail</span>
+                <div class="bar-row"><span class="bar-label">Fine Detail</span>
                     <div class="bar-track">
-                        <div class="bar-fill" style="--w:60%;" data-target="60"></div>
+                        <div class="bar-fill" style="--w:60%"></div>
                     </div>
                 </div>
-                <div class="bar-row">
-                    <span class="bar-label">Cost Efficiency</span>
+                <div class="bar-row"><span class="bar-label">Cost Efficiency</span>
                     <div class="bar-track">
-                        <div class="bar-fill" style="--w:50%;" data-target="50"></div>
+                        <div class="bar-fill" style="--w:50%"></div>
                     </div>
                 </div>
             </div>
@@ -1352,42 +1304,32 @@
                 </div>
             </div>
             <div class="use-cases">
-                <span class="use-tag">Corporate Wear</span>
-                <span class="use-tag">Caps & Hats</span>
-                <span class="use-tag">Polo Shirts</span>
-                <span class="use-tag">Patches</span>
+                <span class="use-tag">Corporate Wear</span><span class="use-tag">Caps &amp; Hats</span>
+                <span class="use-tag">Polo Shirts</span><span class="use-tag">Patches</span>
             </div>
         </div>
         <div class="technique-visual">
-            <div class="fabric-canvas embroidery-fabric">
+            <div class="fabric-canvas">
                 <div class="tshirt-wrap">
-                    <svg class="tshirt-svg" viewBox="0 0 300 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="tshirt-svg" viewBox="0 0 300 360" fill="none">
                         <defs>
-                            <clipPath id="embroClip">
+                            <clipPath id="c3">
                                 <path
                                     d="M90 20 L60 10 L10 60 L50 80 L50 340 L250 340 L250 80 L290 60 L240 10 L210 20 Q200 50 150 50 Q100 50 90 20Z" />
                             </clipPath>
-                            <filter id="embroDepth">
-                                <feDropShadow dx="1" dy="2" stdDeviation="1" flood-color="rgba(0,0,0,0.6)" />
+                            <filter id="ed">
+                                <feDropShadow dx="1" dy="2" stdDeviation="1.2" flood-color="rgba(0,0,0,0.45)" />
                             </filter>
                         </defs>
-
-                        <path
+                        <path class="sb-emb sb-edge"
                             d="M90 20 L60 10 L10 60 L50 80 L50 340 L250 340 L250 80 L290 60 L240 10 L210 20 Q200 50 150 50 Q100 50 90 20Z"
-                            fill="#0c0818" stroke="rgba(255,255,255,0.06)" stroke-width="1" />
-
-                        <g clip-path="url(#embroClip)" filter="url(#embroDepth)">
-                            <!-- Embroidery design: classic crest/badge style -->
-                            <!-- Fill stitches: horizontal lines to simulate satin stitch -->
-                            <!-- Outer ring -->
+                            stroke-width="1" />
+                        <g clip-path="url(#c3)" filter="url(#ed)">
                             <circle cx="150" cy="195" r="68" stroke="#7c3aed" stroke-width="6" fill="none"
                                 stroke-dasharray="5 3" stroke-linecap="round" />
                             <circle cx="150" cy="195" r="60" stroke="#a78bfa" stroke-width="4" fill="none"
                                 stroke-dasharray="3 5" stroke-linecap="round" />
-
-                            <!-- Inner badge fill with satin stitches -->
                             <g stroke-linecap="round" stroke-width="2.5">
-                                <!-- Horizontal satin stitches in purple/violet rows -->
                                 <line x1="110" y1="165" x2="190" y2="165" stroke="#7c3aed" />
                                 <line x1="106" y1="170" x2="194" y2="170" stroke="#8b46f0" />
                                 <line x1="103" y1="175" x2="197" y2="175" stroke="#9333ea" />
@@ -1402,18 +1344,12 @@
                                 <line x1="110" y1="220" x2="190" y2="220" stroke="#8b46f0" />
                                 <line x1="115" y1="225" x2="185" y2="225" stroke="#9333ea" />
                             </g>
-
-                            <!-- Star/emblem in center -->
                             <polygon
                                 points="150,155 156,178 180,178 161,193 168,217 150,202 132,217 139,193 120,178 144,178"
                                 fill="none" stroke="#c4b5fd" stroke-width="2.5" stroke-linejoin="round" />
-
-                            <!-- Chain stitch text simulation -->
                             <path
                                 d="M110 240 Q115 235 120 240 Q125 235 130 240 Q135 235 140 240 Q145 235 150 240 Q155 235 160 240 Q165 235 170 240 Q175 235 180 240 Q185 235 190 240"
                                 stroke="#a78bfa" stroke-width="3" fill="none" stroke-linecap="round" />
-
-                            <!-- Stitch texture dots around badge perimeter -->
                             <g fill="#7c3aed" opacity="0.7">
                                 <circle cx="150" cy="127" r="2.5" />
                                 <circle cx="168" cy="130" r="2" />
@@ -1426,8 +1362,8 @@
                 </div>
                 <div class="info-tooltip">
                     <strong>How Embroidery Works</strong>
-                    Multi-needle machines sew thread directly into fabric using a digitized pattern file. Each color
-                    uses a separate needle. The raised texture makes designs palpably three-dimensional.
+                    Multi-needle machines sew thread directly into fabric using a digitized pattern. Each color uses a
+                    separate needle. The raised texture makes designs palpably three-dimensional.
                 </div>
             </div>
         </div>
@@ -1442,33 +1378,28 @@
             <div class="tech-tag">Transfer Technology</div>
             <h2 class="tech-name">DTF</h2>
             <p class="tech-fullname">Direct-to-Film Printing</p>
-            <p class="tech-desc">
-                Designs are printed onto a clear film, coated with hot-melt powder, then heat-pressed onto any fabric.
-                Exceptional versatility — works on cotton, polyester, nylon, leather, and dark fabrics alike.
-            </p>
+            <p class="tech-desc">Designs are printed onto a clear film, coated with hot-melt powder, then heat-pressed
+                onto any fabric. Exceptional versatility — works on cotton, polyester, nylon, leather, and dark fabrics
+                alike.</p>
             <div class="quality-bar">
-                <div class="bar-row">
-                    <span class="bar-label">Versatility</span>
+                <div class="bar-row"><span class="bar-label">Versatility</span>
                     <div class="bar-track">
-                        <div class="bar-fill" style="--w:98%;" data-target="98"></div>
+                        <div class="bar-fill" style="--w:98%"></div>
                     </div>
                 </div>
-                <div class="bar-row">
-                    <span class="bar-label">Color Vibrancy</span>
+                <div class="bar-row"><span class="bar-label">Color Vibrancy</span>
                     <div class="bar-track">
-                        <div class="bar-fill" style="--w:88%;" data-target="88"></div>
+                        <div class="bar-fill" style="--w:88%"></div>
                     </div>
                 </div>
-                <div class="bar-row">
-                    <span class="bar-label">Wash Durability</span>
+                <div class="bar-row"><span class="bar-label">Wash Durability</span>
                     <div class="bar-track">
-                        <div class="bar-fill" style="--w:78%;" data-target="78"></div>
+                        <div class="bar-fill" style="--w:78%"></div>
                     </div>
                 </div>
-                <div class="bar-row">
-                    <span class="bar-label">Cost Efficiency</span>
+                <div class="bar-row"><span class="bar-label">Cost Efficiency</span>
                     <div class="bar-track">
-                        <div class="bar-fill" style="--w:85%;" data-target="85"></div>
+                        <div class="bar-fill" style="--w:85%"></div>
                     </div>
                 </div>
             </div>
@@ -1491,103 +1422,58 @@
                 </div>
             </div>
             <div class="use-cases">
-                <span class="use-tag">Dark Fabrics</span>
-                <span class="use-tag">Polyester</span>
-                <span class="use-tag">Sportswear</span>
-                <span class="use-tag">Accessories</span>
+                <span class="use-tag">Dark Fabrics</span><span class="use-tag">Polyester</span>
+                <span class="use-tag">Sportswear</span><span class="use-tag">Accessories</span>
             </div>
         </div>
         <div class="technique-visual" style="direction:ltr;">
-            <div class="fabric-canvas dtf-fabric">
+            <div class="fabric-canvas">
                 <div class="tshirt-wrap">
-                    <svg class="tshirt-svg" viewBox="0 0 300 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="tshirt-svg" viewBox="0 0 300 360" fill="none">
                         <defs>
-                            <clipPath id="dtfClip">
+                            <clipPath id="c4">
                                 <path
                                     d="M90 20 L60 10 L10 60 L50 80 L50 340 L250 340 L250 80 L290 60 L240 10 L210 20 Q200 50 150 50 Q100 50 90 20Z" />
                             </clipPath>
-                            <filter id="filmSheen">
-                                <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur" />
-                                <feSpecularLighting result="specOut" in="blur" specularExponent="25"
-                                    lighting-color="white">
-                                    <fePointLight x="80" y="80" z="150" />
-                                </feSpecularLighting>
-                                <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut2" />
-                                <feBlend in="SourceGraphic" in2="specOut2" mode="screen" />
-                            </filter>
-                        </defs>
-
-                        <path
-                            d="M90 20 L60 10 L10 60 L50 80 L50 340 L250 340 L250 80 L290 60 L240 10 L210 20 Q200 50 150 50 Q100 50 90 20Z"
-                            fill="#061226" stroke="rgba(255,255,255,0.06)" stroke-width="1" />
-
-                        <g clip-path="url(#dtfClip)">
-                            <!-- DTF Transfer area (geometric design) -->
-                            <!-- Background gradient of the print area -->
-                            <rect x="80" y="130" width="140" height="130" rx="4" fill="url(#dtfBg)" opacity="0.95" />
-
-                            <!-- Conic/geometric design typical of DTF -->
-                            <polygon points="150,145 210,250 90,250" fill="url(#dtfTri1)" opacity="0.9" />
-                            <polygon points="150,145 90,250 150,250" fill="url(#dtfTri2)" opacity="0.8" />
-
-                            <!-- Central bold text-like shape -->
-                            <rect x="110" y="205" width="80" height="18" rx="2" fill="url(#dtfLine)" opacity="0.95" />
-                            <rect x="120" y="228" width="60" height="12" rx="2" fill="url(#dtfLine2)" opacity="0.8" />
-
-                            <!-- Film sheen overlay -->
-                            <rect x="80" y="130" width="140" height="130" rx="4" fill="url(#filmSheen)"
-                                opacity="0.15" />
-
-                            <!-- Peeling corner effect -->
-                            <polygon points="220,130 220,160 190,130" fill="rgba(200,220,255,0.2)"
-                                stroke="rgba(255,255,255,0.4)" stroke-width="1" />
-
-                            <!-- Edge highlight simulating film edge -->
-                            <rect x="80" y="130" width="140" height="130" rx="4" fill="none"
-                                stroke="rgba(14,165,233,0.3)" stroke-width="1.5" />
-
-                            <!-- Scan lines for film feel -->
-                            <rect x="80" y="130" width="140" height="130" rx="4" fill="url(#scanLines)"
-                                opacity="0.08" />
-                        </g>
-
-                        <defs>
                             <linearGradient id="dtfBg" x1="0%" y1="0%" x2="100%" y2="100%">
                                 <stop offset="0%" stop-color="#0369a1" />
                                 <stop offset="50%" stop-color="#0ea5e9" />
                                 <stop offset="100%" stop-color="#38bdf8" />
                             </linearGradient>
-                            <linearGradient id="dtfTri1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <linearGradient id="dtfT1" x1="0%" y1="0%" x2="100%" y2="100%">
                                 <stop offset="0%" stop-color="#7dd3fc" />
                                 <stop offset="100%" stop-color="#0284c7" />
                             </linearGradient>
-                            <linearGradient id="dtfTri2" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <linearGradient id="dtfT2" x1="0%" y1="0%" x2="100%" y2="0%">
                                 <stop offset="0%" stop-color="#0c4a6e" />
                                 <stop offset="100%" stop-color="#0369a1" />
                             </linearGradient>
-                            <linearGradient id="dtfLine" x1="0%" y1="0%" x2="100%" y2="0%">
-                                <stop offset="0%" stop-color="#bae6fd" />
-                                <stop offset="100%" stop-color="#7dd3fc" />
-                            </linearGradient>
-                            <linearGradient id="dtfLine2" x1="0%" y1="0%" x2="100%" y2="0%">
-                                <stop offset="0%" stop-color="#e0f2fe" />
-                                <stop offset="100%" stop-color="#bae6fd" />
-                            </linearGradient>
-                            <pattern id="scanLines" x="0" y="0" width="2" height="2" patternUnits="userSpaceOnUse">
+                            <pattern id="sL" x="0" y="0" width="2" height="2" patternUnits="userSpaceOnUse">
                                 <line x1="0" y1="0" x2="2" y2="0" stroke="white" stroke-width="0.5" />
                             </pattern>
-                            <linearGradient id="filmSheen" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="white" stop-opacity="0.3" />
-                                <stop offset="50%" stop-color="white" stop-opacity="0" />
-                                <stop offset="100%" stop-color="white" stop-opacity="0.1" />
-                            </linearGradient>
                         </defs>
+                        <path class="sb-dtf sb-edge"
+                            d="M90 20 L60 10 L10 60 L50 80 L50 340 L250 340 L250 80 L290 60 L240 10 L210 20 Q200 50 150 50 Q100 50 90 20Z"
+                            stroke-width="1" />
+                        <g clip-path="url(#c4)">
+                            <rect x="80" y="130" width="140" height="130" rx="4" fill="url(#dtfBg)" opacity="0.92"
+                                style="animation:dtfSpin 12s linear infinite" />
+                            <polygon points="150,145 210,250 90,250" fill="url(#dtfT1)" opacity="0.9" />
+                            <polygon points="150,145 90,250 150,250" fill="url(#dtfT2)" opacity="0.8" />
+                            <rect x="110" y="205" width="80" height="18" rx="2" fill="#bae6fd" opacity="0.95" />
+                            <rect x="120" y="228" width="60" height="12" rx="2" fill="#e0f2fe" opacity="0.8" />
+                            <rect x="80" y="130" width="140" height="130" rx="4" fill="url(#sL)" opacity="0.06" />
+                            <polygon points="220,130 220,162 188,130" fill="rgba(200,230,255,0.25)"
+                                stroke="rgba(255,255,255,0.5)" stroke-width="1" />
+                            <rect x="80" y="130" width="140" height="130" rx="4" fill="none"
+                                stroke="rgba(14,165,233,0.3)" stroke-width="1.5" />
+                        </g>
                     </svg>
                 </div>
                 <div class="info-tooltip">
                     <strong>How DTF Works</strong>
-                    Design is printed on PET film, then coated with hot-melt adhesive powder. Heat press at 160°C bonds
-                    the transfer to fabric. The film is peeled away, leaving a flexible, full-color print.
+                    Design is printed on PET film, coated with hot-melt adhesive powder. Heat press at 160°C bonds the
+                    transfer to fabric. Film is peeled away, leaving a flexible, full-color print.
                 </div>
             </div>
         </div>
@@ -1602,33 +1488,28 @@
             <div class="tech-tag">Classic Method</div>
             <h2 class="tech-name">SCREEN</h2>
             <p class="tech-fullname">Screen / Silkscreen Printing</p>
-            <p class="tech-desc">
-                Ink forced through a mesh stencil directly onto fabric. Each color requires a separate screen. Produces
-                vivid, ultra-opaque results with excellent durability — the industry standard for bulk production.
-            </p>
+            <p class="tech-desc">Ink forced through a mesh stencil directly onto fabric. Each color requires a separate
+                screen. Produces vivid, ultra-opaque results with excellent durability — the industry standard for bulk
+                production.</p>
             <div class="quality-bar">
-                <div class="bar-row">
-                    <span class="bar-label">Ink Opacity</span>
+                <div class="bar-row"><span class="bar-label">Ink Opacity</span>
                     <div class="bar-track">
-                        <div class="bar-fill" style="--w:100%;" data-target="100"></div>
+                        <div class="bar-fill" style="--w:100%"></div>
                     </div>
                 </div>
-                <div class="bar-row">
-                    <span class="bar-label">Wash Durability</span>
+                <div class="bar-row"><span class="bar-label">Wash Durability</span>
                     <div class="bar-track">
-                        <div class="bar-fill" style="--w:95%;" data-target="95"></div>
+                        <div class="bar-fill" style="--w:95%"></div>
                     </div>
                 </div>
-                <div class="bar-row">
-                    <span class="bar-label">Color Complexity</span>
+                <div class="bar-row"><span class="bar-label">Color Complexity</span>
                     <div class="bar-track">
-                        <div class="bar-fill" style="--w:45%;" data-target="45"></div>
+                        <div class="bar-fill" style="--w:45%"></div>
                     </div>
                 </div>
-                <div class="bar-row">
-                    <span class="bar-label">Bulk Value</span>
+                <div class="bar-row"><span class="bar-label">Bulk Value</span>
                     <div class="bar-track">
-                        <div class="bar-fill" style="--w:96%;" data-target="96"></div>
+                        <div class="bar-fill" style="--w:96%"></div>
                     </div>
                 </div>
             </div>
@@ -1651,60 +1532,39 @@
                 </div>
             </div>
             <div class="use-cases">
-                <span class="use-tag">Band Merch</span>
-                <span class="use-tag">Uniforms</span>
-                <span class="use-tag">Bulk Orders</span>
-                <span class="use-tag">Event Tees</span>
+                <span class="use-tag">Band Merch</span><span class="use-tag">Uniforms</span>
+                <span class="use-tag">Bulk Orders</span><span class="use-tag">Event Tees</span>
             </div>
         </div>
         <div class="technique-visual">
-            <div class="fabric-canvas screenprint-fabric" style="background:#080f08;">
+            <div class="fabric-canvas">
                 <div class="tshirt-wrap">
-                    <svg class="tshirt-svg" viewBox="0 0 300 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="tshirt-svg" viewBox="0 0 300 360" fill="none">
                         <defs>
-                            <clipPath id="screenClip">
+                            <clipPath id="c5">
                                 <path
                                     d="M90 20 L60 10 L10 60 L50 80 L50 340 L250 340 L250 80 L290 60 L240 10 L210 20 Q200 50 150 50 Q100 50 90 20Z" />
                             </clipPath>
-                            <filter id="inkTexture">
-                                <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" result="noise" />
-                                <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -5 5"
-                                    in="noise" result="mask" />
-                                <feComposite in="SourceGraphic" in2="mask" operator="in" />
-                            </filter>
+                            <pattern id="iD" x="0" y="0" width="6" height="6" patternUnits="userSpaceOnUse">
+                                <circle cx="3" cy="3" r="1.5" fill="white" />
+                            </pattern>
                         </defs>
-
-                        <path
+                        <path class="sb-scr sb-edge"
                             d="M90 20 L60 10 L10 60 L50 80 L50 340 L250 340 L250 80 L290 60 L240 10 L210 20 Q200 50 150 50 Q100 50 90 20Z"
-                            fill="#080f08" stroke="rgba(255,255,255,0.06)" stroke-width="1" />
-
-                        <g clip-path="url(#screenClip)">
-                            <!-- Screen print: bold, flat, few-color design (retro style) -->
-                            <!-- Layer 1: Green base shape -->
+                            stroke-width="1" />
+                        <g clip-path="url(#c5)">
                             <circle cx="150" cy="200" r="72" fill="#16a34a" opacity="0.92" />
-
-                            <!-- Layer 2: White over-registration offset (simulates mis-reg for authenticity) -->
                             <circle cx="152" cy="198" r="72" fill="#dcfce7" opacity="0.06" />
-
-                            <!-- Layer 3: Inner yellow ring (spot color) -->
                             <circle cx="150" cy="200" r="58" fill="none" stroke="#eab308" stroke-width="8"
                                 opacity="0.9" />
-
-                            <!-- Layer 4: Bold text blocks -->
                             <rect x="105" y="178" width="90" height="22" rx="2" fill="#052e16" />
                             <rect x="116" y="200" width="68" height="16" rx="2" fill="#14532d" />
                             <rect x="126" y="218" width="48" height="12" rx="2" fill="#166534" />
-
-                            <!-- Stars / spot color elements -->
                             <polygon
                                 points="150,150 154,163 168,163 157,172 161,185 150,176 139,185 143,172 132,163 146,163"
                                 fill="#eab308" opacity="0.95" />
-
-                            <!-- Ink bleed texture at edges of design -->
                             <circle cx="150" cy="200" r="72" fill="none" stroke="#16a34a" stroke-width="3" opacity="0.3"
                                 stroke-dasharray="2 4" />
-
-                            <!-- Screen dot pattern in white area -->
                             <g fill="#052e16" opacity="0.5">
                                 <circle cx="150" cy="127" r="3" />
                                 <circle cx="162" cy="131" r="2.5" />
@@ -1712,22 +1572,14 @@
                                 <circle cx="173" cy="141" r="2" />
                                 <circle cx="127" cy="141" r="2" />
                             </g>
-
-                            <!-- Ink spot texture overlay -->
-                            <circle cx="150" cy="200" r="72" fill="url(#inkDots)" opacity="0.04" />
+                            <circle cx="150" cy="200" r="72" fill="url(#iD)" opacity="0.04" />
                         </g>
-
-                        <defs>
-                            <pattern id="inkDots" x="0" y="0" width="6" height="6" patternUnits="userSpaceOnUse">
-                                <circle cx="3" cy="3" r="1.5" fill="white" />
-                            </pattern>
-                        </defs>
                     </svg>
                 </div>
                 <div class="info-tooltip">
                     <strong>How Screen Printing Works</strong>
                     A photo emulsion creates a stencil on mesh screens — one per color. Ink is forced through with a
-                    squeegee. Each layer is cured between passes. Limited colors, maximum vibrancy and longevity.
+                    squeegee. Each layer is cured between passes. Limited colors, maximum vibrancy.
                 </div>
             </div>
         </div>
@@ -1757,11 +1609,11 @@
             </div>
             <div class="comp-row">
                 <div class="comp-cell">Fabric Types</div>
-                <div class="comp-cell" style="opacity:.7">Cotton only</div>
-                <div class="comp-cell" style="opacity:.7">All fabrics</div>
-                <div class="comp-cell" style="opacity:.7">All fabrics</div>
-                <div class="comp-cell" style="opacity:.7">All fabrics</div>
-                <div class="comp-cell" style="opacity:.7">Cotton, Poly</div>
+                <div class="comp-cell">Cotton only</div>
+                <div class="comp-cell">All fabrics</div>
+                <div class="comp-cell">All fabrics</div>
+                <div class="comp-cell">All fabrics</div>
+                <div class="comp-cell">Cotton, Poly</div>
             </div>
             <div class="comp-row">
                 <div class="comp-cell">Durability</div>
@@ -1773,23 +1625,23 @@
             </div>
             <div class="comp-row">
                 <div class="comp-cell">Min. Order</div>
-                <div class="comp-cell" style="opacity:.7">1 pc</div>
-                <div class="comp-cell" style="opacity:.7">1 pc</div>
-                <div class="comp-cell" style="opacity:.7">12 pcs</div>
-                <div class="comp-cell" style="opacity:.7">1 pc</div>
-                <div class="comp-cell" style="opacity:.7">24 pcs</div>
+                <div class="comp-cell">1 pc</div>
+                <div class="comp-cell">1 pc</div>
+                <div class="comp-cell">12 pcs</div>
+                <div class="comp-cell">1 pc</div>
+                <div class="comp-cell">24 pcs</div>
             </div>
             <div class="comp-row">
                 <div class="comp-cell">Photo-realistic</div>
                 <div class="comp-cell"><span style="color:var(--dtg)">●</span> Yes</div>
                 <div class="comp-cell"><span style="color:var(--coloreel)">●</span> Yes</div>
-                <div class="comp-cell"><span style="color:#666">●</span> No</div>
+                <div class="comp-cell"><span style="color:var(--text-dimmer)">●</span> No</div>
                 <div class="comp-cell"><span style="color:var(--dtf)">●</span> Yes</div>
-                <div class="comp-cell"><span style="color:#666">●</span> No</div>
+                <div class="comp-cell"><span style="color:var(--text-dimmer)">●</span> No</div>
             </div>
             <div class="comp-row">
                 <div class="comp-cell">Dark Fabrics</div>
-                <div class="comp-cell"><span style="color:#888">◐</span> Partial</div>
+                <div class="comp-cell">◐ Partial</div>
                 <div class="comp-cell"><span style="color:var(--coloreel)">●</span> Yes</div>
                 <div class="comp-cell"><span style="color:var(--embroidery)">●</span> Yes</div>
                 <div class="comp-cell"><span style="color:var(--dtf)">●</span> Yes</div>
@@ -1797,83 +1649,67 @@
             </div>
             <div class="comp-row">
                 <div class="comp-cell">3D / Texture</div>
-                <div class="comp-cell"><span style="color:#666">●</span> Flat</div>
+                <div class="comp-cell">Flat</div>
                 <div class="comp-cell"><span style="color:var(--coloreel)">●</span> Raised</div>
                 <div class="comp-cell"><span style="color:var(--embroidery)">●</span> High 3D</div>
-                <div class="comp-cell"><span style="color:#888">◐</span> Slight</div>
-                <div class="comp-cell"><span style="color:#888">◐</span> Slight</div>
+                <div class="comp-cell">◐ Slight</div>
+                <div class="comp-cell">◐ Slight</div>
             </div>
             <div class="comp-row">
                 <div class="comp-cell">Best For</div>
-                <div class="comp-cell" style="font-size:.65rem; opacity:.7">Small runs, art</div>
-                <div class="comp-cell" style="font-size:.65rem; opacity:.7">Premium brands</div>
-                <div class="comp-cell" style="font-size:.65rem; opacity:.7">Logos, caps</div>
-                <div class="comp-cell" style="font-size:.65rem; opacity:.7">Any fabric</div>
-                <div class="comp-cell" style="font-size:.65rem; opacity:.7">Bulk orders</div>
+                <div class="comp-cell" style="font-size:.65rem">Small runs, art</div>
+                <div class="comp-cell" style="font-size:.65rem">Premium brands</div>
+                <div class="comp-cell" style="font-size:.65rem">Logos, caps</div>
+                <div class="comp-cell" style="font-size:.65rem">Any fabric</div>
+                <div class="comp-cell" style="font-size:.65rem">Bulk orders</div>
             </div>
         </div>
 
-        <!-- Footer -->
-        <div style="text-align:center; margin-top:4rem; opacity:0.25;">
-            <p style="font-family:'Bebas Neue',sans-serif; font-size:3rem; letter-spacing:0.1em;">FABRIC CRAFT</p>
-            <p style="font-family:'DM Mono',monospace; font-size:0.6rem; letter-spacing:0.3em; margin-top:0.5rem;">THE
-                ART OF CUSTOMIZATION</p>
+        <div class="site-footer">
+            <p class="f-title">FABRIC CRAFT</p>
+            <p class="f-sub">THE ART OF CUSTOMIZATION</p>
         </div>
     </section>
 
     <script>
-        // Animate bars on scroll into view
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const bars = entry.target.querySelectorAll('.bar-fill');
-                    bars.forEach((bar, i) => {
-                        setTimeout(() => {
-                            bar.classList.add('animated');
-                        }, i * 100);
-                    });
+        /* ── THEME TOGGLE ── */
+        function toggleTheme() {
+            const html = document.documentElement;
+            const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            document.getElementById('t-label').textContent = next.charAt(0).toUpperCase() + next.slice(1);
+            try { localStorage.setItem('fc-theme', next); } catch (e) { }
+        }
+
+        // Restore saved preference
+        try {
+            const saved = localStorage.getItem('fc-theme');
+            if (saved) {
+                document.documentElement.setAttribute('data-theme', saved);
+                document.getElementById('t-label').textContent = saved.charAt(0).toUpperCase() + saved.slice(1);
+            }
+        } catch (e) { }
+
+        /* ── BAR ANIMATION ── */
+        const barObs = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.querySelectorAll('.bar-fill').forEach((b, i) =>
+                        setTimeout(() => b.classList.add('animated'), i * 120));
                 }
             });
         }, { threshold: 0.3 });
 
-        document.querySelectorAll('.technique-section').forEach(section => {
-            observer.observe(section);
-        });
+        document.querySelectorAll('.technique-section').forEach(s => barObs.observe(s));
 
-        // Thread animation for Coloreel SVG
-        const threads = document.querySelectorAll('#coloreel .tshirt-svg path[style]');
-        threads.forEach((t, i) => {
-            const len = t.getTotalLength ? t.getTotalLength() : 400;
-            t.style.strokeDasharray = len;
-            t.style.strokeDashoffset = len;
-        });
-
-        // Add draw animation via CSS keyframes programmatically
-        const style = document.createElement('style');
-        style.textContent = `
-    @keyframes drawThread {
-      0% { stroke-dashoffset: var(--len, 400); opacity: 0; }
-      10% { opacity: 1; }
-      80% { stroke-dashoffset: 0; opacity: 1; }
-      100% { stroke-dashoffset: 0; opacity: 0.8; }
-    }
-    #coloreel .tshirt-svg path[style*="drawThread"] {
-      animation: drawThread 3s ease-in-out infinite !important;
-    }
-  `;
-        document.head.appendChild(style);
-
-        // Parallax subtle effect on hero
+        /* ── PARALLAX GRID ── */
         window.addEventListener('scroll', () => {
-            const y = window.scrollY;
-            const grid = document.querySelector('.hero-grid');
-            if (grid) grid.style.transform = `translateY(${y * 0.3}px)`;
-        });
+            const g = document.querySelector('.hero-grid');
+            if (g) g.style.transform = `translateY(${scrollY * 0.3}px)`;
+        }, { passive: true });
 
-        // Smooth section snapping fix on mobile
-        if (window.innerWidth < 900) {
-            document.documentElement.style.scrollSnapType = 'none';
-        }
+        /* ── MOBILE ── */
+        if (window.innerWidth < 900) document.documentElement.style.scrollSnapType = 'none';
     </script>
 </body>
 
