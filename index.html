@@ -1,357 +1,803 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fabric Craft — Customization Techniques</title>
+    <title>Yoode Merch Store — Exclusive Verified Merch for Your Team</title>
     <link
-        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&family=DM+Mono:wght@300;400&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,600;1,9..40,300&family=Space+Mono:wght@400;700&display=swap"
         rel="stylesheet">
     <style>
-        *,
-        *::before,
-        *::after {
+        /* ============================================================
+   ALL STYLES SCOPED TO .yd-merch-store
+   Safe to embed in Shopify — no global overrides
+   ============================================================ */
+body{
+    margin: 0;
+}
+        .yd-merch-store {
+            --yd-black: #0a0a0a;
+            --yd-white: #f5f2ed;
+            --yd-accent: #ff4d1c;
+            --yd-gold: #e8c96d;
+            --yd-muted: #9e9b95;
+            --yd-card: #141414;
+            --yd-border: rgba(255, 255, 255, 0.08);
+            --yd-font-display: 'Bebas Neue', sans-serif;
+            --yd-font-mono: 'Space Mono', monospace;
+            --yd-font-body: 'DM Sans', sans-serif;
+
+            box-sizing: border-box;
+            background: var(--yd-black);
+            color: var(--yd-white);
+            font-family: var(--yd-font-body);
+            overflow-x: hidden;
+            position: relative;
+            width: 100%;
+        }
+
+        .yd-merch-store *,
+        .yd-merch-store *::before,
+        .yd-merch-store *::after {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
-        /* ════════════════════════════════════
-     THEME TOKENS
-  ════════════════════════════════════ */
-        :root {
-            --dtg: #e84393;
-            --coloreel: #ff6b2b;
-            --embroidery: #7c3aed;
-            --dtf: #0ea5e9;
-            --screen: #16a34a;
-            --gold: #c9a84c;
-            --transition: 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        [data-theme="dark"] {
-            --bg: #0a0a0a;
-            --surface: #161616;
-            --border: rgba(255, 255, 255, 0.07);
-            --text: #f5f0e8;
-            --text-dim: rgba(245, 240, 232, 0.55);
-            --text-dimmer: rgba(245, 240, 232, 0.32);
-            --grid-line: rgba(245, 240, 232, 0.04);
-            --bar-track: rgba(255, 255, 255, 0.1);
-            --use-tag-bg: rgba(255, 255, 255, 0.07);
-            --use-tag-bd: rgba(255, 255, 255, 0.1);
-            --tooltip-bg: rgba(10, 10, 10, 0.92);
-            --comp-hover: rgba(255, 255, 255, 0.03);
-            --shadow: rgba(0, 0, 0, 0.7);
-            --hero-glow1: rgba(201, 168, 76, 0.12);
-            --hero-glow2: rgba(212, 99, 122, 0.10);
-            --dtg-bg: #0d0d14;
-            --dtg-vis: rgba(45, 9, 64, 0.6);
-            --col-bg: #0e0b06;
-            --col-vis: rgba(42, 18, 0, 0.6);
-            --emb-bg: #080810;
-            --emb-vis: rgba(26, 8, 56, 0.6);
-            --dtf-bg: #060e16;
-            --dtf-vis: rgba(0, 24, 48, 0.6);
-            --scr-bg: #060d06;
-            --scr-vis: rgba(0, 26, 8, 0.6);
-            --cmp-bg: #0a0a0a;
-            --shirt-dtg: #1a0030;
-            --shirt-col: #1a1008;
-            --shirt-emb: #0c0818;
-            --shirt-dtf: #061226;
-            --shirt-scr: #080f08;
-            --title-from: #f5f0e8;
-        }
-
-        [data-theme="light"] {
-            --bg: #f5f1ea;
-            --surface: #ffffff;
-            --border: rgba(0, 0, 0, 0.09);
-            --text: #18130e;
-            --text-dim: rgba(24, 19, 14, 0.58);
-            --text-dimmer: rgba(24, 19, 14, 0.33);
-            --grid-line: rgba(24, 19, 14, 0.05);
-            --bar-track: rgba(0, 0, 0, 0.1);
-            --use-tag-bg: rgba(0, 0, 0, 0.05);
-            --use-tag-bd: rgba(0, 0, 0, 0.1);
-            --tooltip-bg: rgba(255, 252, 248, 0.97);
-            --comp-hover: rgba(0, 0, 0, 0.025);
-            --shadow: rgba(0, 0, 0, 0.16);
-            --hero-glow1: rgba(201, 168, 76, 0.2);
-            --hero-glow2: rgba(212, 99, 122, 0.13);
-            --dtg-bg: #fdf0f8;
-            --dtg-vis: rgba(248, 195, 230, 0.55);
-            --col-bg: #fff6ee;
-            --col-vis: rgba(255, 214, 178, 0.5);
-            --emb-bg: #f3f0ff;
-            --emb-vis: rgba(210, 195, 255, 0.55);
-            --dtf-bg: #edf6ff;
-            --dtf-vis: rgba(190, 225, 255, 0.55);
-            --scr-bg: #edfaf3;
-            --scr-vis: rgba(185, 240, 210, 0.55);
-            --cmp-bg: #f5f1ea;
-            --shirt-dtg: #f8eaf5;
-            --shirt-col: #fff3ea;
-            --shirt-emb: #ece8ff;
-            --shirt-dtf: #e6f3ff;
-            --shirt-scr: #e6f7ed;
-            --title-from: #18130e;
-        }
-
-        /* ════════════════════════════════════
-     THEME TOGGLE
-  ════════════════════════════════════ */
-        #theme-toggle {
+        /* Noise overlay */
+        .yd-merch-store .yd-noise {
             position: fixed;
-            top: 1.25rem;
-            right: 1.25rem;
-            z-index: 9999;
+            inset: 0;
+            pointer-events: none;
+            z-index: 999;
+            opacity: 0.3;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+        }
+
+        /* ── NAV ── */
+        .yd-merch-store .yd-nav {
+            position: sticky;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 48px;
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-bottom: 1px solid var(--yd-border);
+        }
+
+        .yd-merch-store .yd-logo {
+            font-family: var(--yd-font-display);
+            font-size: 1.9rem;
+            letter-spacing: 3px;
+            color: var(--yd-white);
+            text-decoration: none;
+            line-height: 1;
+        }
+
+        .yd-merch-store .yd-logo span {
+            color: var(--yd-accent);
+        }
+
+        .yd-merch-store .yd-nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .yd-merch-store .yd-nav-links a {
+            color: var(--yd-muted);
+            text-decoration: none;
+            font-size: 0.82rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: color 0.2s;
+            font-family: var(--yd-font-body);
+        }
+
+        .yd-merch-store .yd-nav-links a:hover {
+            color: var(--yd-white);
+        }
+
+        .yd-merch-store .yd-nav-links .yd-nav-cta {
+            background: var(--yd-accent);
+            color: var(--yd-white);
+            padding: 10px 22px;
+            border-radius: 2px;
+            font-weight: 600;
+        }
+
+        .yd-merch-store .yd-nav-links .yd-nav-cta:hover {
+            background: #e03a08;
+            color: var(--yd-white);
+        }
+
+        /* ── HERO ── */
+        .yd-merch-store .yd-hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 48px;
+            padding: 72px 48px;
+            position: relative;
+            overflow: hidden;
+            min-height: 88vh;
+        }
+
+        .yd-merch-store .yd-hero-bg-circle {
+            position: absolute;
+            width: 560px;
+            height: 560px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 77, 28, 0.13) 0%, transparent 70%);
+            right: -80px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        .yd-merch-store .yd-hero-bg-grid {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        .yd-merch-store .yd-hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .yd-merch-store .yd-hero-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 77, 28, 0.12);
+            border: 1px solid rgba(255, 77, 28, 0.3);
+            color: var(--yd-accent);
+            font-family: var(--yd-font-mono);
+            font-size: 0.68rem;
+            letter-spacing: 2px;
+            padding: 7px 14px;
+            border-radius: 2px;
+            margin-bottom: 24px;
+            animation: ydFadeUp 0.6s ease both;
+        }
+
+        .yd-merch-store .yd-hero-label::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--yd-accent);
+            flex-shrink: 0;
+            animation: ydPulse 1.5s ease infinite;
+        }
+
+        .yd-merch-store .yd-hero h1 {
+            font-family: var(--yd-font-display);
+            font-size: clamp(3.4rem, 6vw, 6.5rem);
+            line-height: 0.92;
+            letter-spacing: 2px;
+            margin-bottom: 22px;
+            animation: ydFadeUp 0.6s 0.1s ease both;
+        }
+
+        .yd-merch-store .yd-hero h1 em {
+            font-style: normal;
+            -webkit-text-stroke: 1.5px var(--yd-accent);
+            color: transparent;
+        }
+
+        .yd-merch-store .yd-hero-sub {
+            font-size: 1rem;
+            line-height: 1.75;
+            color: var(--yd-muted);
+            margin-bottom: 36px;
+            font-weight: 300;
+            animation: ydFadeUp 0.6s 0.2s ease both;
+        }
+
+        .yd-merch-store .yd-hero-sub strong {
+            color: var(--yd-white);
+            font-weight: 600;
+        }
+
+        .yd-merch-store .yd-hero-actions {
+            animation: ydFadeUp 0.6s 0.3s ease both;
+        }
+
+        /* Hero right — stat cards */
+        .yd-merch-store .yd-hero-right {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            animation: ydFadeUp 0.7s 0.2s ease both;
+        }
+
+        .yd-merch-store .yd-stat-card {
+            background: var(--yd-card);
+            border: 1px solid var(--yd-border);
+            border-radius: 10px;
+            padding: 24px 20px;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+
+        .yd-merch-store .yd-stat-card:hover {
+            border-color: rgba(255, 77, 28, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .yd-merch-store .yd-stat-card.yd-wide {
+            grid-column: span 2;
+        }
+
+        .yd-merch-store .yd-stat-card.yd-accent-card {
+            background: linear-gradient(135deg, rgba(255, 77, 28, 0.15), rgba(255, 77, 28, 0.05));
+            border-color: rgba(255, 77, 28, 0.3);
+        }
+
+        .yd-merch-store .yd-stat-icon {
+            font-size: 1.6rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .yd-merch-store .yd-stat-num {
+            font-family: var(--yd-font-display);
+            font-size: 2.4rem;
+            letter-spacing: 1px;
+            color: var(--yd-white);
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .yd-merch-store .yd-stat-num span {
+            color: var(--yd-accent);
+        }
+
+        .yd-merch-store .yd-stat-label {
+            font-size: 0.75rem;
+            color: var(--yd-muted);
+            font-family: var(--yd-font-mono);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .yd-merch-store .yd-stat-card p {
+            font-size: 0.82rem;
+            color: var(--yd-muted);
+            line-height: 1.6;
+            margin-top: 8px;
+        }
+
+        .yd-merch-store .yd-product-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 12px;
+        }
+
+        .yd-merch-store .yd-chip {
+            font-size: 0.68rem;
+            font-family: var(--yd-font-mono);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--yd-border);
+            padding: 4px 10px;
+            border-radius: 100px;
+            color: var(--yd-muted);
+            white-space: nowrap;
+        }
+
+        /* ── BUTTONS ── */
+        .yd-merch-store .yd-btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--yd-accent);
+            color: var(--yd-white);
+            padding: 16px 36px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 2px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-family: var(--yd-font-body);
+            letter-spacing: 0.3px;
+        }
+
+        .yd-merch-store .yd-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 40px rgba(255, 77, 28, 0.4);
+        }
+
+        /* ── TICKER ── */
+        .yd-merch-store .yd-ticker {
+            background: var(--yd-accent);
+            overflow: hidden;
+            white-space: nowrap;
+            padding: 11px 0;
+        }
+
+        .yd-merch-store .yd-ticker-inner {
+            display: inline-flex;
+            animation: ydTicker 26s linear infinite;
+        }
+
+        .yd-merch-store .yd-ticker-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-family: var(--yd-font-display);
+            font-size: 1rem;
+            letter-spacing: 2px;
+            padding: 0 36px;
+            color: var(--yd-white);
+        }
+
+        .yd-merch-store .yd-ticker-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            flex-shrink: 0;
+        }
+
+        /* ── SECTION BASE ── */
+        .yd-merch-store .yd-section {
+            padding: 96px 48px;
+        }
+
+        .yd-merch-store .yd-section-label {
+            font-family: var(--yd-font-mono);
+            font-size: 0.68rem;
+            letter-spacing: 3px;
+            color: var(--yd-accent);
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .yd-merch-store .yd-section-title {
+            font-family: var(--yd-font-display);
+            font-size: clamp(2.4rem, 5vw, 4.2rem);
+            letter-spacing: 1px;
+            line-height: 1;
+            margin-bottom: 16px;
+            color: var(--yd-white);
+        }
+
+        .yd-merch-store .yd-section-sub {
+            font-size: 1rem;
+            color: var(--yd-muted);
+            max-width: 540px;
+            line-height: 1.75;
+            font-weight: 300;
+            margin-bottom: 56px;
+        }
+
+        /* ── STEPS ── */
+        .yd-merch-store .yd-steps-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1px;
+            background: var(--yd-border);
+            border: 1px solid var(--yd-border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .yd-merch-store .yd-step {
+            background: var(--yd-card);
+            padding: 36px 24px;
+            transition: background 0.3s;
+        }
+
+        .yd-merch-store .yd-step:hover {
+            background: #1a1a1a;
+        }
+
+        .yd-merch-store .yd-step-num {
+            font-family: var(--yd-font-display);
+            font-size: 3.5rem;
+            color: rgba(255, 77, 28, 0.13);
+            line-height: 1;
+            margin-bottom: 18px;
+            transition: color 0.3s;
+        }
+
+        .yd-merch-store .yd-step:hover .yd-step-num {
+            color: rgba(255, 77, 28, 0.35);
+        }
+
+        .yd-merch-store .yd-step-icon {
+            font-size: 1.6rem;
+            margin-bottom: 14px;
+        }
+
+        .yd-merch-store .yd-step h3 {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            color: var(--yd-white);
+        }
+
+        .yd-merch-store .yd-step p {
+            font-size: 0.83rem;
+            color: var(--yd-muted);
+            line-height: 1.65;
+        }
+
+        /* ── PERK CARDS ── */
+        .yd-merch-store .yd-perks-section {
+            padding: 0 48px 96px;
+            background: var(--yd-black);
+        }
+
+        .yd-merch-store .yd-perks-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .yd-merch-store .yd-perk-card {
+            background: var(--yd-card);
+            border: 1px solid var(--yd-border);
+            border-radius: 10px;
+            padding: 36px 28px;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+
+        .yd-merch-store .yd-perk-card:hover {
+            border-color: rgba(255, 77, 28, 0.3);
+            transform: translateY(-4px);
+        }
+
+        .yd-merch-store .yd-perk-card.yd-highlight {
+            border-color: rgba(255, 77, 28, 0.35);
+            background: linear-gradient(135deg, rgba(255, 77, 28, 0.07), var(--yd-card));
+        }
+
+        .yd-merch-store .yd-perk-emoji {
+            font-size: 2rem;
+            margin-bottom: 18px;
+            display: block;
+        }
+
+        .yd-merch-store .yd-perk-card h3 {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 10px;
+            color: var(--yd-white);
+        }
+
+        .yd-merch-store .yd-perk-card p {
+            font-size: 0.85rem;
+            color: var(--yd-muted);
+            line-height: 1.65;
+        }
+
+        /* ── FEATURES ── */
+        .yd-merch-store .yd-features-section {
+            padding: 96px 48px;
+            background: #0d0d0d;
+        }
+
+        .yd-merch-store .yd-features-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 72px;
+            align-items: start;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .yd-merch-store .yd-features-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .yd-merch-store .yd-feature-item {
+            display: flex;
+            gap: 20px;
+            padding: 24px 0;
+            border-bottom: 1px solid var(--yd-border);
+            transition: padding-left 0.3s;
+            cursor: default;
+        }
+
+        .yd-merch-store .yd-feature-item:hover {
+            padding-left: 8px;
+        }
+
+        .yd-merch-store .yd-feature-item:first-child {
+            padding-top: 0;
+        }
+
+        .yd-merch-store .yd-feature-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 6px;
+            flex-shrink: 0;
+            background: rgba(255, 77, 28, 0.1);
+            border: 1px solid rgba(255, 77, 28, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            transition: background 0.3s;
+        }
+
+        .yd-merch-store .yd-feature-item:hover .yd-feature-icon {
+            background: rgba(255, 77, 28, 0.22);
+        }
+
+        .yd-merch-store .yd-feature-text h4 {
+            font-weight: 600;
+            font-size: 0.93rem;
+            margin-bottom: 5px;
+            color: var(--yd-white);
+        }
+
+        .yd-merch-store .yd-feature-text p {
+            font-size: 0.82rem;
+            color: var(--yd-muted);
+            line-height: 1.6;
+        }
+
+        /* ── TRUST PANEL (replaces delivery tracker) ── */
+        .yd-merch-store .yd-trust-panel {
+            background: var(--yd-card);
+            border: 1px solid var(--yd-border);
+            border-radius: 12px;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .yd-merch-store .yd-trust-title {
+            font-family: var(--yd-font-mono);
+            font-size: 0.68rem;
+            letter-spacing: 2px;
+            color: var(--yd-accent);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .yd-merch-store .yd-trust-heading {
+            font-family: var(--yd-font-display);
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+            line-height: 1.1;
+            color: var(--yd-white);
+            margin-bottom: 8px;
+        }
+
+        .yd-merch-store .yd-trust-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 16px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--yd-border);
+        }
+
+        .yd-merch-store .yd-trust-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 6px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .yd-merch-store .yd-trust-icon.green {
+            background: rgba(61, 220, 132, 0.12);
+        }
+
+        .yd-merch-store .yd-trust-icon.orange {
+            background: rgba(255, 77, 28, 0.12);
+        }
+
+        .yd-merch-store .yd-trust-icon.gold {
+            background: rgba(232, 201, 109, 0.12);
+        }
+
+        .yd-merch-store .yd-trust-icon.blue {
+            background: rgba(77, 121, 255, 0.12);
+        }
+
+        .yd-merch-store .yd-trust-item h5 {
+            font-size: 0.88rem;
+            font-weight: 600;
+            margin-bottom: 3px;
+            color: var(--yd-white);
+        }
+
+        .yd-merch-store .yd-trust-item p {
+            font-size: 0.78rem;
+            color: var(--yd-muted);
+            line-height: 1.5;
+        }
+
+        /* ── COMPANIES SCROLL ── */
+        .yd-merch-store .yd-companies-section {
+            padding: 72px 0;
+            border-top: 1px solid var(--yd-border);
+            overflow: hidden;
+        }
+
+        .yd-merch-store .yd-companies-label {
+            font-size: 0.75rem;
+            color: var(--yd-muted);
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-family: var(--yd-font-mono);
+            margin-bottom: 36px;
+            padding: 0 48px;
+        }
+
+        .yd-merch-store .yd-companies-track {
+            display: flex;
+            gap: 14px;
+            width: max-content;
+            animation: ydBrandScroll 24s linear infinite;
+        }
+
+        .yd-merch-store .yd-company-pill {
             display: flex;
             align-items: center;
             gap: 9px;
-            background: var(--tooltip-bg);
-            border: 1px solid var(--border);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: var(--yd-card);
+            border: 1px solid var(--yd-border);
+            padding: 9px 20px;
             border-radius: 100px;
-            padding: 7px 14px 7px 10px;
-            cursor: pointer;
-            box-shadow: 0 4px 28px var(--shadow);
-            transition: background var(--transition), border var(--transition), box-shadow var(--transition);
-            user-select: none;
-        }
-
-        #theme-toggle:hover {
-            box-shadow: 0 8px 36px var(--shadow);
-            transform: translateY(-1px);
-        }
-
-        .t-icons {
-            display: flex;
-            gap: 3px;
-            align-items: center;
-        }
-
-        .t-icon {
-            font-size: 0.85rem;
-            line-height: 1;
-            transition: opacity 0.3s;
-        }
-
-        .t-moon {
-            opacity: 1;
-        }
-
-        .t-sun {
-            opacity: 0.32;
-        }
-
-        [data-theme="light"] .t-moon {
-            opacity: 0.32;
-        }
-
-        [data-theme="light"] .t-sun {
-            opacity: 1;
-        }
-
-        .t-track {
-            width: 40px;
-            height: 22px;
-            border-radius: 100px;
-            background: var(--bar-track);
-            border: 1px solid var(--border);
-            position: relative;
+            white-space: nowrap;
+            font-size: 0.82rem;
+            font-weight: 500;
             flex-shrink: 0;
-            transition: background 0.35s;
+            color: var(--yd-white);
         }
 
-        [data-theme="light"] .t-track {
-            background: var(--gold);
-        }
-
-        .t-thumb {
-            width: 16px;
-            height: 16px;
+        .yd-merch-store .yd-company-dot {
+            width: 7px;
+            height: 7px;
             border-radius: 50%;
-            background: var(--text);
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.35s;
+            flex-shrink: 0;
         }
 
-        [data-theme="light"] .t-thumb {
-            transform: translateX(18px);
-        }
-
-        .t-label {
-            font-family: 'DM Mono', monospace;
-            font-size: 0.6rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: var(--text-dim);
-            transition: color var(--transition);
-            min-width: 30px;
-        }
-
-        /* ════════════════════════════════════
-     GLOBAL
-  ════════════════════════════════════ */
-        html {
-            scroll-behavior: smooth;
-            scroll-snap-type: y mandatory;
-        }
-
-        body {
-            font-family: 'DM Mono', monospace;
-            background: var(--bg);
-            color: var(--text);
-            overflow-x: hidden;
-            transition: background var(--transition), color var(--transition);
-        }
-
-        /* ════════════════════════════════════
-     HERO
-  ════════════════════════════════════ */
-        #hero {
-            height: 100vh;
-            scroll-snap-align: start;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+        /* ── CTA ── */
+        .yd-merch-store .yd-cta-section {
+            padding: 110px 48px;
+            text-align: center;
             position: relative;
             overflow: hidden;
-            background: var(--bg);
-            transition: background var(--transition);
         }
 
-        #hero::before {
+        .yd-merch-store .yd-cta-section::before {
             content: '';
             position: absolute;
             inset: 0;
-            background:
-                radial-gradient(ellipse 80% 50% at 20% 40%, var(--hero-glow1) 0%, transparent 60%),
-                radial-gradient(ellipse 60% 80% at 80% 60%, var(--hero-glow2) 0%, transparent 50%);
-            transition: background var(--transition);
+            pointer-events: none;
+            background: radial-gradient(ellipse 700px 380px at 50% 50%, rgba(255, 77, 28, 0.1), transparent);
         }
 
-        .hero-grid {
-            position: absolute;
-            inset: 0;
-            background-image:
-                linear-gradient(var(--grid-line) 1px, transparent 1px),
-                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-            background-size: 60px 60px;
-            animation: gridPulse 8s ease-in-out infinite;
-        }
-
-        @keyframes gridPulse {
-
-            0%,
-            100% {
-                opacity: .5
-            }
-
-            50% {
-                opacity: 1
-            }
-        }
-
-        .hero-label {
-            font-size: 0.7rem;
-            letter-spacing: 0.4em;
-            color: var(--gold);
-            text-transform: uppercase;
-            margin-bottom: 2rem;
-            animation: fadeUp 1s ease both;
-        }
-
-        .hero-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(5rem, 15vw, 14rem);
-            line-height: 0.85;
-            text-align: center;
-            letter-spacing: -0.02em;
-            animation: fadeUp 1s 0.2s ease both;
+        .yd-merch-store .yd-cta-section h2 {
+            font-family: var(--yd-font-display);
+            font-size: clamp(2.8rem, 7vw, 5.8rem);
+            letter-spacing: 2px;
+            line-height: 0.96;
+            margin-bottom: 24px;
+            color: var(--yd-white);
             position: relative;
-            z-index: 1;
         }
 
-        .hero-title span {
-            display: block;
-            background: linear-gradient(135deg, var(--title-from) 30%, var(--gold));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            transition: background 0.4s;
+        .yd-merch-store .yd-cta-section h2 span {
+            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.28);
+            color: transparent;
         }
 
-        .hero-sub {
-            font-family: 'Cormorant Garamond', serif;
-            font-style: italic;
-            font-size: clamp(1rem, 2.5vw, 1.5rem);
-            color: var(--text-dim);
-            text-align: center;
-            margin-top: 2rem;
-            animation: fadeUp 1s 0.4s ease both;
-            transition: color var(--transition);
+        .yd-merch-store .yd-cta-section p {
+            font-size: 1.05rem;
+            color: var(--yd-muted);
+            max-width: 500px;
+            margin: 0 auto 44px;
+            line-height: 1.75;
+            font-weight: 300;
+            position: relative;
         }
 
-        .hero-nav {
+        .yd-merch-store .yd-cta-form {
             display: flex;
-            gap: 1.5rem;
-            margin-top: 3.5rem;
-            flex-wrap: wrap;
-            justify-content: center;
-            animation: fadeUp 1s 0.6s ease both;
+            gap: 12px;
+            max-width: 520px;
+            margin: 0 auto 20px;
             position: relative;
-            z-index: 1;
         }
 
-        .hero-nav a {
-            text-decoration: none;
-            padding: 0.5rem 1.2rem;
-            border: 1px solid var(--border);
+        .yd-merch-store .yd-cta-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--yd-border);
             border-radius: 2px;
-            font-size: 0.65rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: var(--text);
-            transition: all 0.3s ease;
+            padding: 16px 20px;
+            color: var(--yd-white);
+            font-family: var(--yd-font-body);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .yd-merch-store .yd-cta-input::placeholder {
+            color: var(--yd-muted);
+        }
+
+        .yd-merch-store .yd-cta-input:focus {
+            border-color: rgba(255, 77, 28, 0.5);
+        }
+
+        .yd-merch-store .yd-cta-note {
+            font-size: 0.72rem;
+            color: var(--yd-muted);
             position: relative;
-            overflow: hidden;
+            font-family: var(--yd-font-mono);
+            letter-spacing: 0.5px;
         }
 
-        .hero-nav a::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: var(--text);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.3s ease;
+        /* ── FOOTER ── */
+        .yd-merch-store .yd-footer {
+            border-top: 1px solid var(--yd-border);
+            padding: 36px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .hero-nav a:hover::before {
-            transform: scaleX(1);
+        .yd-merch-store .yd-footer-links {
+            display: flex;
+            gap: 24px;
+            list-style: none;
         }
 
-        .hero-nav a:hover {
-            color: var(--bg);
+        .yd-merch-store .yd-footer-links a {
+            color: var(--yd-muted);
+            text-decoration: none;
+            font-size: 0.78rem;
+            transition: color 0.2s;
         }
 
-        .hero-nav a span {
-            position: relative;
-            z-index: 1;
+        .yd-merch-store .yd-footer-links a:hover {
+            color: var(--yd-white);
         }
 
-        @keyframes fadeUp {
+        .yd-merch-store .yd-footer-copy {
+            font-size: 0.75rem;
+            color: var(--yd-muted);
+        }
+
+        /* ── ANIMATIONS ── */
+        @keyframes ydFadeUp {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(22px);
             }
 
             to {
@@ -360,1357 +806,572 @@
             }
         }
 
-        .scroll-hint {
-            position: absolute;
-            bottom: 2.5rem;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            opacity: 0.35;
-            animation: bobble 2s ease-in-out infinite;
-            color: var(--text-dim);
-        }
-
-        .scroll-hint span {
-            font-size: 0.55rem;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-        }
-
-        .scroll-line {
-            width: 1px;
-            height: 40px;
-            background: linear-gradient(to bottom, var(--text), transparent);
-            transition: background var(--transition);
-        }
-
-        @keyframes bobble {
+        @keyframes ydPulse {
 
             0%,
             100% {
-                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+                transform: scale(1);
             }
 
             50% {
-                transform: translateX(-50%) translateY(8px);
+                opacity: 0.5;
+                transform: scale(1.5);
             }
         }
 
-        /* ════════════════════════════════════
-     TECHNIQUE SECTIONS
-  ════════════════════════════════════ */
-        .technique-section {
-            min-height: 100vh;
-            scroll-snap-align: start;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            position: relative;
-            overflow: hidden;
-            transition: background var(--transition);
-        }
-
-        @media (max-width: 900px) {
-            .technique-section {
-                grid-template-columns: 1fr;
+        @keyframes ydTicker {
+            0% {
+                transform: translateX(0);
             }
 
-            .technique-visual {
-                min-height: 50vh;
+            100% {
+                transform: translateX(-50%);
             }
         }
 
-        .technique-info {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: clamp(2rem, 6vw, 6rem);
-            position: relative;
-            z-index: 2;
-            transition: background var(--transition);
+        @keyframes ydBrandScroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
         }
 
-        .tech-number {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 0.9rem;
-            letter-spacing: 0.3em;
-            color: var(--text-dimmer);
-            margin-bottom: 1rem;
-            transition: color var(--transition);
-        }
-
-        .tech-tag {
-            display: inline-block;
-            font-size: 0.6rem;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            padding: 0.3rem 0.8rem;
-            border-radius: 100px;
-            margin-bottom: 1.5rem;
-            width: fit-content;
-            transition: all var(--transition);
-        }
-
-        .tech-name {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(2.5rem, 6vw, 5rem);
-            line-height: 1;
-            letter-spacing: 0.02em;
-            margin-bottom: 0.5rem;
-        }
-
-        .tech-fullname {
-            font-family: 'Cormorant Garamond', serif;
-            font-style: italic;
-            font-size: 1rem;
-            color: var(--text-dim);
-            margin-bottom: 1.5rem;
-            transition: color var(--transition);
-        }
-
-        .tech-desc {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: clamp(1rem, 1.5vw, 1.2rem);
-            line-height: 1.7;
-            color: var(--text-dim);
-            margin-bottom: 2rem;
-            max-width: 420px;
-            transition: color var(--transition);
-        }
-
-        .tech-specs {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .spec-label {
-            font-size: 0.6rem;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            color: var(--text-dimmer);
-            margin-bottom: 0.3rem;
-            transition: color var(--transition);
-        }
-
-        .spec-value {
-            font-size: 0.85rem;
-            color: var(--text);
-            transition: color var(--transition);
-        }
-
-        .quality-bar {
-            display: flex;
-            flex-direction: column;
-            gap: 0.6rem;
-            margin-bottom: 2rem;
-        }
-
-        .bar-row {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .bar-label {
-            font-size: 0.6rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: var(--text-dimmer);
-            width: 90px;
-            flex-shrink: 0;
-            transition: color var(--transition);
-        }
-
-        .bar-track {
-            flex: 1;
-            height: 3px;
-            background: var(--bar-track);
-            border-radius: 10px;
-            overflow: hidden;
-            transition: background var(--transition);
-        }
-
-        .bar-fill {
-            height: 100%;
-            border-radius: 10px;
-            width: 0;
-            transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .bar-fill.animated {
-            width: var(--w);
-        }
-
-        .use-cases {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-        }
-
-        .use-tag {
-            font-size: 0.6rem;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            padding: 0.25rem 0.65rem;
-            border-radius: 2px;
-            background: var(--use-tag-bg);
-            border: 1px solid var(--use-tag-bd);
-            color: var(--text-dim);
-            transition: all var(--transition);
-        }
-
-        /* ════════════════════════════════════
-     VISUAL PANEL
-  ════════════════════════════════════ */
-        .technique-visual {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            transition: background var(--transition);
-        }
-
-        .fabric-canvas {
-            width: min(460px, 90%);
-            aspect-ratio: 3/4;
-            position: relative;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 40px 100px var(--shadow);
-            transition: box-shadow var(--transition);
-        }
-
-        .fabric-canvas:hover {
-            box-shadow: 0 60px 120px var(--shadow);
-        }
-
-        .tshirt-wrap {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .tshirt-svg {
-            width: 80%;
-            height: 80%;
-            filter: drop-shadow(0 20px 40px var(--shadow));
-            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .fabric-canvas:hover .tshirt-svg {
-            transform: scale(1.04) rotate(1deg);
-        }
-
-        .info-tooltip {
-            position: absolute;
-            bottom: 1.5rem;
-            left: 1.5rem;
-            right: 1.5rem;
-            background: var(--tooltip-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 1rem 1.2rem;
-            font-size: 0.7rem;
-            line-height: 1.6;
-            color: var(--text);
+        .yd-merch-store .yd-fade-up {
             opacity: 0;
-            transform: translateY(10px);
-            transition: opacity 0.3s, transform 0.3s, background var(--transition), color var(--transition);
-            pointer-events: none;
-            z-index: 10;
+            transform: translateY(28px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
         }
 
-        .fabric-canvas:hover .info-tooltip {
+        .yd-merch-store .yd-fade-up.yd-visible {
             opacity: 1;
             transform: translateY(0);
         }
 
-        .info-tooltip strong {
-            display: block;
-            font-size: 0.65rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            margin-bottom: 0.3rem;
-            color: var(--text-dim);
+        .yd-merch-store .yd-fade-up.yd-d1 {
+            transition-delay: 0.1s;
         }
 
-        .section-edge {
-            position: absolute;
-            left: 0;
-            right: 0;
-            height: 1px;
+        .yd-merch-store .yd-fade-up.yd-d2 {
+            transition-delay: 0.2s;
         }
 
-        .section-edge.top {
-            top: 0;
-            background: linear-gradient(90deg, transparent, var(--border), transparent);
+        .yd-merch-store .yd-fade-up.yd-d3 {
+            transition-delay: 0.3s;
         }
 
-        .section-edge.bottom {
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, var(--border), transparent);
-        }
-
-        /* ════════════════════════════════════
-     PER-SECTION THEMING
-  ════════════════════════════════════ */
-        #dtg {
-            background: var(--dtg-bg);
-        }
-
-        #coloreel {
-            background: var(--col-bg);
-        }
-
-        #embroidery {
-            background: var(--emb-bg);
-        }
-
-        #dtf {
-            background: var(--dtf-bg);
-        }
-
-        #screenprint {
-            background: var(--scr-bg);
-        }
-
-        #dtg .technique-info {
-            background: var(--dtg-bg);
-        }
-
-        #coloreel .technique-info {
-            background: var(--col-bg);
-        }
-
-        #embroidery .technique-info {
-            background: var(--emb-bg);
-        }
-
-        #dtf .technique-info {
-            background: var(--dtf-bg);
-        }
-
-        #screenprint .technique-info {
-            background: var(--scr-bg);
-        }
-
-        #dtg .technique-visual {
-            background: radial-gradient(ellipse at center, var(--dtg-vis) 0%, var(--dtg-bg) 70%);
-        }
-
-        #coloreel .technique-visual {
-            background: radial-gradient(ellipse at center, var(--col-vis) 0%, var(--col-bg) 70%);
-        }
-
-        #embroidery .technique-visual {
-            background: radial-gradient(ellipse at center, var(--emb-vis) 0%, var(--emb-bg) 70%);
-        }
-
-        #dtf .technique-visual {
-            background: radial-gradient(ellipse at center, var(--dtf-vis) 0%, var(--dtf-bg) 70%);
-        }
-
-        #screenprint .technique-visual {
-            background: radial-gradient(ellipse at center, var(--scr-vis) 0%, var(--scr-bg) 70%);
-        }
-
-        #dtg .tech-name {
-            color: var(--dtg);
-        }
-
-        #coloreel .tech-name {
-            color: var(--coloreel);
-        }
-
-        #embroidery .tech-name {
-            color: var(--embroidery);
-        }
-
-        #dtf .tech-name {
-            color: var(--dtf);
-        }
-
-        #screenprint .tech-name {
-            color: var(--screen);
-        }
-
-        #dtg .tech-tag {
-            background: rgba(232, 67, 147, 0.12);
-            color: var(--dtg);
-            border: 1px solid rgba(232, 67, 147, 0.25);
-        }
-
-        #coloreel .tech-tag {
-            background: rgba(255, 107, 43, 0.12);
-            color: var(--coloreel);
-            border: 1px solid rgba(255, 107, 43, 0.25);
-        }
-
-        #embroidery .tech-tag {
-            background: rgba(124, 58, 237, 0.12);
-            color: var(--embroidery);
-            border: 1px solid rgba(124, 58, 237, 0.25);
-        }
-
-        #dtf .tech-tag {
-            background: rgba(14, 165, 233, 0.12);
-            color: var(--dtf);
-            border: 1px solid rgba(14, 165, 233, 0.25);
-        }
-
-        #screenprint .tech-tag {
-            background: rgba(22, 163, 74, 0.12);
-            color: var(--screen);
-            border: 1px solid rgba(22, 163, 74, 0.25);
-        }
-
-        #dtg .bar-fill {
-            background: linear-gradient(90deg, var(--dtg), #ff80c0);
-        }
-
-        #coloreel .bar-fill {
-            background: linear-gradient(90deg, var(--coloreel), #ffdd44);
-        }
-
-        #embroidery .bar-fill {
-            background: linear-gradient(90deg, var(--embroidery), #a78bfa);
-        }
-
-        #dtf .bar-fill {
-            background: linear-gradient(90deg, var(--dtf), #60d9f5);
-        }
-
-        #screenprint .bar-fill {
-            background: linear-gradient(90deg, var(--screen), #86efac);
-        }
-
-        /* Shirt fills */
-        .sb-dtg {
-            fill: var(--shirt-dtg);
-            transition: fill var(--transition);
-        }
-
-        .sb-col {
-            fill: var(--shirt-col);
-            transition: fill var(--transition);
-        }
-
-        .sb-emb {
-            fill: var(--shirt-emb);
-            transition: fill var(--transition);
-        }
-
-        .sb-dtf {
-            fill: var(--shirt-dtf);
-            transition: fill var(--transition);
-        }
-
-        .sb-scr {
-            fill: var(--shirt-scr);
-            transition: fill var(--transition);
-        }
-
-        .sb-edge {
-            stroke: var(--border);
-            transition: stroke var(--transition);
-        }
-
-        /* ════════════════════════════════════
-     COMPARISON
-  ════════════════════════════════════ */
-        #comparison {
-            min-height: 100vh;
-            scroll-snap-align: start;
-            background: var(--cmp-bg);
-            padding: clamp(3rem, 8vw, 6rem) clamp(1.5rem, 5vw, 5rem);
-            position: relative;
-            overflow: hidden;
-            transition: background var(--transition);
-        }
-
-        #comparison::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image:
-                linear-gradient(var(--grid-line) 1px, transparent 1px),
-                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-            background-size: 40px 40px;
-        }
-
-        .comparison-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(2.5rem, 6vw, 5rem);
-            text-align: center;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, var(--title-from), var(--gold));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .comparison-sub {
-            font-family: 'Cormorant Garamond', serif;
-            font-style: italic;
-            text-align: center;
-            color: var(--text-dim);
-            margin-bottom: 3rem;
-            font-size: 1.1rem;
-            transition: color var(--transition);
-        }
-
-        .comparison-table {
-            width: 100%;
-            max-width: 1000px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        .comp-row {
-            display: grid;
-            grid-template-columns: 1.2fr repeat(5, 1fr);
-            border-bottom: 1px solid var(--border);
-            transition: border-color var(--transition);
-        }
-
-        .comp-header .comp-cell {
-            padding: 1rem 0.5rem;
-            font-size: 0.6rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: var(--text-dimmer);
-            text-align: center;
-        }
-
-        .comp-header .comp-cell:first-child {
-            text-align: left;
-        }
-
-        .comp-row:not(.comp-header) .comp-cell {
-            padding: 0.9rem 0.5rem;
-            font-size: 0.75rem;
-            text-align: center;
-            color: var(--text);
-            transition: background 0.3s, color var(--transition);
-        }
-
-        .comp-row:not(.comp-header):hover .comp-cell {
-            background: var(--comp-hover);
-        }
-
-        .comp-row .comp-cell:first-child {
-            text-align: left;
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 0.95rem;
-            color: var(--text-dim);
-            padding-left: 0;
-        }
-
-        .site-footer {
-            text-align: center;
-            margin-top: 4rem;
-            color: var(--text-dimmer);
-            transition: color var(--transition);
-        }
-
-        .site-footer .f-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 3rem;
-            letter-spacing: 0.1em;
-        }
-
-        .site-footer .f-sub {
-            font-size: 0.6rem;
-            letter-spacing: 0.3em;
-            margin-top: 0.5rem;
-        }
-
-        /* ════════════════════════════════════
-     ANIMATIONS
-  ════════════════════════════════════ */
-        @keyframes drawThread {
-            0% {
-                stroke-dashoffset: var(--len, 500);
-                opacity: 0;
-            }
-
-            10% {
-                opacity: 1;
-            }
-
-            80% {
-                stroke-dashoffset: 0;
-                opacity: 1;
-            }
-
-            100% {
-                stroke-dashoffset: 0;
-                opacity: 0.8;
+        /* ── RESPONSIVE ── */
+        @media (max-width: 1100px) {
+            .yd-merch-store .yd-steps-grid {
+                grid-template-columns: repeat(3, 1fr);
             }
         }
 
-        @keyframes dtgPulse {
-
-            0%,
-            100% {
-                filter: saturate(1.2) brightness(1);
+        @media (max-width: 900px) {
+            .yd-merch-store .yd-nav {
+                padding: 14px 20px;
             }
 
-            50% {
-                filter: saturate(1.5) brightness(1.1);
+            .yd-merch-store .yd-nav-links {
+                display: none;
+            }
+
+            .yd-merch-store .yd-hero {
+                grid-template-columns: 1fr;
+                padding: 56px 20px 48px;
+                min-height: auto;
+                gap: 36px;
+            }
+
+            .yd-merch-store .yd-hero-bg-circle {
+                width: 300px;
+                height: 300px;
+                right: -60px;
+            }
+
+            .yd-merch-store .yd-hero-right {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .yd-merch-store .yd-stat-card.yd-wide {
+                grid-column: span 2;
+            }
+
+            .yd-merch-store .yd-section {
+                padding: 64px 20px;
+            }
+
+            .yd-merch-store .yd-perks-section {
+                padding: 0 20px 64px;
+            }
+
+            .yd-merch-store .yd-features-section {
+                padding: 64px 20px;
+            }
+
+            .yd-merch-store .yd-cta-section {
+                padding: 72px 20px;
+            }
+
+            .yd-merch-store .yd-footer {
+                padding: 28px 20px;
+                flex-direction: column;
+                gap: 18px;
+                text-align: center;
+            }
+
+            .yd-merch-store .yd-footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .yd-merch-store .yd-steps-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .yd-merch-store .yd-perks-grid {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+
+            .yd-merch-store .yd-features-inner {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .yd-merch-store .yd-cta-form {
+                flex-direction: column;
+            }
+
+            .yd-merch-store .yd-companies-label {
+                padding: 0 20px;
             }
         }
 
-        @keyframes dtfSpin {
-            from {
-                filter: hue-rotate(0deg) brightness(1.1);
+        @media (max-width: 560px) {
+            .yd-merch-store .yd-steps-grid {
+                grid-template-columns: 1fr;
             }
 
-            to {
-                filter: hue-rotate(360deg) brightness(1.1);
+            .yd-merch-store .yd-hero h1 {
+                font-size: clamp(2.8rem, 13vw, 4rem);
+            }
+
+            .yd-merch-store .yd-hero-right {
+                grid-template-columns: 1fr;
+            }
+
+            .yd-merch-store .yd-stat-card.yd-wide {
+                grid-column: span 1;
             }
         }
     </style>
 </head>
 
 <body>
+    <div class="yd-merch-store">
 
-    <!-- ═══ THEME TOGGLE ═══ -->
-    <div id="theme-toggle" onclick="toggleTheme()" title="Switch theme">
-        <div class="t-icons">
-            <span class="t-icon t-moon">🌙</span>
-            <span class="t-icon t-sun">☀️</span>
-        </div>
-        <div class="t-track">
-            <div class="t-thumb"></div>
-        </div>
-        <span class="t-label" id="t-label">Dark</span>
-    </div>
+        <!-- Noise texture layer -->
+        <div class="yd-noise" aria-hidden="true"></div>
 
-    <!-- ═══════ HERO ═══════ -->
-    <section id="hero">
-        <div class="hero-grid"></div>
-        <p class="hero-label">The Art of Fabric Decoration</p>
-        <h1 class="hero-title">
-            <span>FABRIC</span>
-            <span>CRAFT</span>
-        </h1>
-        <p class="hero-sub">Five techniques. Infinite possibilities. One fabric.</p>
-        <nav class="hero-nav">
-            <a href="#dtg"><span>DTG Printing</span></a>
-            <a href="#coloreel"><span>Coloreel</span></a>
-            <a href="#embroidery"><span>Embroidery</span></a>
-            <a href="#dtf"><span>DTF Printing</span></a>
-            <a href="#screenprint"><span>Screen Printing</span></a>
+        <!-- ── NAV ── -->
+        <nav class="yd-nav">
+            <a href="https://yoode.com" class="yd-logo">YOO<span>DE</span></a>
+            <ul class="yd-nav-links">
+                <li><a href="#yd-how">How It Works</a></li>
+                <li><a href="#yd-benefits">Benefits</a></li>
+                <li><a href="#yd-features">Features</a></li>
+                <li><a href="#yd-register" class="yd-nav-cta">Register Your Company</a></li>
+            </ul>
         </nav>
-        <div class="scroll-hint">
-            <span>Scroll</span>
-            <div class="scroll-line"></div>
-        </div>
-    </section>
 
-    <!-- ═══════ DTG ═══════ -->
-    <section id="dtg" class="technique-section">
-        <div class="section-edge top"></div>
-        <div class="technique-info">
-            <div class="tech-number">01 / 05</div>
-            <div class="tech-tag">Digital Technology</div>
-            <h2 class="tech-name">DTG</h2>
-            <p class="tech-fullname">Direct-to-Garment Printing</p>
-            <p class="tech-desc">Inkjet printing technology applied directly onto fabric — pixel-perfect reproduction of
-                photographic images, gradients, and complex artwork with unlimited color depth on cotton and blended
-                fabrics.</p>
-            <div class="quality-bar">
-                <div class="bar-row"><span class="bar-label">Color Depth</span>
-                    <div class="bar-track">
-                        <div class="bar-fill" style="--w:95%"></div>
-                    </div>
-                </div>
-                <div class="bar-row"><span class="bar-label">Detail</span>
-                    <div class="bar-track">
-                        <div class="bar-fill" style="--w:90%"></div>
-                    </div>
-                </div>
-                <div class="bar-row"><span class="bar-label">Wash Durability</span>
-                    <div class="bar-track">
-                        <div class="bar-fill" style="--w:65%"></div>
-                    </div>
-                </div>
-                <div class="bar-row"><span class="bar-label">Cost Efficiency</span>
-                    <div class="bar-track">
-                        <div class="bar-fill" style="--w:75%"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="tech-specs">
-                <div class="spec-item">
-                    <div class="spec-label">Min. Order</div>
-                    <div class="spec-value">1 piece</div>
-                </div>
-                <div class="spec-item">
-                    <div class="spec-label">Best Fabric</div>
-                    <div class="spec-value">100% Cotton</div>
-                </div>
-                <div class="spec-item">
-                    <div class="spec-label">Colors</div>
-                    <div class="spec-value">Unlimited</div>
-                </div>
-                <div class="spec-item">
-                    <div class="spec-label">Lead Time</div>
-                    <div class="spec-value">24–48 hrs</div>
-                </div>
-            </div>
-            <div class="use-cases">
-                <span class="use-tag">Photo Prints</span><span class="use-tag">Art Merch</span>
-                <span class="use-tag">Small Runs</span><span class="use-tag">Custom Gifts</span>
-            </div>
-        </div>
-        <div class="technique-visual">
-            <div class="fabric-canvas">
-                <div class="tshirt-wrap">
-                    <svg class="tshirt-svg" viewBox="0 0 300 360" fill="none">
-                        <defs>
-                            <clipPath id="c1">
-                                <path
-                                    d="M90 20 L60 10 L10 60 L50 80 L50 340 L250 340 L250 80 L290 60 L240 10 L210 20 Q200 50 150 50 Q100 50 90 20Z" />
-                            </clipPath>
-                            <radialGradient id="g1a">
-                                <stop offset="0%" stop-color="#ff64c8" />
-                                <stop offset="100%" stop-color="#8b40ff" stop-opacity="0" />
-                            </radialGradient>
-                            <radialGradient id="g1b">
-                                <stop offset="0%" stop-color="#60a5ff" />
-                                <stop offset="100%" stop-color="#00e0ff" stop-opacity="0" />
-                            </radialGradient>
-                            <radialGradient id="g1c">
-                                <stop offset="0%" stop-color="#ffdd40" />
-                                <stop offset="100%" stop-color="#ff6040" stop-opacity="0" />
-                            </radialGradient>
-                            <radialGradient id="g1d">
-                                <stop offset="0%" stop-color="#50ffc0" />
-                                <stop offset="100%" stop-color="#00c0ff" stop-opacity="0" />
-                            </radialGradient>
-                        </defs>
-                        <path class="sb-dtg sb-edge"
-                            d="M90 20 L60 10 L10 60 L50 80 L50 340 L250 340 L250 80 L290 60 L240 10 L210 20 Q200 50 150 50 Q100 50 90 20Z"
-                            stroke-width="1" />
-                        <g clip-path="url(#c1)">
-                            <ellipse cx="120" cy="200" rx="80" ry="90" fill="url(#g1a)" opacity="0.9"
-                                style="animation:dtgPulse 4s ease-in-out infinite" />
-                            <ellipse cx="200" cy="170" rx="70" ry="80" fill="url(#g1b)" opacity="0.85"
-                                style="animation:dtgPulse 4s 1s ease-in-out infinite" />
-                            <ellipse cx="150" cy="260" rx="90" ry="60" fill="url(#g1c)" opacity="0.75"
-                                style="animation:dtgPulse 4s 2s ease-in-out infinite" />
-                            <ellipse cx="90" cy="140" rx="50" ry="55" fill="url(#g1d)" opacity="0.8"
-                                style="animation:dtgPulse 4s 0.5s ease-in-out infinite" />
-                            <line x1="70" y1="100" x2="140" y2="320" stroke="rgba(255,255,255,0.05)"
-                                stroke-width="30" />
-                        </g>
-                    </svg>
-                </div>
-                <div class="info-tooltip">
-                    <strong>How DTG Works</strong>
-                    Inkjet nozzles fire water-based inks directly into fabric fibers. A pre-treatment ensures ink
-                    adhesion. Heat-curing sets the print permanently.
-                </div>
-            </div>
-        </div>
-        <div class="section-edge bottom"></div>
-    </section>
+        <!-- ── HERO ── -->
+        <section class="yd-hero">
+            <div class="yd-hero-bg-grid" aria-hidden="true"></div>
+            <div class="yd-hero-bg-circle" aria-hidden="true"></div>
 
-    <!-- ═══════ COLOREEL ═══════ -->
-    <section id="coloreel" class="technique-section" style="direction:rtl;">
-        <div class="section-edge top"></div>
-        <div class="technique-info" style="direction:ltr;">
-            <div class="tech-number">02 / 05</div>
-            <div class="tech-tag">Innovative Thread Tech</div>
-            <h2 class="tech-name">COLOREEL</h2>
-            <p class="tech-fullname">Instant Thread Coloring System</p>
-            <p class="tech-desc">A groundbreaking Swedish innovation that dyes embroidery thread in real-time, enabling
-                infinite color gradients and transitions mid-stitch — impossible with traditional thread-based methods.
-            </p>
-            <div class="quality-bar">
-                <div class="bar-row"><span class="bar-label">Color Range</span>
-                    <div class="bar-track">
-                        <div class="bar-fill" style="--w:98%"></div>
-                    </div>
-                </div>
-                <div class="bar-row"><span class="bar-label">Gradient</span>
-                    <div class="bar-track">
-                        <div class="bar-fill" style="--w:100%"></div>
-                    </div>
-                </div>
-                <div class="bar-row"><span class="bar-label">Wash Durability</span>
-                    <div class="bar-track">
-                        <div class="bar-fill" style="--w:92%"></div>
-                    </div>
-                </div>
-                <div class="bar-row"><span class="bar-label">Cost Efficiency</span>
-                    <div class="bar-track">
-                        <div class="bar-fill" style="--w:55%"></div>
-                    </div>
+            <!-- Left: text + CTA -->
+            <div class="yd-hero-content">
+                <div class="yd-hero-label">🏢 For Registered Companies</div>
+                <h1>YOUR LOGO.<br>YOUR TEAM.<br><em>SPECIAL PRICE.</em></h1>
+                <p class="yd-hero-sub">
+                    Yoode Merch Store gives registered companies a dedicated page on yoode.com. Employees order branded
+                    tees, event jerseys &amp; more at <strong>exclusive corporate pricing</strong>. Every order goes
+                    through a <strong>background verification process</strong> to confirm its genuineness — and delivery
+                    is made only to your office premises.
+                </p>
+                <div class="yd-hero-actions">
+                    <a href="#yd-register" class="yd-btn-primary">Register Your Company →</a>
                 </div>
             </div>
-            <div class="tech-specs">
-                <div class="spec-item">
-                    <div class="spec-label">Uniqueness</div>
-                    <div class="spec-value">Revolutionary</div>
-                </div>
-                <div class="spec-item">
-                    <div class="spec-label">Best Fabric</div>
-                    <div class="spec-value">All Fabrics</div>
-                </div>
-                <div class="spec-item">
-                    <div class="spec-label">Colors</div>
-                    <div class="spec-value">16M+ (CMYK)</div>
-                </div>
-                <div class="spec-item">
-                    <div class="spec-label">Texture</div>
-                    <div class="spec-value">3D Raised</div>
-                </div>
-            </div>
-            <div class="use-cases">
-                <span class="use-tag">Premium Apparel</span><span class="use-tag">Sportswear</span>
-                <span class="use-tag">Haute Couture</span><span class="use-tag">Logos</span>
-            </div>
-        </div>
-        <div class="technique-visual" style="direction:ltr;">
-            <div class="fabric-canvas">
-                <div class="tshirt-wrap">
-                    <svg class="tshirt-svg" viewBox="0 0 300 360" fill="none">
-                        <defs>
-                            <clipPath id="c2">
-                                <path
-                                    d="M90 20 L60 10 L10 60 L50 80 L50 340 L250 340 L250 80 L290 60 L240 10 L210 20 Q200 50 150 50 Q100 50 90 20Z" />
-                            </clipPath>
-                            <linearGradient id="tg1" x1="70" y1="120" x2="220" y2="260" gradientUnits="userSpaceOnUse">
-                                <stop offset="0%" stop-color="#ff6b2b" />
-                                <stop offset="25%" stop-color="#ff3b8e" />
-                                <stop offset="50%" stop-color="#8b5cf6" />
-                                <stop offset="75%" stop-color="#06b6d4" />
-                                <stop offset="100%" stop-color="#22c55e" />
-                            </linearGradient>
-                            <linearGradient id="tg2" x1="90" y1="130" x2="210" y2="260" gradientUnits="userSpaceOnUse">
-                                <stop offset="0%" stop-color="#eab308" />
-                                <stop offset="33%" stop-color="#ff6b2b" />
-                                <stop offset="66%" stop-color="#ec4899" />
-                                <stop offset="100%" stop-color="#6366f1" />
-                            </linearGradient>
-                            <linearGradient id="tg3" x1="110" y1="145" x2="200" y2="220" gradientUnits="userSpaceOnUse">
-                                <stop offset="0%" stop-color="#06b6d4" />
-                                <stop offset="50%" stop-color="#22c55e" />
-                                <stop offset="100%" stop-color="#ff6b2b" />
-                            </linearGradient>
-                            <linearGradient id="tg4" x1="65" y1="125" x2="235" y2="255" gradientUnits="userSpaceOnUse">
-                                <stop offset="0%" stop-color="#f43f5e" />
-                                <stop offset="33%" stop-color="#8b5cf6" />
-                                <stop offset="66%" stop-color="#0ea5e9" />
-                                <stop offset="100%" stop-color="#10b981" />
-                            </linearGradient>
-                        </defs>
-                        <path class="sb-col sb-edge"
-                            d="M90 20 L60 10 L10 60 L50 80 L50 340 L250 340 L250 80 L290 60 L240 10 L210 20 Q200 50 150 50 Q100 50 90 20Z"
-                            stroke-width="1" />
-                        <g clip-path="url(#c2)">
-                            <path
-                                d="M80 120 Q150 100 220 140 Q160 180 100 160 Q160 200 220 190 Q160 230 80 210 Q150 250 220 240 Q160 280 80 260"
-                                stroke="url(#tg1)" stroke-width="3.5" fill="none" stroke-linecap="round"
-                                style="stroke-dasharray:500;stroke-dashoffset:500;animation:drawThread 3s linear infinite" />
-                            <path
-                                d="M100 135 Q150 115 200 145 Q155 185 105 175 Q155 215 205 200 Q155 240 95 225 Q155 260 205 250"
-                                stroke="url(#tg2)" stroke-width="3" fill="none" stroke-linecap="round"
-                                style="stroke-dasharray:450;stroke-dashoffset:450;animation:drawThread 3s 0.3s linear infinite" />
-                            <path d="M120 150 Q150 130 180 155 Q155 195 120 190 Q155 225 185 215" stroke="url(#tg3)"
-                                stroke-width="2.5" fill="none" stroke-linecap="round"
-                                style="stroke-dasharray:300;stroke-dashoffset:300;animation:drawThread 3s 0.6s linear infinite" />
-                            <path
-                                d="M75 130 Q150 108 225 135 Q165 175 90 155 Q160 200 225 185 Q160 235 75 215 Q160 260 225 248"
-                                stroke="url(#tg4)" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.7"
-                                style="stroke-dasharray:550;stroke-dashoffset:550;animation:drawThread 3s 0.9s linear infinite" />
-                        </g>
-                    </svg>
-                </div>
-                <div class="info-tooltip">
-                    <strong>How Coloreel Works</strong>
-                    White thread passes through a compact dye unit on the embroidery head. Micro-dosing CMYK inks mix in
-                    real-time, creating seamless gradient shifts impossible by hand.
-                </div>
-            </div>
-        </div>
-        <div class="section-edge bottom"></div>
-    </section>
 
-    <!-- ═══════ EMBROIDERY ═══════ -->
-    <section id="embroidery" class="technique-section">
-        <div class="section-edge top"></div>
-        <div class="technique-info">
-            <div class="tech-number">03 / 05</div>
-            <div class="tech-tag">Traditional Craft</div>
-            <h2 class="tech-name">EMBROIDER</h2>
-            <p class="tech-fullname">Machine Embroidery</p>
-            <p class="tech-desc">Thread stitched directly into fabric using multi-needle embroidery machines. Creates a
-                premium three-dimensional texture with unmatched tactile quality — the gold standard for corporate and
-                luxury branding.</p>
-            <div class="quality-bar">
-                <div class="bar-row"><span class="bar-label">Durability</span>
-                    <div class="bar-track">
-                        <div class="bar-fill" style="--w:98%"></div>
-                    </div>
+            <!-- Right: stat cards -->
+            <div class="yd-hero-right">
+                <div class="yd-stat-card yd-accent-card">
+                    <span class="yd-stat-icon">🔍</span>
+                    <div class="yd-stat-num">100<span>%</span></div>
+                    <div class="yd-stat-label">Orders Verified</div>
+                    <p>Every order confirmed via background verification before production begins.</p>
                 </div>
-                <div class="bar-row"><span class="bar-label">Texture/Feel</span>
-                    <div class="bar-track">
-                        <div class="bar-fill" style="--w:100%"></div>
-                    </div>
+                <div class="yd-stat-card">
+                    <span class="yd-stat-icon">🏢</span>
+                    <div class="yd-stat-num">0</div>
+                    <div class="yd-stat-label">Personal Deliveries</div>
+                    <p>All shipments go exclusively to your registered office address.</p>
                 </div>
-                <div class="bar-row"><span class="bar-label">Fine Detail</span>
-                    <div class="bar-track">
-                        <div class="bar-fill" style="--w:60%"></div>
-                    </div>
+                <div class="yd-stat-card">
+                    <span class="yd-stat-icon">🏷️</span>
+                    <div class="yd-stat-num">30<span>%+</span></div>
+                    <div class="yd-stat-label">Employee Savings</div>
+                    <p>Exclusive corporate pricing vs standard retail.</p>
                 </div>
-                <div class="bar-row"><span class="bar-label">Cost Efficiency</span>
-                    <div class="bar-track">
-                        <div class="bar-fill" style="--w:50%"></div>
+                <div class="yd-stat-card">
+                    <span class="yd-stat-icon">🎽</span>
+                    <div class="yd-stat-label">Products Available</div>
+                    <div class="yd-product-chips">
+                        <span class="yd-chip">Logo Tees</span>
+                        <span class="yd-chip">Event Jerseys</span>
+                        <span class="yd-chip">Hoodies</span>
+                        <span class="yd-chip">Caps</span>
+                        <span class="yd-chip">Mugs</span>
+                        <span class="yd-chip">Tote Bags</span>
                     </div>
                 </div>
             </div>
-            <div class="tech-specs">
-                <div class="spec-item">
-                    <div class="spec-label">Min. Order</div>
-                    <div class="spec-value">12 pieces</div>
-                </div>
-                <div class="spec-item">
-                    <div class="spec-label">Best Fabric</div>
-                    <div class="spec-value">All Fabrics</div>
-                </div>
-                <div class="spec-item">
-                    <div class="spec-label">Colors</div>
-                    <div class="spec-value">Up to 15</div>
-                </div>
-                <div class="spec-item">
-                    <div class="spec-label">Texture</div>
-                    <div class="spec-value">Raised 3D</div>
-                </div>
-            </div>
-            <div class="use-cases">
-                <span class="use-tag">Corporate Wear</span><span class="use-tag">Caps &amp; Hats</span>
-                <span class="use-tag">Polo Shirts</span><span class="use-tag">Patches</span>
-            </div>
-        </div>
-        <div class="technique-visual">
-            <div class="fabric-canvas">
-                <div class="tshirt-wrap">
-                    <svg class="tshirt-svg" viewBox="0 0 300 360" fill="none">
-                        <defs>
-                            <clipPath id="c3">
-                                <path
-                                    d="M90 20 L60 10 L10 60 L50 80 L50 340 L250 340 L250 80 L290 60 L240 10 L210 20 Q200 50 150 50 Q100 50 90 20Z" />
-                            </clipPath>
-                            <filter id="ed">
-                                <feDropShadow dx="1" dy="2" stdDeviation="1.2" flood-color="rgba(0,0,0,0.45)" />
-                            </filter>
-                        </defs>
-                        <path class="sb-emb sb-edge"
-                            d="M90 20 L60 10 L10 60 L50 80 L50 340 L250 340 L250 80 L290 60 L240 10 L210 20 Q200 50 150 50 Q100 50 90 20Z"
-                            stroke-width="1" />
-                        <g clip-path="url(#c3)" filter="url(#ed)">
-                            <circle cx="150" cy="195" r="68" stroke="#7c3aed" stroke-width="6" fill="none"
-                                stroke-dasharray="5 3" stroke-linecap="round" />
-                            <circle cx="150" cy="195" r="60" stroke="#a78bfa" stroke-width="4" fill="none"
-                                stroke-dasharray="3 5" stroke-linecap="round" />
-                            <g stroke-linecap="round" stroke-width="2.5">
-                                <line x1="110" y1="165" x2="190" y2="165" stroke="#7c3aed" />
-                                <line x1="106" y1="170" x2="194" y2="170" stroke="#8b46f0" />
-                                <line x1="103" y1="175" x2="197" y2="175" stroke="#9333ea" />
-                                <line x1="101" y1="180" x2="199" y2="180" stroke="#7c3aed" />
-                                <line x1="100" y1="185" x2="200" y2="185" stroke="#8b46f0" />
-                                <line x1="100" y1="190" x2="200" y2="190" stroke="#9333ea" />
-                                <line x1="100" y1="195" x2="200" y2="195" stroke="#a855f7" />
-                                <line x1="100" y1="200" x2="200" y2="200" stroke="#7c3aed" />
-                                <line x1="101" y1="205" x2="199" y2="205" stroke="#8b46f0" />
-                                <line x1="103" y1="210" x2="197" y2="210" stroke="#9333ea" />
-                                <line x1="106" y1="215" x2="194" y2="215" stroke="#7c3aed" />
-                                <line x1="110" y1="220" x2="190" y2="220" stroke="#8b46f0" />
-                                <line x1="115" y1="225" x2="185" y2="225" stroke="#9333ea" />
-                            </g>
-                            <polygon
-                                points="150,155 156,178 180,178 161,193 168,217 150,202 132,217 139,193 120,178 144,178"
-                                fill="none" stroke="#c4b5fd" stroke-width="2.5" stroke-linejoin="round" />
-                            <path
-                                d="M110 240 Q115 235 120 240 Q125 235 130 240 Q135 235 140 240 Q145 235 150 240 Q155 235 160 240 Q165 235 170 240 Q175 235 180 240 Q185 235 190 240"
-                                stroke="#a78bfa" stroke-width="3" fill="none" stroke-linecap="round" />
-                            <g fill="#7c3aed" opacity="0.7">
-                                <circle cx="150" cy="127" r="2.5" />
-                                <circle cx="168" cy="130" r="2" />
-                                <circle cx="183" cy="141" r="2" />
-                                <circle cx="132" cy="130" r="2" />
-                                <circle cx="117" cy="141" r="2" />
-                            </g>
-                        </g>
-                    </svg>
-                </div>
-                <div class="info-tooltip">
-                    <strong>How Embroidery Works</strong>
-                    Multi-needle machines sew thread directly into fabric using a digitized pattern. Each color uses a
-                    separate needle. The raised texture makes designs palpably three-dimensional.
-                </div>
-            </div>
-        </div>
-        <div class="section-edge bottom"></div>
-    </section>
+        </section>
 
-    <!-- ═══════ DTF ═══════ -->
-    <section id="dtf" class="technique-section" style="direction:rtl;">
-        <div class="section-edge top"></div>
-        <div class="technique-info" style="direction:ltr;">
-            <div class="tech-number">04 / 05</div>
-            <div class="tech-tag">Transfer Technology</div>
-            <h2 class="tech-name">DTF</h2>
-            <p class="tech-fullname">Direct-to-Film Printing</p>
-            <p class="tech-desc">Designs are printed onto a clear film, coated with hot-melt powder, then heat-pressed
-                onto any fabric. Exceptional versatility — works on cotton, polyester, nylon, leather, and dark fabrics
-                alike.</p>
-            <div class="quality-bar">
-                <div class="bar-row"><span class="bar-label">Versatility</span>
-                    <div class="bar-track">
-                        <div class="bar-fill" style="--w:98%"></div>
-                    </div>
-                </div>
-                <div class="bar-row"><span class="bar-label">Color Vibrancy</span>
-                    <div class="bar-track">
-                        <div class="bar-fill" style="--w:88%"></div>
-                    </div>
-                </div>
-                <div class="bar-row"><span class="bar-label">Wash Durability</span>
-                    <div class="bar-track">
-                        <div class="bar-fill" style="--w:78%"></div>
-                    </div>
-                </div>
-                <div class="bar-row"><span class="bar-label">Cost Efficiency</span>
-                    <div class="bar-track">
-                        <div class="bar-fill" style="--w:85%"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="tech-specs">
-                <div class="spec-item">
-                    <div class="spec-label">Min. Order</div>
-                    <div class="spec-value">1 piece</div>
-                </div>
-                <div class="spec-item">
-                    <div class="spec-label">Best Fabric</div>
-                    <div class="spec-value">All Types</div>
-                </div>
-                <div class="spec-item">
-                    <div class="spec-label">Colors</div>
-                    <div class="spec-value">Unlimited</div>
-                </div>
-                <div class="spec-item">
-                    <div class="spec-label">Feel</div>
-                    <div class="spec-value">Smooth Film</div>
-                </div>
-            </div>
-            <div class="use-cases">
-                <span class="use-tag">Dark Fabrics</span><span class="use-tag">Polyester</span>
-                <span class="use-tag">Sportswear</span><span class="use-tag">Accessories</span>
-            </div>
-        </div>
-        <div class="technique-visual" style="direction:ltr;">
-            <div class="fabric-canvas">
-                <div class="tshirt-wrap">
-                    <svg class="tshirt-svg" viewBox="0 0 300 360" fill="none">
-                        <defs>
-                            <clipPath id="c4">
-                                <path
-                                    d="M90 20 L60 10 L10 60 L50 80 L50 340 L250 340 L250 80 L290 60 L240 10 L210 20 Q200 50 150 50 Q100 50 90 20Z" />
-                            </clipPath>
-                            <linearGradient id="dtfBg" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#0369a1" />
-                                <stop offset="50%" stop-color="#0ea5e9" />
-                                <stop offset="100%" stop-color="#38bdf8" />
-                            </linearGradient>
-                            <linearGradient id="dtfT1" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#7dd3fc" />
-                                <stop offset="100%" stop-color="#0284c7" />
-                            </linearGradient>
-                            <linearGradient id="dtfT2" x1="0%" y1="0%" x2="100%" y2="0%">
-                                <stop offset="0%" stop-color="#0c4a6e" />
-                                <stop offset="100%" stop-color="#0369a1" />
-                            </linearGradient>
-                            <pattern id="sL" x="0" y="0" width="2" height="2" patternUnits="userSpaceOnUse">
-                                <line x1="0" y1="0" x2="2" y2="0" stroke="white" stroke-width="0.5" />
-                            </pattern>
-                        </defs>
-                        <path class="sb-dtf sb-edge"
-                            d="M90 20 L60 10 L10 60 L50 80 L50 340 L250 340 L250 80 L290 60 L240 10 L210 20 Q200 50 150 50 Q100 50 90 20Z"
-                            stroke-width="1" />
-                        <g clip-path="url(#c4)">
-                            <rect x="80" y="130" width="140" height="130" rx="4" fill="url(#dtfBg)" opacity="0.92"
-                                style="animation:dtfSpin 12s linear infinite" />
-                            <polygon points="150,145 210,250 90,250" fill="url(#dtfT1)" opacity="0.9" />
-                            <polygon points="150,145 90,250 150,250" fill="url(#dtfT2)" opacity="0.8" />
-                            <rect x="110" y="205" width="80" height="18" rx="2" fill="#bae6fd" opacity="0.95" />
-                            <rect x="120" y="228" width="60" height="12" rx="2" fill="#e0f2fe" opacity="0.8" />
-                            <rect x="80" y="130" width="140" height="130" rx="4" fill="url(#sL)" opacity="0.06" />
-                            <polygon points="220,130 220,162 188,130" fill="rgba(200,230,255,0.25)"
-                                stroke="rgba(255,255,255,0.5)" stroke-width="1" />
-                            <rect x="80" y="130" width="140" height="130" rx="4" fill="none"
-                                stroke="rgba(14,165,233,0.3)" stroke-width="1.5" />
-                        </g>
-                    </svg>
-                </div>
-                <div class="info-tooltip">
-                    <strong>How DTF Works</strong>
-                    Design is printed on PET film, coated with hot-melt adhesive powder. Heat press at 160°C bonds the
-                    transfer to fabric. Film is peeled away, leaving a flexible, full-color print.
-                </div>
-            </div>
-        </div>
-        <div class="section-edge bottom"></div>
-    </section>
-
-    <!-- ═══════ SCREEN PRINTING ═══════ -->
-    <section id="screenprint" class="technique-section">
-        <div class="section-edge top"></div>
-        <div class="technique-info">
-            <div class="tech-number">05 / 05</div>
-            <div class="tech-tag">Classic Method</div>
-            <h2 class="tech-name">SCREEN</h2>
-            <p class="tech-fullname">Screen / Silkscreen Printing</p>
-            <p class="tech-desc">Ink forced through a mesh stencil directly onto fabric. Each color requires a separate
-                screen. Produces vivid, ultra-opaque results with excellent durability — the industry standard for bulk
-                production.</p>
-            <div class="quality-bar">
-                <div class="bar-row"><span class="bar-label">Ink Opacity</span>
-                    <div class="bar-track">
-                        <div class="bar-fill" style="--w:100%"></div>
-                    </div>
-                </div>
-                <div class="bar-row"><span class="bar-label">Wash Durability</span>
-                    <div class="bar-track">
-                        <div class="bar-fill" style="--w:95%"></div>
-                    </div>
-                </div>
-                <div class="bar-row"><span class="bar-label">Color Complexity</span>
-                    <div class="bar-track">
-                        <div class="bar-fill" style="--w:45%"></div>
-                    </div>
-                </div>
-                <div class="bar-row"><span class="bar-label">Bulk Value</span>
-                    <div class="bar-track">
-                        <div class="bar-fill" style="--w:96%"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="tech-specs">
-                <div class="spec-item">
-                    <div class="spec-label">Min. Order</div>
-                    <div class="spec-value">24 pieces</div>
-                </div>
-                <div class="spec-item">
-                    <div class="spec-label">Best Fabric</div>
-                    <div class="spec-value">Cotton, Poly</div>
-                </div>
-                <div class="spec-item">
-                    <div class="spec-label">Colors</div>
-                    <div class="spec-value">1–8 spot</div>
-                </div>
-                <div class="spec-item">
-                    <div class="spec-label">Feel</div>
-                    <div class="spec-value">Thick, Tactile</div>
-                </div>
-            </div>
-            <div class="use-cases">
-                <span class="use-tag">Band Merch</span><span class="use-tag">Uniforms</span>
-                <span class="use-tag">Bulk Orders</span><span class="use-tag">Event Tees</span>
-            </div>
-        </div>
-        <div class="technique-visual">
-            <div class="fabric-canvas">
-                <div class="tshirt-wrap">
-                    <svg class="tshirt-svg" viewBox="0 0 300 360" fill="none">
-                        <defs>
-                            <clipPath id="c5">
-                                <path
-                                    d="M90 20 L60 10 L10 60 L50 80 L50 340 L250 340 L250 80 L290 60 L240 10 L210 20 Q200 50 150 50 Q100 50 90 20Z" />
-                            </clipPath>
-                            <pattern id="iD" x="0" y="0" width="6" height="6" patternUnits="userSpaceOnUse">
-                                <circle cx="3" cy="3" r="1.5" fill="white" />
-                            </pattern>
-                        </defs>
-                        <path class="sb-scr sb-edge"
-                            d="M90 20 L60 10 L10 60 L50 80 L50 340 L250 340 L250 80 L290 60 L240 10 L210 20 Q200 50 150 50 Q100 50 90 20Z"
-                            stroke-width="1" />
-                        <g clip-path="url(#c5)">
-                            <circle cx="150" cy="200" r="72" fill="#16a34a" opacity="0.92" />
-                            <circle cx="152" cy="198" r="72" fill="#dcfce7" opacity="0.06" />
-                            <circle cx="150" cy="200" r="58" fill="none" stroke="#eab308" stroke-width="8"
-                                opacity="0.9" />
-                            <rect x="105" y="178" width="90" height="22" rx="2" fill="#052e16" />
-                            <rect x="116" y="200" width="68" height="16" rx="2" fill="#14532d" />
-                            <rect x="126" y="218" width="48" height="12" rx="2" fill="#166534" />
-                            <polygon
-                                points="150,150 154,163 168,163 157,172 161,185 150,176 139,185 143,172 132,163 146,163"
-                                fill="#eab308" opacity="0.95" />
-                            <circle cx="150" cy="200" r="72" fill="none" stroke="#16a34a" stroke-width="3" opacity="0.3"
-                                stroke-dasharray="2 4" />
-                            <g fill="#052e16" opacity="0.5">
-                                <circle cx="150" cy="127" r="3" />
-                                <circle cx="162" cy="131" r="2.5" />
-                                <circle cx="138" cy="131" r="2.5" />
-                                <circle cx="173" cy="141" r="2" />
-                                <circle cx="127" cy="141" r="2" />
-                            </g>
-                            <circle cx="150" cy="200" r="72" fill="url(#iD)" opacity="0.04" />
-                        </g>
-                    </svg>
-                </div>
-                <div class="info-tooltip">
-                    <strong>How Screen Printing Works</strong>
-                    A photo emulsion creates a stencil on mesh screens — one per color. Ink is forced through with a
-                    squeegee. Each layer is cured between passes. Limited colors, maximum vibrancy.
-                </div>
-            </div>
-        </div>
-        <div class="section-edge bottom"></div>
-    </section>
-
-    <!-- ═══════ COMPARISON ═══════ -->
-    <section id="comparison">
-        <h2 class="comparison-title">AT A GLANCE</h2>
-        <p class="comparison-sub">Compare all five techniques side by side</p>
-        <div class="comparison-table">
-            <div class="comp-row comp-header">
-                <div class="comp-cell">Attribute</div>
-                <div class="comp-cell" style="color:var(--dtg)">DTG</div>
-                <div class="comp-cell" style="color:var(--coloreel)">COLOREEL</div>
-                <div class="comp-cell" style="color:var(--embroidery)">EMBROIDERY</div>
-                <div class="comp-cell" style="color:var(--dtf)">DTF</div>
-                <div class="comp-cell" style="color:var(--screen)">SCREEN</div>
-            </div>
-            <div class="comp-row">
-                <div class="comp-cell">Color Range</div>
-                <div class="comp-cell">♦♦♦♦♦</div>
-                <div class="comp-cell">♦♦♦♦♦</div>
-                <div class="comp-cell">♦♦♦◇◇</div>
-                <div class="comp-cell">♦♦♦♦♦</div>
-                <div class="comp-cell">♦♦♦◇◇</div>
-            </div>
-            <div class="comp-row">
-                <div class="comp-cell">Fabric Types</div>
-                <div class="comp-cell">Cotton only</div>
-                <div class="comp-cell">All fabrics</div>
-                <div class="comp-cell">All fabrics</div>
-                <div class="comp-cell">All fabrics</div>
-                <div class="comp-cell">Cotton, Poly</div>
-            </div>
-            <div class="comp-row">
-                <div class="comp-cell">Durability</div>
-                <div class="comp-cell">♦♦♦◇◇</div>
-                <div class="comp-cell">♦♦♦♦◇</div>
-                <div class="comp-cell">♦♦♦♦♦</div>
-                <div class="comp-cell">♦♦♦♦◇</div>
-                <div class="comp-cell">♦♦♦♦♦</div>
-            </div>
-            <div class="comp-row">
-                <div class="comp-cell">Min. Order</div>
-                <div class="comp-cell">1 pc</div>
-                <div class="comp-cell">1 pc</div>
-                <div class="comp-cell">12 pcs</div>
-                <div class="comp-cell">1 pc</div>
-                <div class="comp-cell">24 pcs</div>
-            </div>
-            <div class="comp-row">
-                <div class="comp-cell">Photo-realistic</div>
-                <div class="comp-cell"><span style="color:var(--dtg)">●</span> Yes</div>
-                <div class="comp-cell"><span style="color:var(--coloreel)">●</span> Yes</div>
-                <div class="comp-cell"><span style="color:var(--text-dimmer)">●</span> No</div>
-                <div class="comp-cell"><span style="color:var(--dtf)">●</span> Yes</div>
-                <div class="comp-cell"><span style="color:var(--text-dimmer)">●</span> No</div>
-            </div>
-            <div class="comp-row">
-                <div class="comp-cell">Dark Fabrics</div>
-                <div class="comp-cell">◐ Partial</div>
-                <div class="comp-cell"><span style="color:var(--coloreel)">●</span> Yes</div>
-                <div class="comp-cell"><span style="color:var(--embroidery)">●</span> Yes</div>
-                <div class="comp-cell"><span style="color:var(--dtf)">●</span> Yes</div>
-                <div class="comp-cell"><span style="color:var(--screen)">●</span> Yes</div>
-            </div>
-            <div class="comp-row">
-                <div class="comp-cell">3D / Texture</div>
-                <div class="comp-cell">Flat</div>
-                <div class="comp-cell"><span style="color:var(--coloreel)">●</span> Raised</div>
-                <div class="comp-cell"><span style="color:var(--embroidery)">●</span> High 3D</div>
-                <div class="comp-cell">◐ Slight</div>
-                <div class="comp-cell">◐ Slight</div>
-            </div>
-            <div class="comp-row">
-                <div class="comp-cell">Best For</div>
-                <div class="comp-cell" style="font-size:.65rem">Small runs, art</div>
-                <div class="comp-cell" style="font-size:.65rem">Premium brands</div>
-                <div class="comp-cell" style="font-size:.65rem">Logos, caps</div>
-                <div class="comp-cell" style="font-size:.65rem">Any fabric</div>
-                <div class="comp-cell" style="font-size:.65rem">Bulk orders</div>
+        <!-- ── TICKER ── -->
+        <div class="yd-ticker" aria-hidden="true">
+            <div class="yd-ticker-inner">
+                <span class="yd-ticker-item"><span class="yd-ticker-dot"></span>EXCLUSIVE EMPLOYEE PRICING</span>
+                <span class="yd-ticker-item"><span class="yd-ticker-dot"></span>LOGO TEES · EVENT JERSEYS · CAPS ·
+                    HOODIES · MUGS</span>
+                <span class="yd-ticker-item"><span class="yd-ticker-dot"></span>BACKGROUND VERIFICATION ON EVERY
+                    ORDER</span>
+                <span class="yd-ticker-item"><span class="yd-ticker-dot"></span>DELIVERED ONLY TO YOUR OFFICE
+                    PREMISES</span>
+                <span class="yd-ticker-item"><span class="yd-ticker-dot"></span>COMPANY-REGISTERED EMPLOYEES · ZERO
+                    MISUSE</span>
+                <span class="yd-ticker-item"><span class="yd-ticker-dot"></span>YOUR BRAND. YOUR TEAM. YOUR
+                    PRICE.</span>
+                <!-- duplicate for seamless loop -->
+                <span class="yd-ticker-item"><span class="yd-ticker-dot"></span>EXCLUSIVE EMPLOYEE PRICING</span>
+                <span class="yd-ticker-item"><span class="yd-ticker-dot"></span>LOGO TEES · EVENT JERSEYS · CAPS ·
+                    HOODIES · MUGS</span>
+                <span class="yd-ticker-item"><span class="yd-ticker-dot"></span>BACKGROUND VERIFICATION ON EVERY
+                    ORDER</span>
+                <span class="yd-ticker-item"><span class="yd-ticker-dot"></span>DELIVERED ONLY TO YOUR OFFICE
+                    PREMISES</span>
+                <span class="yd-ticker-item"><span class="yd-ticker-dot"></span>COMPANY-REGISTERED EMPLOYEES · ZERO
+                    MISUSE</span>
+                <span class="yd-ticker-item"><span class="yd-ticker-dot"></span>YOUR BRAND. YOUR TEAM. YOUR
+                    PRICE.</span>
             </div>
         </div>
 
-        <div class="site-footer">
-            <p class="f-title">FABRIC CRAFT</p>
-            <p class="f-sub">THE ART OF CUSTOMIZATION</p>
-        </div>
-    </section>
+        <!-- ── HOW IT WORKS ── -->
+        <section class="yd-section" id="yd-how">
+            <div class="yd-section-label">// The Process</div>
+            <h2 class="yd-section-title yd-fade-up">FIVE STEPS FROM<br>SIGN-UP TO DELIVERY</h2>
+            <p class="yd-section-sub yd-fade-up">From company registration to verified, branded merch at your employees'
+                desks — every step is designed to keep it exclusive, genuine, and hassle-free.</p>
+
+            <div class="yd-steps-grid yd-fade-up">
+                <div class="yd-step">
+                    <div class="yd-step-num">01</div>
+                    <div class="yd-step-icon">🏢</div>
+                    <h3>Register Your Company</h3>
+                    <p>Sign up with Yoode as a corporate account. We verify your organisation and set up your dedicated
+                        company page on yoode.com.</p>
+                </div>
+                <div class="yd-step">
+                    <div class="yd-step-num">02</div>
+                    <div class="yd-step-icon">🎨</div>
+                    <h3>We Build Your Brand Page</h3>
+                    <p>Your logo, brand colors, and product catalog go live on your dedicated company page on yoode.com
+                        — curated specifically for your employees at corporate pricing.</p>
+                </div>
+                <div class="yd-step">
+                    <div class="yd-step-num">03</div>
+                    <div class="yd-step-icon">🛍️</div>
+                    <h3>Employees Browse &amp; Order</h3>
+                    <p>Enrolled employees log in to your company's merch page, pick products at exclusive corporate
+                        prices, and place their order.</p>
+                </div>
+                <div class="yd-step">
+                    <div class="yd-step-num">04</div>
+                    <div class="yd-step-icon">🔍</div>
+                    <h3>Background Verification</h3>
+                    <p>Every order is run through our background verification process to confirm its genuineness —
+                        ensuring only legitimate employees avail the benefit.</p>
+                </div>
+                <div class="yd-step">
+                    <div class="yd-step-num">05</div>
+                    <div class="yd-step-icon">🚚</div>
+                    <h3>Delivered to Your Office</h3>
+                    <p>Verified orders are printed, packed, and dispatched exclusively to your registered company
+                        premises — never to a personal address.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── BENEFIT CARDS ── -->
+        <section class="yd-perks-section" id="yd-benefits">
+            <div class="yd-section-label">// Why It Works</div>
+            <h2 class="yd-section-title yd-fade-up">BUILT FOR TEAMS.<br>PRICED FOR LOYALTY.</h2>
+            <p class="yd-section-sub yd-fade-up">A merch program that employees actually love — and HR can confidently
+                run.</p>
+
+            <div class="yd-perks-grid">
+                <div class="yd-perk-card yd-fade-up yd-d1">
+                    <span class="yd-perk-emoji">🏷️</span>
+                    <h3>Exclusive Employee Pricing</h3>
+                    <p>Registered company employees get special pricing unavailable anywhere else on Yoode — making
+                        branded merch genuinely affordable for every member of your team.</p>
+                </div>
+                <div class="yd-perk-card yd-highlight yd-fade-up yd-d2">
+                    <span class="yd-perk-emoji">🔍</span>
+                    <h3>Background Verification on Every Order</h3>
+                    <p>Each order goes through a defined background verification process to confirm its genuineness — so
+                        the benefit is protected and only real, enrolled employees can avail it.</p>
+                </div>
+                <div class="yd-perk-card yd-fade-up yd-d3">
+                    <span class="yd-perk-emoji">🎽</span>
+                    <h3>Company-Branded Everything</h3>
+                    <p>From everyday logo tees to custom event jerseys for your annual sports day or team outing — all
+                        products carry your brand and colors, printed to a quality your team will be proud to wear.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── FEATURES ── -->
+        <section class="yd-features-section" id="yd-features">
+            <div class="yd-features-inner">
+                <div>
+                    <div class="yd-section-label">// What's Included</div>
+                    <h2 class="yd-section-title yd-fade-up">EVERYTHING YOUR<br>HR TEAM NEEDS</h2>
+                    <p class="yd-section-sub yd-fade-up">Your Yoode merch page comes fully managed — zero operational
+                        load on your team.</p>
+
+                    <div class="yd-features-list yd-fade-up">
+                        <div class="yd-feature-item">
+                            <div class="yd-feature-icon">🔍</div>
+                            <div class="yd-feature-text">
+                                <h4>Background Verification on Every Order</h4>
+                                <p>Each order is run through our verification process before production — confirming the
+                                    genuineness of the order and the identity of the employee placing it.</p>
+                            </div>
+                        </div>
+                        <div class="yd-feature-item">
+                            <div class="yd-feature-icon">💰</div>
+                            <div class="yd-feature-text">
+                                <h4>Special Corporate Pricing</h4>
+                                <p>Employees enjoy prices set exclusively for your company — significantly lower than
+                                    standard retail, available only to those ordering through your company's registered
+                                    page.</p>
+                            </div>
+                        </div>
+                        <div class="yd-feature-item">
+                            <div class="yd-feature-icon">🎽</div>
+                            <div class="yd-feature-text">
+                                <h4>Logo Products &amp; Event Jerseys</h4>
+                                <p>Everyday branded wear or one-time event jersey orders for your sports day or team
+                                    outing — all products carry your logo, printed to quality you'll be proud of.</p>
+                            </div>
+                        </div>
+                        <div class="yd-feature-item">
+                            <div class="yd-feature-icon">🏢</div>
+                            <div class="yd-feature-text">
+                                <h4>Office-Premises Delivery Only</h4>
+                                <p>All verified orders ship exclusively to your registered company address — never to a
+                                    personal home. This keeps the benefit entirely within your team.</p>
+                            </div>
+                        </div>
+                        <div class="yd-feature-item">
+                            <div class="yd-feature-icon">📦</div>
+                            <div class="yd-feature-text">
+                                <h4>Fully Managed by Yoode</h4>
+                                <p>Verification, printing, quality checks, and delivery are all handled by us. Your HR
+                                    team sets it up once — Yoode does the rest.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trust panel — replaces delivery tracker -->
+                <div class="yd-fade-up yd-d1">
+                    <div class="yd-trust-panel">
+                        <div class="yd-trust-title">// How We Keep It Genuine</div>
+                        <div class="yd-trust-heading">SECURE BY<br>DESIGN.</div>
+
+                        <div class="yd-trust-item">
+                            <div class="yd-trust-icon green">✅</div>
+                            <div>
+                                <h5>Genuine Orders Only</h5>
+                                <p>Every order placed on your company's page is screened through our background
+                                    verification — so only legitimate employee orders move to production.</p>
+                            </div>
+                        </div>
+                        <div class="yd-trust-item">
+                            <div class="yd-trust-icon orange">🔍</div>
+                            <div>
+                                <h5>Background Order Verification</h5>
+                                <p>Every order placed is verified through our background process before it moves to
+                                    production — confirming employee identity and order legitimacy.</p>
+                            </div>
+                        </div>
+                        <div class="yd-trust-item">
+                            <div class="yd-trust-icon gold">🏢</div>
+                            <div>
+                                <h5>Office-Only Delivery Address</h5>
+                                <p>Orders can only be delivered to the company's registered premises. No personal
+                                    addresses are accepted — ever.</p>
+                            </div>
+                        </div>
+                        <div class="yd-trust-item">
+                            <div class="yd-trust-icon blue">✅</div>
+                            <div>
+                                <h5>Company-Approved Enrollment</h5>
+                                <p>Only employees approved by your HR admin are enrolled. You stay in full control of
+                                    who can access and order from your page.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── COMPANIES SCROLL ── -->
+        <section class="yd-companies-section">
+            <div class="yd-companies-label">Companies already on Yoode Merch</div>
+            <div style="overflow:hidden;">
+                <div class="yd-companies-track">
+                    <div class="yd-company-pill">
+                        <div class="yd-company-dot" style="background:#4d79ff"></div>TechCorp India
+                    </div>
+                    <div class="yd-company-pill">
+                        <div class="yd-company-dot" style="background:#3ddc84"></div>GreenLeaf Solutions
+                    </div>
+                    <div class="yd-company-pill">
+                        <div class="yd-company-dot" style="background:#ff4d1c"></div>NovaSpark Pvt Ltd
+                    </div>
+                    <div class="yd-company-pill">
+                        <div class="yd-company-dot" style="background:#e8c96d"></div>ZenFinance Co.
+                    </div>
+                    <div class="yd-company-pill">
+                        <div class="yd-company-dot" style="background:#ff79c6"></div>Bloom HR Services
+                    </div>
+                    <div class="yd-company-pill">
+                        <div class="yd-company-dot" style="background:#bd93f9"></div>Urban Tech Labs
+                    </div>
+                    <div class="yd-company-pill">
+                        <div class="yd-company-dot" style="background:#8be9fd"></div>AquaLogic Corp
+                    </div>
+                    <div class="yd-company-pill">
+                        <div class="yd-company-dot" style="background:#50fa7b"></div>SwiftOps Group
+                    </div>
+                    <div class="yd-company-pill">
+                        <div class="yd-company-dot" style="background:#ffb86c"></div>Orion Retail Ltd
+                    </div>
+                    <div class="yd-company-pill">
+                        <div class="yd-company-dot" style="background:#ff5555"></div>RedPeak Infra
+                    </div>
+                    <!-- duplicate for seamless loop -->
+                    <div class="yd-company-pill">
+                        <div class="yd-company-dot" style="background:#4d79ff"></div>TechCorp India
+                    </div>
+                    <div class="yd-company-pill">
+                        <div class="yd-company-dot" style="background:#3ddc84"></div>GreenLeaf Solutions
+                    </div>
+                    <div class="yd-company-pill">
+                        <div class="yd-company-dot" style="background:#ff4d1c"></div>NovaSpark Pvt Ltd
+                    </div>
+                    <div class="yd-company-pill">
+                        <div class="yd-company-dot" style="background:#e8c96d"></div>ZenFinance Co.
+                    </div>
+                    <div class="yd-company-pill">
+                        <div class="yd-company-dot" style="background:#ff79c6"></div>Bloom HR Services
+                    </div>
+                    <div class="yd-company-pill">
+                        <div class="yd-company-dot" style="background:#bd93f9"></div>Urban Tech Labs
+                    </div>
+                    <div class="yd-company-pill">
+                        <div class="yd-company-dot" style="background:#8be9fd"></div>AquaLogic Corp
+                    </div>
+                    <div class="yd-company-pill">
+                        <div class="yd-company-dot" style="background:#50fa7b"></div>SwiftOps Group
+                    </div>
+                    <div class="yd-company-pill">
+                        <div class="yd-company-dot" style="background:#ffb86c"></div>Orion Retail Ltd
+                    </div>
+                    <div class="yd-company-pill">
+                        <div class="yd-company-dot" style="background:#ff5555"></div>RedPeak Infra
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── CTA / REGISTER ── -->
+        <section class="yd-cta-section" id="yd-register">
+            <div class="yd-section-label">// Get Your Company On Board</div>
+            <h2 class="yd-fade-up">GIVE YOUR TEAM<br><span>MERCH THEY'LL WEAR.</span></h2>
+            <p class="yd-fade-up">Register your company with Yoode. We'll set up your dedicated merch page, add your
+                branded products at corporate pricing, and run background verification on every single order — so the
+                benefit stays genuine and gets to the right people.</p>
+            <div class="yd-cta-form yd-fade-up">
+                <input class="yd-cta-input" type="email" placeholder="hr@yourcompany.com" aria-label="Company email">
+                <a href="#" class="yd-btn-primary">Register Your Company →</a>
+            </div>
+            <div class="yd-cta-note yd-fade-up">🔍 Verified orders &nbsp;·&nbsp; 🏢 Office delivery only &nbsp;·&nbsp;
+                🎽 Exclusive employee pricing</div>
+        </section>
+
+        <!-- ── FOOTER ── -->
+        <footer class="yd-footer">
+            <a href="https://yoode.com" class="yd-logo">YOO<span>DE</span></a>
+            <ul class="yd-footer-links">
+                <li><a href="#">Privacy</a></li>
+                <li><a href="#">Terms</a></li>
+                <li><a href="#">Contact</a></li>
+                <li><a href="#">Corporate FAQ</a></li>
+            </ul>
+            <div class="yd-footer-copy">© 2025 Yoode. All rights reserved.</div>
+        </footer>
+
+    </div><!-- /.yd-merch-store -->
 
     <script>
-        /* ── THEME TOGGLE ── */
-        function toggleTheme() {
-            const html = document.documentElement;
-            const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-            html.setAttribute('data-theme', next);
-            document.getElementById('t-label').textContent = next.charAt(0).toUpperCase() + next.slice(1);
-            try { localStorage.setItem('fc-theme', next); } catch (e) { }
-        }
+        (function () {
+            // Scoped scroll animation — only targets .yd-merch-store elements
+            const observer = new IntersectionObserver(function (entries) {
+                entries.forEach(function (e) {
+                    if (e.isIntersecting) {
+                        e.target.classList.add('yd-visible');
+                        observer.unobserve(e.target);
+                    }
+                });
+            }, { threshold: 0.08 });
 
-        // Restore saved preference
-        try {
-            const saved = localStorage.getItem('fc-theme');
-            if (saved) {
-                document.documentElement.setAttribute('data-theme', saved);
-                document.getElementById('t-label').textContent = saved.charAt(0).toUpperCase() + saved.slice(1);
-            }
-        } catch (e) { }
-
-        /* ── BAR ANIMATION ── */
-        const barObs = new IntersectionObserver(entries => {
-            entries.forEach(e => {
-                if (e.isIntersecting) {
-                    e.target.querySelectorAll('.bar-fill').forEach((b, i) =>
-                        setTimeout(() => b.classList.add('animated'), i * 120));
-                }
+            document.querySelectorAll('.yd-merch-store .yd-fade-up').forEach(function (el) {
+                observer.observe(el);
             });
-        }, { threshold: 0.3 });
 
-        document.querySelectorAll('.technique-section').forEach(s => barObs.observe(s));
-
-        /* ── PARALLAX GRID ── */
-        window.addEventListener('scroll', () => {
-            const g = document.querySelector('.hero-grid');
-            if (g) g.style.transform = `translateY(${scrollY * 0.3}px)`;
-        }, { passive: true });
-
-        /* ── MOBILE ── */
-        if (window.innerWidth < 900) document.documentElement.style.scrollSnapType = 'none';
+            // Smooth scroll for hero CTA → #yd-register
+            document.querySelectorAll('.yd-merch-store a[href="#yd-register"]').forEach(function (link) {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var target = document.getElementById('yd-register');
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+        })();
     </script>
+
 </body>
 
 </html>
