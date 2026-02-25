@@ -13,9 +13,10 @@
    ALL STYLES SCOPED TO .yd-merch-store
    Safe to embed in Shopify no global overrides
    ============================================================ */
-body{
-    margin: 0;
-}
+        body {
+            margin: 0;
+        }
+
         .yd-merch-store {
             --yd-black: #0a0a0a;
             --yd-white: #f5f2ed;
@@ -598,9 +599,6 @@ body{
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 1px;
-            background: var(--yd-border);
-            border: 1px solid var(--yd-border);
-            border-radius: 8px;
             overflow: hidden;
         }
 
@@ -1188,7 +1186,7 @@ body{
                 <li><a href="#yd-how">How It Works</a></li>
                 <li><a href="#yd-benefits">Benefits</a></li>
                 <li><a href="#yd-features">Features</a></li>
-                <li><a href="#yd-register" class="yd-nav-cta">Register Your Organisation</a></li>
+                <!-- <li><a href="#yd-register" class="yd-nav-cta">Register Your Organisation</a></li> -->
             </ul>
             <button class="yd-theme-toggle" id="ydThemeToggle" aria-label="Toggle light/dark theme"
                 title="Toggle theme">
@@ -1241,19 +1239,19 @@ body{
                     <div class="yd-stat-label">Orders Verified</div>
                     <p>Every order confirmed via background verification before production begins.</p>
                 </div>
-                <div class="yd-stat-card">
+                <div class="yd-stat-card yd-accent-card">
                     <span class="yd-stat-icon">🏢</span>
                     <div class="yd-stat-num">0</div>
                     <div class="yd-stat-label">Personal Deliveries</div>
                     <p>All shipments go exclusively to your registered office address.</p>
                 </div>
-                <div class="yd-stat-card">
+                <div class="yd-stat-card yd-accent-card">
                     <span class="yd-stat-icon">🏷️</span>
                     <div class="yd-stat-num">30<span>%+</span></div>
                     <div class="yd-stat-label">Member Savings</div>
                     <p>Exclusive member pricing vs standard retail.</p>
                 </div>
-                <div class="yd-stat-card">
+                <div class="yd-stat-card yd-accent-card">
                     <span class="yd-stat-icon">🎽</span>
                     <div class="yd-stat-label">Products Available</div>
                     <div class="yd-product-chips">
