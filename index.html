@@ -2,1627 +2,1163 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yoode Merch Store Exclusive Verified Merch for Your Team</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,600;1,9..40,300&family=Space+Mono:wght@400;700&display=swap"
-        rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Price Calculator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.21/vue.global.prod.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Bebas+Neue&display=swap"
+        rel="stylesheet" />
     <style>
-        /* ============================================================
-   ALL STYLES SCOPED TO .yd-merch-store
-   Safe to embed in Shopify no global overrides
-   ============================================================ */
-        body {
-            margin: 0;
+        :root {
+            --bg: #0e0e0f;
+            --surface: #16171a;
+            --surface2: #1e2024;
+            --border: #2a2d35;
+            --accent: #e8ff47;
+            --accent2: #47d9ff;
+            --text: #f0f0f0;
+            --muted: #6b7280;
+            --danger: #ff5c5c;
+            --success: #4ade80;
         }
 
-        .yd-merch-store {
-            --yd-black: #0a0a0a;
-            --yd-white: #f5f2ed;
-            --yd-accent: #ff4d1c;
-            --yd-gold: #e8c96d;
-            --yd-muted: #9e9b95;
-            --yd-card: #141414;
-            --yd-border: rgba(255, 255, 255, 0.08);
-            --yd-font-display: 'Bebas Neue', sans-serif;
-            --yd-font-mono: 'Space Mono', monospace;
-            --yd-font-body: 'DM Sans', sans-serif;
-
-            box-sizing: border-box;
-            background: var(--yd-black);
-            color: var(--yd-white);
-            font-family: var(--yd-font-body);
-            overflow-x: hidden;
-            position: relative;
-            width: 100%;
-        }
-
-        .yd-merch-store *,
-        .yd-merch-store *::before,
-        .yd-merch-store *::after {
+        * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
-        /* Noise overlay */
-        .yd-merch-store .yd-noise {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 999;
-            opacity: 0.3;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            min-height: 100vh;
         }
 
-        /* ── THEME TRANSITION ── */
-        .yd-merch-store,
-        .yd-merch-store .yd-nav,
-        .yd-merch-store .yd-stat-card,
-        .yd-merch-store .yd-perk-card,
-        .yd-merch-store .yd-step,
-        .yd-merch-store .yd-feature-item,
-        .yd-merch-store .yd-trust-panel,
-        .yd-merch-store .yd-trust-item,
-        .yd-merch-store .yd-company-pill,
-        .yd-merch-store .yd-footer {
-            transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
-        }
-
-        /* ── LIGHT THEME OVERRIDES ── */
-        .yd-merch-store.yd-light {
-            --yd-black: #f5f4f0;
-            --yd-white: #111110;
-            --yd-muted: #666460;
-            --yd-card: #ffffff;
-            --yd-border: rgba(0, 0, 0, 0.1);
-        }
-
-        .yd-merch-store.yd-light .yd-nav {
-            background: rgba(245, 244, 240, 0.9);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        }
-
-        .yd-merch-store.yd-light .yd-hero-bg-grid {
-            background-image:
-                linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
-        }
-
-        .yd-merch-store.yd-light .yd-hero-bg-circle {
-            background: radial-gradient(circle, rgba(255, 77, 28, 0.10) 0%, transparent 70%);
-        }
-
-        .yd-merch-store.yd-light .yd-noise {
-            opacity: 0.08;
-        }
-
-        .yd-merch-store.yd-light .yd-step {
-            background: #fff;
-        }
-
-        .yd-merch-store.yd-light .yd-step:hover {
-            background: #f9f8f6;
-        }
-
-        .yd-merch-store.yd-light .yd-steps-grid {
-            background: rgba(0, 0, 0, 0.08);
-            border-color: rgba(0, 0, 0, 0.08);
-        }
-
-        .yd-merch-store.yd-light .yd-features-section {
-            background: #eeede9;
-        }
-
-        .yd-merch-store.yd-light .yd-trust-panel {
-            background: #fff;
-            border-color: rgba(0, 0, 0, 0.1);
-        }
-
-        .yd-merch-store.yd-light .yd-trust-item {
-            background: rgba(0, 0, 0, 0.03);
-            border-color: rgba(0, 0, 0, 0.08);
-        }
-
-        .yd-merch-store.yd-light .yd-cta-section::before {
-            background: radial-gradient(ellipse 700px 380px at 50% 50%, rgba(255, 77, 28, 0.08), transparent);
-        }
-
-        .yd-merch-store.yd-light .yd-company-pill {
-            background: #fff;
-            border-color: rgba(0, 0, 0, 0.1);
-        }
-
-        .yd-merch-store.yd-light .yd-footer {
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
-        }
-
-        .yd-merch-store.yd-light .yd-stat-card {
-            background: #fff;
-            border-color: rgba(0, 0, 0, 0.1);
-        }
-
-        .yd-merch-store.yd-light .yd-stat-card.yd-accent-card {
-            background: linear-gradient(135deg, rgba(255, 77, 28, 0.1), #fff);
-            border-color: rgba(255, 77, 28, 0.3);
-        }
-
-        .yd-merch-store.yd-light .yd-chip {
-            background: rgba(0, 0, 0, 0.06);
-            border-color: rgba(0, 0, 0, 0.1);
-            color: #555;
-        }
-
-        .yd-merch-store.yd-light .yd-perk-card {
-            background: #fff;
-            border-color: rgba(0, 0, 0, 0.1);
-        }
-
-        .yd-merch-store.yd-light .yd-perk-card.yd-highlight {
-            background: linear-gradient(135deg, rgba(255, 77, 28, 0.07), #fff);
-            border-color: rgba(255, 77, 28, 0.3);
-        }
-
-        .yd-merch-store.yd-light .yd-cta-input {
-            background: #fff;
-            border-color: rgba(0, 0, 0, 0.15);
-            color: #111;
-        }
-
-        .yd-merch-store.yd-light .yd-cta-input::placeholder {
-            color: #999;
-        }
-
-        .yd-merch-store.yd-light .yd-nav-links a {
-            color: #666;
-        }
-
-        .yd-merch-store.yd-light .yd-nav-links a:hover {
-            color: #111;
-        }
-
-        .yd-merch-store.yd-light .yd-logo {
-            color: #111;
-        }
-
-        .yd-merch-store.yd-light .yd-hero h1 em {
-            -webkit-text-stroke-color: var(--yd-accent);
-        }
-
-        .yd-merch-store.yd-light .yd-section-title {
-            color: #111;
-        }
-
-        .yd-merch-store.yd-light .yd-step h3,
-        .yd-merch-store.yd-light .yd-perk-card h3,
-        .yd-merch-store.yd-light .yd-feature-text h4,
-        .yd-merch-store.yd-light .yd-trust-item h5,
-        .yd-merch-store.yd-light .yd-trust-heading,
-        .yd-merch-store.yd-light .yd-stat-num,
-        .yd-merch-store.yd-light .yd-cta-section h2 {
-            color: #111;
-        }
-
-        /* ── THEME TOGGLE BUTTON ── */
-        .yd-merch-store .yd-theme-toggle {
+        /* Header */
+        .header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 18px 40px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.07);
-            border: 1px solid var(--yd-border);
-            cursor: pointer;
-            flex-shrink: 0;
-            transition: background 0.2s, border-color 0.2s, transform 0.2s;
-            outline: none;
-            padding: 0;
-        }
-
-        .yd-merch-store .yd-theme-toggle:hover {
-            background: rgba(255, 77, 28, 0.12);
-            border-color: rgba(255, 77, 28, 0.35);
-            transform: rotate(15deg);
-        }
-
-        .yd-merch-store.yd-light .yd-theme-toggle {
-            background: rgba(0, 0, 0, 0.06);
-            border-color: rgba(0, 0, 0, 0.15);
-        }
-
-        .yd-merch-store.yd-light .yd-theme-toggle:hover {
-            background: rgba(255, 77, 28, 0.1);
-        }
-
-        .yd-merch-store .yd-theme-toggle svg {
-            width: 18px;
-            height: 18px;
-            pointer-events: none;
-            transition: opacity 0.25s, transform 0.35s;
-        }
-
-        /* show moon in dark, sun in light */
-        .yd-merch-store .yd-icon-sun {
-            display: none;
-        }
-
-        .yd-merch-store .yd-icon-moon {
-            display: block;
-        }
-
-        .yd-merch-store.yd-light .yd-icon-sun {
-            display: block;
-        }
-
-        .yd-merch-store.yd-light .yd-icon-moon {
-            display: none;
-        }
-
-        /* ── NAV ── */
-        .yd-merch-store .yd-nav {
+            gap: 16px;
             position: sticky;
             top: 0;
-            left: 0;
-            right: 0;
             z-index: 100;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 18px 48px;
-            background: rgba(10, 10, 10, 0.85);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            border-bottom: 1px solid var(--yd-border);
         }
 
-        .yd-merch-store .yd-logo {
-            font-family: var(--yd-font-display);
-            font-size: 1.9rem;
-            letter-spacing: 3px;
-            color: var(--yd-white);
-            text-decoration: none;
+        .header-logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 28px;
+            letter-spacing: 2px;
+            color: var(--accent);
             line-height: 1;
         }
 
-        .yd-merch-store .yd-logo span {
-            color: var(--yd-accent);
-        }
-
-        .yd-merch-store .yd-nav-links {
-            display: flex;
-            gap: 32px;
-            list-style: none;
-            align-items: center;
-        }
-
-        .yd-merch-store .yd-nav-links a {
-            color: var(--yd-muted);
-            text-decoration: none;
-            font-size: 0.82rem;
+        .header-sub {
+            font-size: 12px;
+            color: var(--muted);
             letter-spacing: 1px;
             text-transform: uppercase;
-            transition: color 0.2s;
-            font-family: var(--yd-font-body);
         }
 
-        .yd-merch-store .yd-nav-links a:hover {
-            color: var(--yd-white);
-        }
-
-        .yd-merch-store .yd-nav-links .yd-nav-cta {
-            background: var(--yd-accent);
-            color: var(--yd-white);
-            padding: 10px 22px;
-            border-radius: 2px;
-            font-weight: 600;
-        }
-
-        .yd-merch-store .yd-nav-links .yd-nav-cta:hover {
-            background: #e03a08;
-            color: var(--yd-white);
-        }
-
-        /* ── HERO ── */
-        .yd-merch-store .yd-hero {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            align-items: center;
-            gap: 48px;
-            padding: 72px 48px;
-            position: relative;
-            overflow: hidden;
-            min-height: 88vh;
-        }
-
-        .yd-merch-store .yd-hero-bg-circle {
-            position: absolute;
-            width: 560px;
-            height: 560px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255, 77, 28, 0.13) 0%, transparent 70%);
-            right: -80px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
-        }
-
-        .yd-merch-store .yd-hero-bg-grid {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            background-image:
-                linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
-            background-size: 60px 60px;
-        }
-
-        .yd-merch-store .yd-hero-content {
-            position: relative;
-            z-index: 2;
-        }
-
-        .yd-merch-store .yd-hero-label {
-            display: inline-flex;
-            align-items: center;
+        .step-trail {
+            margin-left: auto;
+            display: flex;
             gap: 8px;
-            background: rgba(255, 77, 28, 0.12);
-            border: 1px solid rgba(255, 77, 28, 0.3);
-            color: var(--yd-accent);
-            font-family: var(--yd-font-mono);
-            font-size: 0.68rem;
-            letter-spacing: 2px;
-            padding: 7px 14px;
-            border-radius: 2px;
-            margin-bottom: 24px;
-            animation: ydFadeUp 0.6s ease both;
+            align-items: center;
         }
 
-        .yd-merch-store .yd-hero-label::before {
-            content: '';
-            width: 6px;
-            height: 6px;
+        .step-dot {
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
-            background: var(--yd-accent);
-            flex-shrink: 0;
-            animation: ydPulse 1.5s ease infinite;
-        }
-
-        .yd-merch-store .yd-hero h1 {
-            font-family: var(--yd-font-display);
-            font-size: clamp(3.4rem, 6vw, 6.5rem);
-            line-height: 0.92;
-            letter-spacing: 2px;
-            margin-bottom: 22px;
-            animation: ydFadeUp 0.6s 0.1s ease both;
-        }
-
-        .yd-merch-store .yd-hero h1 em {
-            font-style: normal;
-            -webkit-text-stroke: 1.5px var(--yd-accent);
-            color: transparent;
-        }
-
-        .yd-merch-store .yd-hero-sub {
-            font-size: 1rem;
-            line-height: 1.75;
-            color: var(--yd-muted);
-            margin-bottom: 36px;
-            font-weight: 300;
-            animation: ydFadeUp 0.6s 0.2s ease both;
-        }
-
-        .yd-merch-store .yd-hero-sub strong {
-            color: var(--yd-white);
-            font-weight: 600;
-        }
-
-        .yd-merch-store .yd-hero-actions {
-            animation: ydFadeUp 0.6s 0.3s ease both;
-        }
-
-        /* Hero right stat cards */
-        .yd-merch-store .yd-hero-right {
-            position: relative;
-            z-index: 2;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-            animation: ydFadeUp 0.7s 0.2s ease both;
-        }
-
-        .yd-merch-store .yd-stat-card {
-            background: var(--yd-card);
-            border: 1px solid var(--yd-border);
-            border-radius: 10px;
-            padding: 24px 20px;
-            transition: border-color 0.3s, transform 0.3s;
-        }
-
-        .yd-merch-store .yd-stat-card:hover {
-            border-color: rgba(255, 77, 28, 0.3);
-            transform: translateY(-3px);
-        }
-
-        .yd-merch-store .yd-stat-card.yd-wide {
-            grid-column: span 2;
-        }
-
-        .yd-merch-store .yd-stat-card.yd-accent-card {
-            background: linear-gradient(135deg, rgba(255, 77, 28, 0.15), rgba(255, 77, 28, 0.05));
-            border-color: rgba(255, 77, 28, 0.3);
-        }
-
-        .yd-merch-store .yd-stat-icon {
-            font-size: 1.6rem;
-            margin-bottom: 10px;
-            display: block;
-        }
-
-        .yd-merch-store .yd-stat-num {
-            font-family: var(--yd-font-display);
-            font-size: 2.4rem;
-            letter-spacing: 1px;
-            color: var(--yd-white);
-            line-height: 1;
-            margin-bottom: 4px;
-        }
-
-        .yd-merch-store .yd-stat-num span {
-            color: var(--yd-accent);
-        }
-
-        .yd-merch-store .yd-stat-label {
-            font-size: 0.75rem;
-            color: var(--yd-muted);
-            font-family: var(--yd-font-mono);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .yd-merch-store .yd-stat-card p {
-            font-size: 0.82rem;
-            color: var(--yd-muted);
-            line-height: 1.6;
-            margin-top: 8px;
-        }
-
-        .yd-merch-store .yd-product-chips {
             display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin-top: 12px;
-        }
-
-        .yd-merch-store .yd-chip {
-            font-size: 0.68rem;
-            font-family: var(--yd-font-mono);
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid var(--yd-border);
-            padding: 4px 10px;
-            border-radius: 100px;
-            color: var(--yd-muted);
-            white-space: nowrap;
-        }
-
-        /* ── BUTTONS ── */
-        .yd-merch-store .yd-btn-primary {
-            display: inline-flex;
             align-items: center;
-            gap: 10px;
-            background: var(--yd-accent);
-            color: var(--yd-white);
-            padding: 16px 36px;
-            font-size: 1rem;
+            justify-content: center;
+            font-size: 11px;
             font-weight: 600;
-            border-radius: 2px;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            font-family: var(--yd-font-body);
-            letter-spacing: 0.3px;
+            border: 1.5px solid var(--border);
+            color: var(--muted);
+            transition: all .2s;
         }
 
-        .yd-merch-store .yd-btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 14px 40px rgba(255, 77, 28, 0.4);
+        .step-dot.active {
+            border-color: var(--accent);
+            color: var(--accent);
         }
 
-        /* ── TICKER ── */
-        .yd-merch-store .yd-ticker {
-            background: var(--yd-accent);
-            overflow: hidden;
-            white-space: nowrap;
-            padding: 11px 0;
+        .step-dot.done {
+            background: var(--accent);
+            color: var(--bg);
+            border-color: var(--accent);
         }
 
-        .yd-merch-store .yd-ticker-inner {
-            display: inline-flex;
-            animation: ydTicker 26s linear infinite;
+        .step-dash {
+            width: 20px;
+            height: 1px;
+            background: var(--border);
         }
 
-        .yd-merch-store .yd-ticker-item {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            font-family: var(--yd-font-display);
-            font-size: 1rem;
-            letter-spacing: 2px;
-            padding: 0 36px;
-            color: var(--yd-white);
-        }
-
-        .yd-merch-store .yd-ticker-dot {
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.5);
-            flex-shrink: 0;
-        }
-
-        /* ── SECTION BASE ── */
-        .yd-merch-store .yd-section {
-            padding: 96px 48px;
-        }
-
-        .yd-merch-store .yd-section-label {
-            font-family: var(--yd-font-mono);
-            font-size: 0.68rem;
-            letter-spacing: 3px;
-            color: var(--yd-accent);
-            text-transform: uppercase;
-            margin-bottom: 14px;
-        }
-
-        .yd-merch-store .yd-section-title {
-            font-family: var(--yd-font-display);
-            font-size: clamp(2.4rem, 5vw, 4.2rem);
-            letter-spacing: 1px;
-            line-height: 1;
-            margin-bottom: 16px;
-            color: var(--yd-white);
-        }
-
-        .yd-merch-store .yd-section-sub {
-            font-size: 1rem;
-            color: var(--yd-muted);
-            max-width: 540px;
-            line-height: 1.75;
-            font-weight: 300;
-            margin-bottom: 56px;
-        }
-
-        /* ── STEPS ── */
-        .yd-merch-store .yd-steps-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 1px;
-            overflow: hidden;
-        }
-
-        .yd-merch-store .yd-step {
-            background: var(--yd-card);
-            padding: 36px 24px;
-            transition: background 0.3s;
-        }
-
-        .yd-merch-store .yd-step:hover {
-            background: #1a1a1a;
-        }
-
-        .yd-merch-store .yd-step-num {
-            font-family: var(--yd-font-display);
-            font-size: 3.5rem;
-            color: rgba(255, 77, 28, 0.13);
-            line-height: 1;
-            margin-bottom: 18px;
-            transition: color 0.3s;
-        }
-
-        .yd-merch-store .yd-step:hover .yd-step-num {
-            color: rgba(255, 77, 28, 0.35);
-        }
-
-        .yd-merch-store .yd-step-icon {
-            font-size: 1.6rem;
-            margin-bottom: 14px;
-        }
-
-        .yd-merch-store .yd-step h3 {
-            font-weight: 600;
-            font-size: 0.95rem;
-            margin-bottom: 10px;
-            color: var(--yd-white);
-        }
-
-        .yd-merch-store .yd-step p {
-            font-size: 0.83rem;
-            color: var(--yd-muted);
-            line-height: 1.65;
-        }
-
-        /* ── PERK CARDS ── */
-        .yd-merch-store .yd-perks-section {
-            padding: 0 48px 96px;
-            background: var(--yd-black);
-        }
-
-        .yd-merch-store .yd-perks-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-
-        .yd-merch-store .yd-perk-card {
-            background: var(--yd-card);
-            border: 1px solid var(--yd-border);
-            border-radius: 10px;
-            padding: 36px 28px;
-            transition: border-color 0.3s, transform 0.3s;
-        }
-
-        .yd-merch-store .yd-perk-card:hover {
-            border-color: rgba(255, 77, 28, 0.3);
-            transform: translateY(-4px);
-        }
-
-        .yd-merch-store .yd-perk-card.yd-highlight {
-            border-color: rgba(255, 77, 28, 0.35);
-            background: linear-gradient(135deg, rgba(255, 77, 28, 0.07), var(--yd-card));
-        }
-
-        .yd-merch-store .yd-perk-emoji {
-            font-size: 2rem;
-            margin-bottom: 18px;
-            display: block;
-        }
-
-        .yd-merch-store .yd-perk-card h3 {
-            font-weight: 600;
-            font-size: 1rem;
-            margin-bottom: 10px;
-            color: var(--yd-white);
-        }
-
-        .yd-merch-store .yd-perk-card p {
-            font-size: 0.85rem;
-            color: var(--yd-muted);
-            line-height: 1.65;
-        }
-
-        /* ── FEATURES ── */
-        .yd-merch-store .yd-features-section {
-            padding: 96px 48px;
-            background: #0d0d0d;
-        }
-
-        .yd-merch-store .yd-features-inner {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 72px;
-            align-items: start;
+        /* Layout */
+        .container {
             max-width: 1200px;
             margin: 0 auto;
+            padding: 40px 40px 80px;
         }
 
-        .yd-merch-store .yd-features-list {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .yd-merch-store .yd-feature-item {
-            display: flex;
-            gap: 20px;
-            padding: 24px 0;
-            border-bottom: 1px solid var(--yd-border);
-            transition: padding-left 0.3s;
-            cursor: default;
-        }
-
-        .yd-merch-store .yd-feature-item:hover {
-            padding-left: 8px;
-        }
-
-        .yd-merch-store .yd-feature-item:first-child {
-            padding-top: 0;
-        }
-
-        .yd-merch-store .yd-feature-icon {
-            width: 42px;
-            height: 42px;
-            border-radius: 6px;
-            flex-shrink: 0;
-            background: rgba(255, 77, 28, 0.1);
-            border: 1px solid rgba(255, 77, 28, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            transition: background 0.3s;
-        }
-
-        .yd-merch-store .yd-feature-item:hover .yd-feature-icon {
-            background: rgba(255, 77, 28, 0.22);
-        }
-
-        .yd-merch-store .yd-feature-text h4 {
-            font-weight: 600;
-            font-size: 0.93rem;
-            margin-bottom: 5px;
-            color: var(--yd-white);
-        }
-
-        .yd-merch-store .yd-feature-text p {
-            font-size: 0.82rem;
-            color: var(--yd-muted);
-            line-height: 1.6;
-        }
-
-        /* ── TRUST PANEL (replaces delivery tracker) ── */
-        .yd-merch-store .yd-trust-panel {
-            background: var(--yd-card);
-            border: 1px solid var(--yd-border);
+        /* Cards */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 32px;
+            padding: 28px 32px;
+            margin-bottom: 20px;
+            transition: border-color .2s;
+        }
+
+        .card.active {
+            border-color: var(--accent);
+        }
+
+        .card-title {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .card-title span {
+            display: inline-block;
+            background: var(--accent);
+            color: var(--bg);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 20px;
+            font-size: 10px;
+            margin-right: 10px;
+        }
+
+        /* Segmented control */
+        .seg-ctrl {
+            display: flex;
+            background: var(--surface2);
+            border-radius: 8px;
+            padding: 4px;
+            gap: 4px;
+            width: fit-content;
+        }
+
+        .seg-btn {
+            padding: 8px 20px;
+            border-radius: 6px;
+            border: none;
+            background: transparent;
+            color: var(--muted);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all .15s;
+        }
+
+        .seg-btn.active {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        /* Select */
+        .custom-select {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            outline: none;
+            cursor: pointer;
+            min-width: 240px;
+            transition: border-color .2s;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 36px;
+        }
+
+        .custom-select:focus {
+            border-color: var(--accent);
+        }
+
+        /* Size/Qty Table */
+        .sizes-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 8px;
+        }
+
+        .size-cell {
+            text-align: center;
+        }
+
+        .size-label {
+            font-size: 11px;
+            color: var(--muted);
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+
+        .qty-input {
+            width: 100%;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 6px;
+            padding: 8px 4px;
+            text-align: center;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: border-color .2s;
+            -moz-appearance: textfield;
+        }
+
+        .qty-input::-webkit-outer-spin-button,
+        .qty-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+        }
+
+        .qty-input:focus {
+            border-color: var(--accent);
+        }
+
+        .total-qty {
+            margin-top: 16px;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .total-qty strong {
+            color: var(--accent);
+            font-size: 18px;
+        }
+
+        /* Addons */
+        .addons-section {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 12px;
         }
 
-        .yd-merch-store .yd-trust-title {
-            font-family: var(--yd-font-mono);
-            font-size: 0.68rem;
-            letter-spacing: 2px;
-            color: var(--yd-accent);
-            text-transform: uppercase;
-            margin-bottom: 4px;
-        }
-
-        .yd-merch-store .yd-trust-heading {
-            font-family: var(--yd-font-display);
-            font-size: 1.8rem;
-            letter-spacing: 1px;
-            line-height: 1.1;
-            color: var(--yd-white);
-            margin-bottom: 8px;
-        }
-
-        .yd-merch-store .yd-trust-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 14px;
-            padding: 16px;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--yd-border);
-        }
-
-        .yd-merch-store .yd-trust-icon {
-            width: 38px;
-            height: 38px;
-            border-radius: 6px;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-        }
-
-        .yd-merch-store .yd-trust-icon.green {
-            background: rgba(61, 220, 132, 0.12);
-        }
-
-        .yd-merch-store .yd-trust-icon.orange {
-            background: rgba(255, 77, 28, 0.12);
-        }
-
-        .yd-merch-store .yd-trust-icon.gold {
-            background: rgba(232, 201, 109, 0.12);
-        }
-
-        .yd-merch-store .yd-trust-icon.blue {
-            background: rgba(77, 121, 255, 0.12);
-        }
-
-        .yd-merch-store .yd-trust-item h5 {
-            font-size: 0.88rem;
-            font-weight: 600;
-            margin-bottom: 3px;
-            color: var(--yd-white);
-        }
-
-        .yd-merch-store .yd-trust-item p {
-            font-size: 0.78rem;
-            color: var(--yd-muted);
-            line-height: 1.5;
-        }
-
-        /* ── COMPANIES SCROLL ── */
-        .yd-merch-store .yd-companies-section {
-            padding: 72px 0;
-            border-top: 1px solid var(--yd-border);
+        .addon-location {
+            background: var(--surface2);
+            border-radius: 10px;
             overflow: hidden;
+            border: 1px solid var(--border);
         }
 
-        .yd-merch-store .yd-companies-label {
-            font-size: 0.75rem;
-            color: var(--yd-muted);
-            text-align: center;
-            text-transform: uppercase;
+        .addon-loc-header {
+            padding: 10px 16px;
+            font-size: 10px;
+            font-weight: 700;
             letter-spacing: 2px;
-            font-family: var(--yd-font-mono);
-            margin-bottom: 36px;
-            padding: 0 48px;
+            text-transform: uppercase;
+            color: var(--accent2);
+            background: rgba(71, 217, 255, .06);
+            border-bottom: 1px solid var(--border);
         }
 
-        .yd-merch-store .yd-companies-track {
+        .addon-rows {
+            padding: 12px 16px;
             display: flex;
-            gap: 14px;
-            width: max-content;
-            animation: ydBrandScroll 24s linear infinite;
+            flex-direction: column;
+            gap: 12px;
         }
 
-        .yd-merch-store .yd-company-pill {
-            display: flex;
+        .addon-row {
+            display: grid;
+            grid-template-columns: 180px 1fr 100px 100px 80px 100px 100px;
+            gap: 10px;
             align-items: center;
-            gap: 9px;
-            background: var(--yd-card);
-            border: 1px solid var(--yd-border);
-            padding: 9px 20px;
-            border-radius: 100px;
-            white-space: nowrap;
-            font-size: 0.82rem;
+        }
+
+        .addon-type {
+            font-size: 13px;
             font-weight: 500;
-            flex-shrink: 0;
-            color: var(--yd-white);
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .yd-merch-store .yd-company-dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            flex-shrink: 0;
+        .addon-col-label {
+            font-size: 10px;
+            color: var(--muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 3px;
         }
 
-        /* ── CTA ── */
-        .yd-merch-store .yd-cta-section {
-            padding: 110px 48px;
-            text-align: center;
+        .field-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-val {
+            font-size: 13px;
+            color: var(--text);
+            padding: 8px 0;
+        }
+
+        /* Toggle */
+        .toggle-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .toggle {
+            width: 38px;
+            height: 22px;
+            background: var(--border);
+            border-radius: 11px;
             position: relative;
-            overflow: hidden;
+            transition: background .2s;
         }
 
-        .yd-merch-store .yd-cta-section::before {
+        .toggle.on {
+            background: var(--accent);
+        }
+
+        .toggle::after {
             content: '';
             position: absolute;
-            inset: 0;
-            pointer-events: none;
-            background: radial-gradient(ellipse 700px 380px at 50% 50%, rgba(255, 77, 28, 0.1), transparent);
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: white;
+            top: 3px;
+            left: 3px;
+            transition: transform .2s;
         }
 
-        .yd-merch-store .yd-cta-section h2 {
-            font-family: var(--yd-font-display);
-            font-size: clamp(2.8rem, 7vw, 5.8rem);
-            letter-spacing: 2px;
-            line-height: 0.96;
-            margin-bottom: 24px;
-            color: var(--yd-white);
-            position: relative;
+        .toggle.on::after {
+            transform: translateX(16px);
         }
 
-        .yd-merch-store .yd-cta-section h2 span {
-            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.28);
-            color: transparent;
-        }
-
-        .yd-merch-store .yd-cta-section p {
-            font-size: 1.05rem;
-            color: var(--yd-muted);
-            max-width: 500px;
-            margin: 0 auto 44px;
-            line-height: 1.75;
-            font-weight: 300;
-            position: relative;
-        }
-
-        .yd-merch-store .yd-cta-form {
-            display: flex;
-            gap: 12px;
-            max-width: 600px;
-            margin: 0 auto 20px;
-            position: relative;
-        }
-
-        .yd-merch-store .yd-cta-input {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid var(--yd-border);
-            border-radius: 2px;
-            padding: 16px 20px;
-            color: var(--yd-white);
-            font-family: var(--yd-font-body);
-            font-size: 0.95rem;
+        /* Colors input */
+        .num-input {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 6px;
+            padding: 7px 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
             outline: none;
-            transition: border-color 0.2s;
+            width: 100%;
+            -moz-appearance: textfield;
+            transition: border-color .2s;
         }
 
-        .yd-merch-store .yd-cta-input::placeholder {
-            color: var(--yd-muted);
+        .num-input::-webkit-outer-spin-button,
+        .num-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
         }
 
-        .yd-merch-store .yd-cta-input:focus {
-            border-color: rgba(255, 77, 28, 0.5);
+        .num-input:focus {
+            border-color: var(--accent);
         }
 
-        .yd-merch-store .yd-cta-note {
-            font-size: 0.72rem;
-            color: var(--yd-muted);
-            position: relative;
-            font-family: var(--yd-font-mono);
-            letter-spacing: 0.5px;
+        /* Addon type badges */
+        .location-badge {
+            font-size: 9px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 3px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            background: rgba(232, 255, 71, .1);
+            color: var(--accent);
+            border: 1px solid rgba(232, 255, 71, .2);
         }
 
-        /* ── FOOTER ── */
-        .yd-merch-store .yd-footer {
-            border-top: 1px solid var(--yd-border);
-            padding: 36px 48px;
+        /* Summary */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .summary-item {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 18px 20px;
+        }
+
+        .summary-label {
+            font-size: 11px;
+            color: var(--muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .summary-val {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 32px;
+            color: var(--text);
+            letter-spacing: 1px;
+        }
+
+        .summary-val.accent {
+            color: var(--accent);
+        }
+
+        .summary-val small {
+            font-size: 16px;
+            color: var(--muted);
+        }
+
+        .breakdown-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .breakdown-table th {
+            text-align: left;
+            padding: 8px 12px;
+            font-size: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--muted);
+            background: var(--surface2);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .breakdown-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .breakdown-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .breakdown-table .total-row td {
+            font-weight: 600;
+            color: var(--accent);
+            background: rgba(232, 255, 71, .04);
+            border-top: 1px solid var(--border);
+        }
+
+        /* Shipping */
+        .shipping-wrap {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: var(--surface2);
+            border-radius: 10px;
+            border: 1px solid var(--border);
         }
 
-        .yd-merch-store .yd-footer-links {
-            display: flex;
-            gap: 24px;
-            list-style: none;
+        .shipping-wrap label {
+            font-size: 13px;
+            color: var(--muted);
+            min-width: 180px;
         }
 
-        .yd-merch-store .yd-footer-links a {
-            color: var(--yd-muted);
-            text-decoration: none;
-            font-size: 0.78rem;
-            transition: color 0.2s;
+        .shipping-input {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 8px;
+            padding: 9px 14px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            outline: none;
+            width: 160px;
+            -moz-appearance: textfield;
+            transition: border-color .2s;
         }
 
-        .yd-merch-store .yd-footer-links a:hover {
-            color: var(--yd-white);
+        .shipping-input::-webkit-outer-spin-button,
+        .shipping-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
         }
 
-        .yd-merch-store .yd-footer-copy {
-            font-size: 0.75rem;
-            color: var(--yd-muted);
+        .shipping-input:focus {
+            border-color: var(--accent);
         }
 
-        /* ── ANIMATIONS ── */
-        @keyframes ydFadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(22px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        /* Warning */
+        .warning {
+            background: rgba(255, 92, 92, .08);
+            border: 1px solid rgba(255, 92, 92, .3);
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 12px;
+            color: #ff8a8a;
+            margin-top: 10px;
         }
 
-        @keyframes ydPulse {
-
-            0%,
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-
-            50% {
-                opacity: 0.5;
-                transform: scale(1.5);
-            }
-        }
-
-        @keyframes ydTicker {
-            0% {
-                transform: translateX(0);
-            }
-
-            100% {
-                transform: translateX(-50%);
-            }
-        }
-
-        @keyframes ydBrandScroll {
-            0% {
-                transform: translateX(0);
-            }
-
-            100% {
-                transform: translateX(-50%);
-            }
-        }
-
-        .yd-merch-store .yd-fade-up {
-            opacity: 0;
-            transform: translateY(28px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-
-        .yd-merch-store .yd-fade-up.yd-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .yd-merch-store .yd-fade-up.yd-d1 {
-            transition-delay: 0.1s;
-        }
-
-        .yd-merch-store .yd-fade-up.yd-d2 {
-            transition-delay: 0.2s;
-        }
-
-        .yd-merch-store .yd-fade-up.yd-d3 {
-            transition-delay: 0.3s;
-        }
-
-        /* ── RESPONSIVE ── */
-        @media (max-width: 1100px) {
-            .yd-merch-store .yd-steps-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
+        /* Responsive fixes */
         @media (max-width: 900px) {
-            .yd-merch-store .yd-nav {
-                padding: 14px 20px;
-            }
-
-            .yd-merch-store .yd-nav-links {
-                display: none;
-            }
-
-            .yd-merch-store .yd-hero {
-                grid-template-columns: 1fr;
-                padding: 56px 20px 48px;
-                min-height: auto;
-                gap: 36px;
-            }
-
-            .yd-merch-store .yd-hero-bg-circle {
-                width: 300px;
-                height: 300px;
-                right: -60px;
-            }
-
-            .yd-merch-store .yd-hero-right {
+            .addon-row {
                 grid-template-columns: 1fr 1fr;
+                gap: 8px;
             }
 
-            .yd-merch-store .yd-stat-card.yd-wide {
-                grid-column: span 2;
+            .sizes-grid {
+                grid-template-columns: repeat(5, 1fr);
             }
 
-            .yd-merch-store .yd-section {
-                padding: 64px 20px;
-            }
-
-            .yd-merch-store .yd-perks-section {
-                padding: 0 20px 64px;
-            }
-
-            .yd-merch-store .yd-features-section {
-                padding: 64px 20px;
-            }
-
-            .yd-merch-store .yd-cta-section {
-                padding: 72px 20px;
-            }
-
-            .yd-merch-store .yd-footer {
-                padding: 28px 20px;
-                flex-direction: column;
-                gap: 18px;
-                text-align: center;
-            }
-
-            .yd-merch-store .yd-footer-links {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .yd-merch-store .yd-steps-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .yd-merch-store .yd-perks-grid {
-                grid-template-columns: 1fr;
-                gap: 14px;
-            }
-
-            .yd-merch-store .yd-features-inner {
-                grid-template-columns: 1fr;
-                gap: 40px;
-            }
-
-            .yd-merch-store .yd-cta-form {
-                flex-direction: column;
-            }
-
-            .yd-merch-store .yd-companies-label {
-                padding: 0 20px;
-            }
-        }
-
-        @media (max-width: 560px) {
-            .yd-merch-store .yd-steps-grid {
+            .summary-grid {
                 grid-template-columns: 1fr;
             }
 
-            .yd-merch-store .yd-hero h1 {
-                font-size: clamp(2.8rem, 13vw, 4rem);
+            .container {
+                padding: 24px 16px 60px;
             }
 
-            .yd-merch-store .yd-hero-right {
-                grid-template-columns: 1fr;
-            }
-
-            .yd-merch-store .yd-stat-card.yd-wide {
-                grid-column: span 1;
+            .header {
+                padding: 16px 20px;
             }
         }
     </style>
 </head>
 
 <body>
-    <div class="yd-merch-store">
+    <div id="app">
 
-        <!-- Noise texture layer -->
-        <div class="yd-noise" aria-hidden="true"></div>
-
-        <!-- ── NAV ── -->
-        <nav class="yd-nav">
-            <a href="https://yoode.com" class="yd-logo">YOO<span>DE</span></a>
-            <ul class="yd-nav-links">
-                <li><a href="#yd-how">How It Works</a></li>
-                <li><a href="#yd-benefits">Benefits</a></li>
-                <li><a href="#yd-features">Features</a></li>
-                <!-- <li><a href="#yd-register" class="yd-nav-cta">Register Your Organisation</a></li> -->
-            </ul>
-            <button class="yd-theme-toggle" id="ydThemeToggle" aria-label="Toggle light/dark theme"
-                title="Toggle theme">
-                <!-- Moon icon (shown in dark mode) -->
-                <svg class="yd-icon-moon" viewBox="0 0 24 24" fill="none" stroke="#f5f2ed" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" />
-                </svg>
-                <!-- Sun icon (shown in light mode) -->
-                <svg class="yd-icon-sun" viewBox="0 0 24 24" fill="none" stroke="#111110" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="5" />
-                    <line x1="12" y1="1" x2="12" y2="3" />
-                    <line x1="12" y1="21" x2="12" y2="23" />
-                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-                    <line x1="1" y1="12" x2="3" y2="12" />
-                    <line x1="21" y1="12" x2="23" y2="12" />
-                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-                </svg>
-            </button>
-        </nav>
-
-        <!-- ── HERO ── -->
-        <section class="yd-hero">
-            <div class="yd-hero-bg-grid" aria-hidden="true"></div>
-            <div class="yd-hero-bg-circle" aria-hidden="true"></div>
-
-            <!-- Left: text + CTA -->
-            <div class="yd-hero-content">
-                <div class="yd-hero-label">🏢 For Registered Organisations</div>
-                <h1>YOUR LOGO.<br>YOUR TEAM.<br><em>SPECIAL PRICE.</em></h1>
-                <p class="yd-hero-sub">
-                    Yoode Merch Store gives registered organisations a dedicated page on yoode.com. Members order
-                    branded tees, event jerseys &amp; more at <strong>exclusive member pricing</strong>. Every order
-                    goes through a <strong>background verification process</strong> to confirm its genuineness — and
-                    delivery is made only to your office premises.
-                </p>
-                <div class="yd-hero-actions">
-                    <a href="#yd-register" class="yd-btn-primary">Register Your Organisation →</a>
-                </div>
+        <!-- Header -->
+        <div class="header">
+            <div>
+                <div class="header-logo">PriceCalc</div>
+                <div class="header-sub">Product Price Calculator</div>
             </div>
-
-            <!-- Right: stat cards -->
-            <div class="yd-hero-right">
-                <div class="yd-stat-card yd-accent-card">
-                    <span class="yd-stat-icon">🔍</span>
-                    <div class="yd-stat-num">100<span>%</span></div>
-                    <div class="yd-stat-label">Orders Verified</div>
-                    <p>Every order confirmed via background verification before production begins.</p>
-                </div>
-                <div class="yd-stat-card yd-accent-card">
-                    <span class="yd-stat-icon">🏢</span>
-                    <div class="yd-stat-num">0</div>
-                    <div class="yd-stat-label">Personal Deliveries</div>
-                    <p>All shipments go exclusively to your registered office address.</p>
-                </div>
-                <div class="yd-stat-card yd-accent-card">
-                    <span class="yd-stat-icon">🏷️</span>
-                    <div class="yd-stat-num">30<span>%+</span></div>
-                    <div class="yd-stat-label">Member Savings</div>
-                    <p>Exclusive member pricing vs standard retail.</p>
-                </div>
-                <div class="yd-stat-card yd-accent-card">
-                    <span class="yd-stat-icon">🎽</span>
-                    <div class="yd-stat-label">Products Available</div>
-                    <div class="yd-product-chips">
-                        <span class="yd-chip">Logo Tees</span>
-                        <span class="yd-chip">Event Jerseys</span>
-                        <span class="yd-chip">Hoodies</span>
-                        <span class="yd-chip">Caps</span>
-                        <span class="yd-chip">Mugs</span>
-                        <span class="yd-chip">Tote Bags</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ── TICKER ── -->
-        <div class="yd-ticker" aria-hidden="true">
-            <div class="yd-ticker-inner">
-                <span class="yd-ticker-item"><span class="yd-ticker-dot"></span>EXCLUSIVE MEMBER PRICING</span>
-                <span class="yd-ticker-item"><span class="yd-ticker-dot"></span>LOGO TEES · EVENT JERSEYS · CAPS ·
-                    HOODIES · MUGS</span>
-                <span class="yd-ticker-item"><span class="yd-ticker-dot"></span>BACKGROUND VERIFICATION ON EVERY
-                    ORDER</span>
-                <span class="yd-ticker-item"><span class="yd-ticker-dot"></span>DELIVERED ONLY TO YOUR OFFICE
-                    PREMISES</span>
-                <span class="yd-ticker-item"><span class="yd-ticker-dot"></span>REGISTERED MEMBERS · ZERO MISUSE</span>
-                <span class="yd-ticker-item"><span class="yd-ticker-dot"></span>YOUR BRAND. YOUR TEAM. YOUR
-                    PRICE.</span>
-                <!-- duplicate for seamless loop -->
-                <span class="yd-ticker-item"><span class="yd-ticker-dot"></span>EXCLUSIVE MEMBER PRICING</span>
-                <span class="yd-ticker-item"><span class="yd-ticker-dot"></span>LOGO TEES · EVENT JERSEYS · CAPS ·
-                    HOODIES · MUGS</span>
-                <span class="yd-ticker-item"><span class="yd-ticker-dot"></span>BACKGROUND VERIFICATION ON EVERY
-                    ORDER</span>
-                <span class="yd-ticker-item"><span class="yd-ticker-dot"></span>DELIVERED ONLY TO YOUR OFFICE
-                    PREMISES</span>
-                <span class="yd-ticker-item"><span class="yd-ticker-dot"></span>REGISTERED MEMBERS · ZERO MISUSE</span>
-                <span class="yd-ticker-item"><span class="yd-ticker-dot"></span>YOUR BRAND. YOUR TEAM. YOUR
-                    PRICE.</span>
+            <div class="step-trail">
+                <div class="step-dot" :class="{active: step===1, done: step>1}">1</div>
+                <div class="step-dash"></div>
+                <div class="step-dot" :class="{active: step===2, done: step>2}">2</div>
+                <div class="step-dash"></div>
+                <div class="step-dot" :class="{active: step===3, done: step>3}">3</div>
+                <div class="step-dash"></div>
+                <div class="step-dot" :class="{active: step===4}">4</div>
             </div>
         </div>
 
-        <!-- ── HOW IT WORKS ── -->
-        <section class="yd-section" id="yd-how">
-            <div class="yd-section-label">// The Process</div>
-            <h2 class="yd-section-title yd-fade-up">FIVE STEPS FROM<br>SIGN-UP TO DELIVERY</h2>
-            <p class="yd-section-sub yd-fade-up">From registration to verified, branded merch delivered to your premises
-                every step is designed to keep it exclusive, genuine, and hassle-free.</p>
+        <div class="container">
 
-            <div class="yd-steps-grid yd-fade-up">
-                <div class="yd-step">
-                    <div class="yd-step-num">01</div>
-                    <div class="yd-step-icon">🏢</div>
-                    <h3>Register Your Organisation</h3>
-                    <p>Sign up with Yoode as a registered organisation. We verify your organisation and set up your
-                        dedicated page on yoode.com.</p>
-                </div>
-                <div class="yd-step">
-                    <div class="yd-step-num">02</div>
-                    <div class="yd-step-icon">🎨</div>
-                    <h3>We Build Your Brand Page</h3>
-                    <p>Your logo, brand colors, and product catalog go live on your dedicated page on yoode.com —
-                        curated specifically for your members at member pricing.</p>
-                </div>
-                <div class="yd-step">
-                    <div class="yd-step-num">03</div>
-                    <div class="yd-step-icon">🛍️</div>
-                    <h3>Members Browse &amp; Order</h3>
-                    <p>Enrolled members visit your organisation's page, pick products at exclusive member prices, and
-                        place their order.</p>
-                </div>
-                <div class="yd-step">
-                    <div class="yd-step-num">04</div>
-                    <div class="yd-step-icon">🔍</div>
-                    <h3>Background Verification</h3>
-                    <p>Every order is run through our background verification process to confirm its genuineness —
-                        ensuring only legitimate members avail the benefit.</p>
-                </div>
-                <div class="yd-step">
-                    <div class="yd-step-num">05</div>
-                    <div class="yd-step-icon">🚚</div>
-                    <h3>Delivered to Your Office</h3>
-                    <p>Verified orders are printed, packed, and dispatched exclusively to your registered premises —
-                        never to a personal address.</p>
+            <!-- Step 1: Customer Type -->
+            <div class="card" :class="{active: step===1}">
+                <div class="card-title"><span>1</span>Customer Type</div>
+                <div class="seg-ctrl">
+                    <button v-for="ct in customerTypes" :key="ct" class="seg-btn" :class="{active: customerType===ct}"
+                        @click="setCustomerType(ct)">{{ct}}</button>
                 </div>
             </div>
-        </section>
 
-        <!-- ── BENEFIT CARDS ── -->
-        <section class="yd-perks-section" id="yd-benefits">
-            <div class="yd-section-label">// Why It Works</div>
-            <h2 class="yd-section-title yd-fade-up">BUILT FOR TEAMS.<br>PRICED FOR LOYALTY.</h2>
-            <p class="yd-section-sub yd-fade-up">A merch program that members actually love and easy for any admin to
-                run.</p>
-
-            <div class="yd-perks-grid">
-                <div class="yd-perk-card yd-fade-up yd-d1">
-                    <span class="yd-perk-emoji">🏷️</span>
-                    <h3>Exclusive Member Pricing</h3>
-                    <p>Registered organisation members get special pricing unavailable anywhere else on Yoode making
-                        branded merch genuinely affordable for every person in your group.</p>
-                </div>
-                <div class="yd-perk-card yd-highlight yd-fade-up yd-d2">
-                    <span class="yd-perk-emoji">🔍</span>
-                    <h3>Background Verification on Every Order</h3>
-                    <p>Each order goes through a defined background verification process to confirm its genuineness so
-                        the benefit is protected and only real, enrolled members can avail it.</p>
-                </div>
-                <div class="yd-perk-card yd-fade-up yd-d3">
-                    <span class="yd-perk-emoji">🎽</span>
-                    <h3>Organisation-Branded Everything</h3>
-                    <p>From everyday logo tees to custom event jerseys for your tournament, annual day, or team outing —
-                        all products carry your brand and colors, printed to a quality your members will be proud to
-                        wear.</p>
-                </div>
+            <!-- Step 2: Style -->
+            <div class="card" :class="{active: step===2}">
+                <div class="card-title"><span>2</span>Product Style</div>
+                <select class="custom-select" v-model="selectedProduct" @change="onProductChange">
+                    <option value="">— Select Product —</option>
+                    <option v-for="p in products" :key="p" :value="p">{{p}}</option>
+                </select>
             </div>
-        </section>
 
-        <!-- ── FEATURES ── -->
-        <section class="yd-features-section" id="yd-features">
-            <div class="yd-features-inner">
+            <!-- Step 3: Size & Qty -->
+            <div class="card" :class="{active: step===3}" v-if="selectedProduct">
+                <div class="card-title"><span>3</span>Size &amp; Quantity</div>
+
+                <div style="margin-bottom:12px;">
+                    <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">XS — L</div>
+                    <div class="sizes-grid" style="grid-template-columns: repeat(5,1fr);">
+                        <div class="size-cell" v-for="s in sizes.slice(0,5)" :key="s">
+                            <div class="size-label">{{s}}</div>
+                            <input type="number" class="qty-input" min="0" v-model.number="quantities[s]"
+                                @input="onQtyChange" />
+                        </div>
+                    </div>
+                </div>
                 <div>
-                    <div class="yd-section-label">// What's Included</div>
-                    <h2 class="yd-section-title yd-fade-up">EVERYTHING YOUR<br>ADMIN NEEDS</h2>
-                    <p class="yd-section-sub yd-fade-up">Your Yoode merch page comes fully managed zero operational
-                        load on your team.</p>
-
-                    <div class="yd-features-list yd-fade-up">
-                        <div class="yd-feature-item">
-                            <div class="yd-feature-icon">🔍</div>
-                            <div class="yd-feature-text">
-                                <h4>Background Verification on Every Order</h4>
-                                <p>Each order is run through our verification process before production confirming the
-                                    genuineness of the order and the identity of the member placing it.</p>
-                            </div>
-                        </div>
-                        <div class="yd-feature-item">
-                            <div class="yd-feature-icon">💰</div>
-                            <div class="yd-feature-text">
-                                <h4>Special Member Pricing</h4>
-                                <p>Members enjoy prices set exclusively for your organisation significantly lower than
-                                    standard retail, available only to those ordering through your organisation's
-                                    registered page.</p>
-                            </div>
-                        </div>
-                        <div class="yd-feature-item">
-                            <div class="yd-feature-icon">🎽</div>
-                            <div class="yd-feature-text">
-                                <h4>Logo Products &amp; Event Jerseys</h4>
-                                <p>Everyday branded wear or one-time event jersey orders for your sports day or team
-                                    outing all products carry your logo, printed to quality you'll be proud of.</p>
-                            </div>
-                        </div>
-                        <div class="yd-feature-item">
-                            <div class="yd-feature-icon">🏢</div>
-                            <div class="yd-feature-text">
-                                <h4>Office-Premises Delivery Only</h4>
-                                <p>All verified orders ship exclusively to your registered premises address never to a
-                                    personal home. This keeps the benefit entirely within your group.</p>
-                            </div>
-                        </div>
-                        <div class="yd-feature-item">
-                            <div class="yd-feature-icon">📦</div>
-                            <div class="yd-feature-text">
-                                <h4>Fully Managed by Yoode</h4>
-                                <p>Verification, printing, quality checks, and delivery are all handled by us. Your
-                                    admin sets it up once Yoode does the rest.</p>
-                            </div>
+                    <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">XL — 4XL</div>
+                    <div class="sizes-grid" style="grid-template-columns: repeat(5,1fr);">
+                        <div class="size-cell" v-for="s in sizes.slice(5)" :key="s">
+                            <div class="size-label">{{s}}</div>
+                            <input type="number" class="qty-input" min="0" v-model.number="quantities[s]"
+                                @input="onQtyChange" />
                         </div>
                     </div>
                 </div>
 
-                <!-- Trust panel replaces delivery tracker -->
-                <div class="yd-fade-up yd-d1">
-                    <div class="yd-trust-panel">
-                        <div class="yd-trust-title">// How We Keep It Genuine</div>
-                        <div class="yd-trust-heading">SECURE BY<br>DESIGN.</div>
+                <div class="total-qty" style="margin-top:18px;">Total Qty: <strong>{{totalQty}}</strong></div>
 
-                        <div class="yd-trust-item">
-                            <div class="yd-trust-icon green">✅</div>
-                            <div>
-                                <h5>Genuine Orders Only</h5>
-                                <p>Every order placed on your organisation's page is screened through our background
-                                    verification so only legitimate member orders move to production.</p>
-                            </div>
+                <div class="warning" v-if="pricePerItem === 0 && totalQty > 0">
+                    No pricing found for this product + quantity combination.
+                </div>
+            </div>
+
+            <!-- Step 4: Add-ons -->
+            <div class="card" :class="{active: step===4}" v-if="totalQty > 0">
+                <div class="card-title"><span>4</span>Add-ons / Decoration</div>
+
+                <div class="addons-section">
+                    <div class="addon-location" v-for="loc in addonLocations" :key="loc.name">
+                        <div class="addon-loc-header">
+                            {{loc.name}}
                         </div>
-                        <div class="yd-trust-item">
-                            <div class="yd-trust-icon orange">🔍</div>
-                            <div>
-                                <h5>Background Order Verification</h5>
-                                <p>Every order placed is verified through our background process before it moves to
-                                    production confirming member identity and order legitimacy.</p>
-                            </div>
-                        </div>
-                        <div class="yd-trust-item">
-                            <div class="yd-trust-icon gold">🏢</div>
-                            <div>
-                                <h5>Office-Only Delivery Address</h5>
-                                <p>Orders can only be delivered to the organisation's registered premises. No personal
-                                    addresses are accepted ever.</p>
-                            </div>
-                        </div>
-                        <div class="yd-trust-item">
-                            <div class="yd-trust-icon blue">✅</div>
-                            <div>
-                                <h5>Organisation-Approved Enrollment</h5>
-                                <p>Only members approved by your organisation admin are enrolled. You stay in full
-                                    control of who can order from your page.</p>
+                        <div class="addon-rows">
+                            <div v-for="addon in loc.addons" :key="addon.type" class="addon-row">
+                                <!-- Toggle + Name -->
+                                <div class="addon-type">
+                                    <div class="toggle-wrap" @click="toggleAddon(loc.name, addon.type)">
+                                        <div class="toggle" :class="{on: isAddonEnabled(loc.name, addon.type)}"></div>
+                                    </div>
+                                    <span>{{addon.type}}</span>
+                                </div>
+
+                                <!-- Setup Charge -->
+                                <div class="field-group">
+                                    <div class="addon-col-label">Setup Charge</div>
+                                    <div class="info-val">₹{{getSetupCharge(addon.type)}}</div>
+                                </div>
+
+                                <!-- Rate -->
+                                <div class="field-group" v-if="['DTG','DTF','Screen Print'].includes(addon.type)">
+                                    <div class="addon-col-label">Rate/cm²</div>
+                                    <div class="info-val">₹{{getRate(addon.type)}}</div>
+                                </div>
+                                <div class="field-group" v-else-if="addon.type.startsWith('Embroidery')">
+                                    <div class="addon-col-label">Rate/1k stitch</div>
+                                    <div class="info-val">₹{{getRate(addon.type)}}</div>
+                                </div>
+                                <div class="field-group" v-else>
+                                    <div class="addon-col-label">Rate/pc</div>
+                                    <div class="info-val">₹{{getRate(addon.type)}}</div>
+                                </div>
+
+                                <!-- Colours (Screen Print only) -->
+                                <div class="field-group" v-if="addon.type === 'Screen Print'">
+                                    <div class="addon-col-label">Colours</div>
+                                    <input type="number" class="num-input" min="1"
+                                        :disabled="!isAddonEnabled(loc.name, addon.type)"
+                                        v-model.number="getAddonState(loc.name, addon.type).colours" @input="recalc" />
+                                </div>
+                                <div v-else></div>
+
+                                <!-- Width -->
+                                <div class="field-group" v-if="['DTG','DTF','Screen Print'].includes(addon.type)">
+                                    <div class="addon-col-label">W (cm)</div>
+                                    <input type="number" class="num-input" min="1"
+                                        :disabled="!isAddonEnabled(loc.name, addon.type)"
+                                        v-model.number="getAddonState(loc.name, addon.type).width" @input="recalc" />
+                                </div>
+                                <div class="field-group" v-else-if="addon.type.startsWith('Embroidery')">
+                                    <div class="addon-col-label">W (cm)</div>
+                                    <input type="number" class="num-input" min="1"
+                                        :disabled="!isAddonEnabled(loc.name, addon.type)"
+                                        v-model.number="getAddonState(loc.name, addon.type).width" @input="recalc" />
+                                </div>
+                                <div v-else></div>
+
+                                <!-- Height -->
+                                <div class="field-group" v-if="['DTG','DTF','Screen Print'].includes(addon.type)">
+                                    <div class="addon-col-label">H (cm)</div>
+                                    <input type="number" class="num-input" min="1"
+                                        :disabled="!isAddonEnabled(loc.name, addon.type)"
+                                        v-model.number="getAddonState(loc.name, addon.type).height" @input="recalc" />
+                                </div>
+                                <div class="field-group" v-else-if="addon.type.startsWith('Embroidery')">
+                                    <div class="addon-col-label">H (cm)</div>
+                                    <input type="number" class="num-input" min="1"
+                                        :disabled="!isAddonEnabled(loc.name, addon.type)"
+                                        v-model.number="getAddonState(loc.name, addon.type).height" @input="recalc" />
+                                </div>
+                                <div v-else></div>
+
+                                <!-- Total per item -->
+                                <div class="field-group">
+                                    <div class="addon-col-label">Total/item</div>
+                                    <div class="info-val" style="color:var(--accent2)">₹{{fmt(getAddonTotal(loc.name,
+                                        addon.type))}}</div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
 
-        <!-- ── COMPANIES SCROLL ── -->
-        <section class="yd-companies-section">
-            <div class="yd-companies-label">Organisations already on Yoode Merch</div>
-            <div style="overflow:hidden;">
-                <div class="yd-companies-track">
-                    <div class="yd-company-pill">
-                        <div class="yd-company-dot" style="background:#4d79ff"></div>TechCorp India &nbsp;<span
-                            style="font-size:0.6rem;color:var(--yd-muted);">Corp</span>
+            <!-- Summary -->
+            <div class="card" v-if="totalQty > 0" style="border-color:var(--accent)">
+                <div class="card-title" style="color:var(--accent)">Price Summary</div>
+
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <div class="summary-label">Base Price/Item</div>
+                        <div class="summary-val">₹<small></small>{{fmt(pricePerItem)}}</div>
                     </div>
-                    <div class="yd-company-pill">
-                        <div class="yd-company-dot" style="background:#3ddc84"></div>GreenLeaf Solutions
+                    <div class="summary-item">
+                        <div class="summary-label">Total Qty</div>
+                        <div class="summary-val accent">{{totalQty}}<small> pcs</small></div>
                     </div>
-                    <div class="yd-company-pill">
-                        <div class="yd-company-dot" style="background:#ff4d1c"></div>NovaSpark Pvt Ltd
+                </div>
+
+                <div class="shipping-wrap" style="margin-bottom:20px;">
+                    <label>Shipping &amp; Other Charges (₹)</label>
+                    <input type="number" class="shipping-input" v-model.number="shippingCharges" min="0"
+                        @input="recalc" />
+                </div>
+
+                <table class="breakdown-table">
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th style="text-align:right">Per Item (₹)</th>
+                            <th style="text-align:right">Total (₹)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Base Product Price</td>
+                            <td style="text-align:right">{{fmt(pricePerItem)}}</td>
+                            <td style="text-align:right">{{fmt(pricePerItem * totalQty)}}</td>
+                        </tr>
+                        <tr v-for="row in addonBreakdown" :key="row.label">
+                            <td>{{row.label}}</td>
+                            <td style="text-align:right">{{fmt(row.perItem)}}</td>
+                            <td style="text-align:right">{{fmt(row.total)}}</td>
+                        </tr>
+                        <tr>
+                            <td>Setup Charges (total)</td>
+                            <td style="text-align:right">—</td>
+                            <td style="text-align:right">{{fmt(totalSetupCharges)}}</td>
+                        </tr>
+                        <tr>
+                            <td>Shipping &amp; Other</td>
+                            <td style="text-align:right">—</td>
+                            <td style="text-align:right">{{fmt(shippingCharges)}}</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td>Grand Total</td>
+                            <td style="text-align:right">{{fmt(finalPricePerItem)}}</td>
+                            <td style="text-align:right">{{fmt(grandTotal)}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="margin-top:20px;display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                    <div class="summary-item" style="border-color:var(--accent)">
+                        <div class="summary-label">Final Price Per Item</div>
+                        <div class="summary-val accent">₹{{fmt(finalPricePerItem)}}</div>
                     </div>
-                    <div class="yd-company-pill">
-                        <div class="yd-company-dot" style="background:#e8c96d"></div>ZenFinance Co.
-                    </div>
-                    <div class="yd-company-pill">
-                        <div class="yd-company-dot" style="background:#ff79c6"></div>Bloom Sports Club
-                    </div>
-                    <div class="yd-company-pill">
-                        <div class="yd-company-dot" style="background:#bd93f9"></div>Urban Tech Labs
-                    </div>
-                    <div class="yd-company-pill">
-                        <div class="yd-company-dot" style="background:#8be9fd"></div>AquaLogic Corp
-                    </div>
-                    <div class="yd-company-pill">
-                        <div class="yd-company-dot" style="background:#50fa7b"></div>Swift FC
-                    </div>
-                    <div class="yd-company-pill">
-                        <div class="yd-company-dot" style="background:#ffb86c"></div>Orion Athletics
-                    </div>
-                    <div class="yd-company-pill">
-                        <div class="yd-company-dot" style="background:#ff5555"></div>RedPeak Infra
-                    </div>
-                    <!-- duplicate for seamless loop -->
-                    <div class="yd-company-pill">
-                        <div class="yd-company-dot" style="background:#4d79ff"></div>TechCorp India &nbsp;<span
-                            style="font-size:0.6rem;color:var(--yd-muted);">Corp</span>
-                    </div>
-                    <div class="yd-company-pill">
-                        <div class="yd-company-dot" style="background:#3ddc84"></div>GreenLeaf Solutions
-                    </div>
-                    <div class="yd-company-pill">
-                        <div class="yd-company-dot" style="background:#ff4d1c"></div>NovaSpark Pvt Ltd
-                    </div>
-                    <div class="yd-company-pill">
-                        <div class="yd-company-dot" style="background:#e8c96d"></div>ZenFinance Co.
-                    </div>
-                    <div class="yd-company-pill">
-                        <div class="yd-company-dot" style="background:#ff79c6"></div>Bloom Sports Club
-                    </div>
-                    <div class="yd-company-pill">
-                        <div class="yd-company-dot" style="background:#bd93f9"></div>Urban Tech Labs
-                    </div>
-                    <div class="yd-company-pill">
-                        <div class="yd-company-dot" style="background:#8be9fd"></div>AquaLogic Corp
-                    </div>
-                    <div class="yd-company-pill">
-                        <div class="yd-company-dot" style="background:#50fa7b"></div>Swift FC
-                    </div>
-                    <div class="yd-company-pill">
-                        <div class="yd-company-dot" style="background:#ffb86c"></div>Orion Athletics
-                    </div>
-                    <div class="yd-company-pill">
-                        <div class="yd-company-dot" style="background:#ff5555"></div>RedPeak Infra
+                    <div class="summary-item" style="border-color:var(--accent)">
+                        <div class="summary-label">Grand Total</div>
+                        <div class="summary-val accent">₹{{fmt(grandTotal)}}</div>
                     </div>
                 </div>
             </div>
-        </section>
 
-        <!-- ── CTA / REGISTER ── -->
-        <section class="yd-cta-section" id="yd-register">
-            <div class="yd-section-label">// Get Your Organisation On Board</div>
-            <h2 class="yd-fade-up">GIVE YOUR TEAM<br><span>MERCH THEY'LL WEAR.</span></h2>
-            <p class="yd-fade-up">Register your organisation with Yoode. We'll set up your dedicated merch page, add
-                your branded products at member pricing, and run background verification on every single order so the
-                benefit stays genuine and reaches the right people.</p>
-            <div class="yd-cta-form yd-fade-up">
-                <input class="yd-cta-input" type="email" placeholder="admin@yourorganisation.com"
-                    aria-label="Organisation email">
-                <a href="#" class="yd-btn-primary">Register Your Organisation →</a>
-            </div>
-            <div class="yd-cta-note yd-fade-up">🔍 Verified orders &nbsp;·&nbsp; 🏢 Office delivery only &nbsp;·&nbsp;
-                🎽 Exclusive member pricing</div>
-        </section>
-
-        <!-- ── FOOTER ── -->
-        <footer class="yd-footer">
-            <a href="https://yoode.com" class="yd-logo">YOO<span>DE</span></a>
-            <ul class="yd-footer-links">
-                <li><a href="#">Privacy</a></li>
-                <li><a href="#">Terms</a></li>
-                <li><a href="#">Contact</a></li>
-                <li><a href="#">Organisation FAQ</a></li>
-            </ul>
-            <div class="yd-footer-copy">© 2025 Yoode. All rights reserved.</div>
-        </footer>
-
-    </div><!-- /.yd-merch-store -->
+        </div>
+    </div>
 
     <script>
-        (function () {
-            var wrapper = document.querySelector('.yd-merch-store');
+        const { createApp, reactive, ref, computed } = Vue;
 
-            // ── THEME TOGGLE ──
-            var toggleBtn = document.getElementById('ydThemeToggle');
-            var storageKey = 'yd-theme';
+        // ===== DATA =====
 
-            function applyTheme(theme) {
-                if (theme === 'light') {
-                    wrapper.classList.add('yd-light');
-                } else {
-                    wrapper.classList.remove('yd-light');
+        const PRODUCT_DATA = [
+            // [product, min, max, retail, corporate, reseller]
+            ['Men Plain Crew Neck', 1, 10, 449, 349, 249],
+            ['Men Plain Crew Neck', 11, 100, 429, 329, 249],
+            ['Men Plain Crew Neck', 101, 500, 399, 299, 249],
+            ['Men Plain Crew Neck', 501, null, 369, 269, 249],
+            ['Men Amid Crew Neck', 1, 10, 499, 399, 299],
+            ['Men Amid Crew Neck', 11, 100, 479, 379, 299],
+            ['Men Amid Crew Neck', 101, 500, 449, 349, 299],
+            ['Men Amid Crew Neck', 501, null, 419, 319, 299],
+            ['Men SoftTouch Crew Neck', 1, 10, 599, 499, 399],
+            ['Men SoftTouch Crew Neck', 11, 100, 579, 479, 399],
+            ['Men SoftTouch Crew Neck', 101, 500, 549, 449, 399],
+            ['Men SoftTouch Crew Neck', 501, null, 519, 419, 399],
+            ['Men SoftTouch Oversized', 1, 10, 699, 599, 499],
+            ['Men SoftTouch Oversized', 11, 100, 679, 579, 499],
+            ['Men SoftTouch Oversized', 101, 500, 649, 549, 499],
+            ['Men SoftTouch Oversized', 501, null, 619, 519, 499],
+            ['Men Brisk Polo', 1, 9, 549, 449, 349],
+            ['Men Brisk Polo', 11, 49, 529, 429, 349],
+            ['Men Brisk Polo', 50, 99, 499, 399, 349],
+            ['Men Brisk Polo', 100, null, 469, 369, 349],
+            ['Men Plain Polo', 1, 9, 599, 499, 399],
+            ['Men Plain Polo', 11, 49, 579, 479, 399],
+            ['Men Plain Polo', 50, 99, 549, 449, 399],
+            ['Men Plain Polo', 100, null, 519, 419, 399],
+            ['Men Performance Polo', 1, 9, 649, 549, 449],
+            ['Men Performance Polo', 11, 49, 629, 529, 449],
+            ['Men Performance Polo', 50, 99, 599, 499, 449],
+            ['Men Performance Polo', 100, null, 569, 469, 449],
+            ['Men Flexi Polo', 1, 9, 699, 599, 499],
+            ['Men Flexi Polo', 11, 49, 679, 579, 499],
+            ['Men Flexi Polo', 50, 99, 649, 549, 499],
+            ['Men Flexi Polo', 100, null, 619, 519, 499],
+            ['Men SoftTouch Polo', 1, 9, 749, 649, 549],
+            ['Men SoftTouch Polo', 11, 49, 729, 629, 549],
+            ['Men SoftTouch Polo', 50, 99, 699, 599, 549],
+            ['Men SoftTouch Polo', 100, null, 669, 569, 549],
+            ['Men Printed Collar SoftTouch Polo', 1, 9, 799, 699, 599],
+            ['Men Printed Collar SoftTouch Polo', 11, 49, 779, 679, 599],
+            ['Men Printed Collar SoftTouch Polo', 50, 99, 749, 649, 599],
+            ['Men Printed Collar SoftTouch Polo', 100, null, 719, 619, 599],
+            ['Men Cozy Hoodie', 1, 10, 499, 424, 349],
+            ['Men Cozy Hoodie', 11, 100, 449, 382, 314],
+            ['Men Cozy Hoodie', 101, 500, 399, 339, 279],
+            ['Men Cozy Hoodie', 501, null, 349, 297, 244],
+            ['Men Cozy Zipper Hoodie', 1, 10, 499, 424, 349],
+            ['Men Cozy Zipper Hoodie', 11, 100, 449, 382, 314],
+            ['Men Cozy Zipper Hoodie', 101, 500, 399, 339, 279],
+            ['Men Cozy Zipper Hoodie', 501, null, 349, 297, 244],
+            ['Men Cozy Sweatshirt', 1, 10, 499, 424, 349],
+            ['Men Cozy Sweatshirt', 11, 100, 449, 382, 314],
+            ['Men Cozy Sweatshirt', 101, 500, 399, 339, 279],
+            ['Men Cozy Sweatshirt', 501, null, 349, 297, 244],
+            ['Men Cozy Varsity Jacket', 1, 10, 499, 424, 349],
+            ['Men Cozy Varsity Jacket', 11, 100, 449, 382, 314],
+            ['Men Cozy Varsity Jacket', 101, 500, 399, 339, 279],
+            ['Men Cozy Varsity Jacket', 501, null, 349, 297, 244],
+            ['Men Cozy Joggers', 1, 10, 499, 424, 349],
+            ['Men Cozy Joggers', 11, 100, 449, 382, 314],
+            ['Men Cozy Joggers', 101, 500, 399, 339, 279],
+            ['Men Cozy Joggers', 501, null, 349, 297, 244],
+            ['Men Cozy Shorts', 1, 10, 499, 424, 349],
+            ['Men Cozy Shorts', 11, 100, 449, 382, 314],
+            ['Men Cozy Shorts', 101, 500, 399, 339, 279],
+            ['Men Cozy Shorts', 501, null, 349, 297, 244],
+            ['Women Plain Crew Neck', 1, 10, 449, 349, 249],
+            ['Women Plain Crew Neck', 11, 100, 429, 329, 249],
+            ['Women Plain Crew Neck', 101, 500, 399, 299, 249],
+            ['Women Plain Crew Neck', 501, null, 369, 269, 249],
+            ['Women Amid Crop Top', 1, 10, 499, 399, 299],
+            ['Women Amid Crop Top', 11, 100, 479, 379, 299],
+            ['Women Amid Crop Top', 101, 500, 449, 349, 299],
+            ['Women Amid Crop Top', 501, null, 419, 319, 299],
+            ['Women Amid Crew Neck', 1, 10, 699, 560, 532],
+            ['Women Amid Crew Neck', 11, 25, 629, 504, 476],
+            ['Women Amid Crew Neck', 26, 50, 615, 493, 465],
+            ['Women Amid Crew Neck', 51, 100, 594, 476, 448],
+            ['Women Amid Crew Neck', 101, null, 559, 448, 420],
+            ['Women SoftTouch Crew Neck', 1, 10, 699, 560, 532],
+            ['Women SoftTouch Crew Neck', 11, 25, 629, 504, 476],
+            ['Women SoftTouch Crew Neck', 26, 50, 615, 493, 465],
+            ['Women SoftTouch Crew Neck', 51, 100, 594, 476, 448],
+            ['Women SoftTouch Crew Neck', 101, null, 559, 448, 420],
+            ['Women SoftTouch Oversized', 1, 10, 699, 599, 499],
+            ['Women SoftTouch Oversized', 11, 100, 679, 579, 499],
+            ['Women SoftTouch Oversized', 101, 500, 649, 549, 499],
+            ['Women SoftTouch Oversized', 501, null, 619, 519, 499],
+        ];
+
+        // Data table: [style, addon, min, max, retail, corporate, reseller]
+        const RATES = [
+            // MOQ
+            ['MOQ', 'DTG', 1, null, 1, 1, 1],
+            ['MOQ', 'DTF', 1, null, 1, 1, 1],
+            ['MOQ', 'Screen Print', 1, null, 50, 50, 50],
+            ['MOQ', 'Embroidery (Standard)', 1, null, 1, 1, 1],
+            ['MOQ', 'Embroidery (Coloreel)', 1, null, 1, 1, 1],
+            // Setup Charge
+            ['Setup Charge', 'Screen Print', 1, 9, 1200, 1100, 1000],
+            ['Setup Charge', 'Screen Print', 10, 49, 500, 500, 500],
+            ['Setup Charge', 'Screen Print', 50, 99, 500, 500, 500],
+            ['Setup Charge', 'Screen Print', 100, null, 500, 500, 500],
+            ['Setup Charge', 'Embroidery (Standard)', 1, 9, 300, 250, 200],
+            ['Setup Charge', 'Embroidery (Standard)', 10, 49, 300, 250, 200],
+            ['Setup Charge', 'Embroidery (Standard)', 50, 99, 300, 250, 200],
+            ['Setup Charge', 'Embroidery (Standard)', 100, null, 300, 250, 200],
+            ['Setup Charge', 'Embroidery (Coloreel)', 1, 9, 400, 350, 300],
+            ['Setup Charge', 'Embroidery (Coloreel)', 10, 49, 400, 350, 300],
+            ['Setup Charge', 'Embroidery (Coloreel)', 50, 99, 400, 350, 300],
+            ['Setup Charge', 'Embroidery (Coloreel)', 100, null, 400, 350, 300],
+            // Rates
+            ['Rate', 'DTG', 1, 9, 1.2, 1.1, 1],
+            ['Rate', 'DTG', 10, 99, 1.2, 1.1, 1],
+            ['Rate', 'DTG', 100, 499, 1.2, 1.1, 1],
+            ['Rate', 'DTG', 500, null, 1.2, 1.1, 1],
+            ['Rate', 'DTF', 1, 10, 0.5, 0.5, 0.5],
+            ['Rate', 'DTF', 11, 100, 0.5, 0.5, 0.5],
+            ['Rate', 'DTF', 101, 500, 0.5, 0.5, 0.5],
+            ['Rate', 'DTF', 501, null, 0.5, 0.5, 0.5],
+            ['Rate', 'Screen Print', 1, 9, 4, 4, 4],
+            ['Rate', 'Screen Print', 10, 49, 4, 4, 4],
+            ['Rate', 'Screen Print', 50, 99, 4, 4, 4],
+            ['Rate', 'Screen Print', 100, null, 4, 4, 4],
+            ['Rate', 'Embroidery (Standard)', 1, 9, 5, 5, 5],
+            ['Rate', 'Embroidery (Standard)', 10, 49, 4, 4, 4],
+            ['Rate', 'Embroidery (Standard)', 50, 99, 3, 3, 3],
+            ['Rate', 'Embroidery (Standard)', 100, null, 2, 2, 2],
+            ['Rate', 'Embroidery (Coloreel)', 1, 9, 6, 6, 6],
+            ['Rate', 'Embroidery (Coloreel)', 10, 49, 5, 5, 5],
+            ['Rate', 'Embroidery (Coloreel)', 50, 99, 4, 4, 4],
+            ['Rate', 'Embroidery (Coloreel)', 100, null, 3, 3, 3],
+            ['Rate', 'Loop Label', 1, 10, 20, 18, 16],
+            ['Rate', 'Loop Label', 11, 100, 15, 13, 11],
+            ['Rate', 'Loop Label', 101, 500, 10, 8, 6],
+            ['Rate', 'Loop Label', 501, null, 5, 4, 3],
+            ['Rate', 'Hang Tag', 1, 10, 25, 23, 20],
+            ['Rate', 'Hang Tag', 11, 100, 20, 18, 16],
+            ['Rate', 'Hang Tag', 101, 500, 10, 8, 7],
+            ['Rate', 'Hang Tag', 501, null, 8, 7, 6],
+            ['Rate', 'Textile Patch', 1, 10, 25, 23, 20],
+            ['Rate', 'Textile Patch', 11, 100, 20, 18, 16],
+            ['Rate', 'Textile Patch', 101, 500, 15, 13, 11],
+            ['Rate', 'Textile Patch', 501, null, 10, 8, 6],
+        ];
+
+        // Product addons map
+        const PRODUCT_ADDONS = {
+            'Men Amid Crew Neck': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
+            'Men SoftTouch Crew Neck': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
+            'Men SoftTouch Oversized': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
+            'Men Brisk Polo': ['DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
+            'Men Plain Polo': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
+            'Men Performance Polo': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
+            'Men Flexi Polo': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
+            'Men SoftTouch Polo': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
+            'Men Printed Collar SoftTouch Polo': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
+            'Men Cozy Hoodie': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
+            'Men Cozy Zipper Hoodie': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
+            'Men Cozy Sweatshirt': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
+            'Men Cozy Varsity Jacket': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
+            'Men Cozy Joggers': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
+            'Men Cozy Shorts': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
+            'Women Plain Crew Neck': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
+            'Women Amid Crop Top': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
+            'Women Amid Crew Neck': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
+            'Women SoftTouch Crew Neck': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
+            'Women SoftTouch Oversized': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
+            'Men Plain Crew Neck': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
+        };
+
+        const LOCATIONS = ['FRONT', 'BACK', 'LEFT SLEEVE', 'RIGHT SLEEVE'];
+
+        createApp({
+            setup() {
+                const customerTypes = ['Retail', 'Corporate', 'Reseller'];
+                const customerType = ref('Retail');
+                const sizes = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'];
+
+                const products = Object.keys(PRODUCT_ADDONS);
+
+                const selectedProduct = ref('');
+                const quantities = reactive({});
+                sizes.forEach(s => quantities[s] = 0);
+
+                const shippingCharges = ref(0);
+
+                // addon state: { [locAddonKey]: { enabled, width, height, colours } }
+                const addonStates = reactive({});
+
+                const step = computed(() => {
+                    if (!selectedProduct.value) return 2;
+                    if (totalQty.value === 0) return 3;
+                    return 4;
+                });
+
+                const totalQty = computed(() => sizes.reduce((s, sz) => s + (quantities[sz] || 0), 0));
+
+                function ctIdx() {
+                    return customerType.value === 'Retail' ? 0 : customerType.value === 'Corporate' ? 1 : 2;
                 }
+
+                function lookupRate(style, addon, qty) {
+                    const ci = ctIdx();
+                    const rows = RATES.filter(r => r[0] === style && r[1] === addon);
+                    for (const r of rows) {
+                        const [, , min, max, retail, corp, res] = r;
+                        if (qty >= min && (max === null || qty <= max)) {
+                            return [retail, corp, res][ci];
+                        }
+                    }
+                    return 0;
+                }
+
+                const pricePerItem = computed(() => {
+                    if (!selectedProduct.value || totalQty.value === 0) return 0;
+                    const ci = ctIdx();
+                    const rows = PRODUCT_DATA.filter(r => r[0] === selectedProduct.value);
+                    for (const r of rows) {
+                        const [, min, max, retail, corp, res] = r;
+                        if (totalQty.value >= min && (max === null || totalQty.value <= max)) {
+                            return [retail, corp, res][ci];
+                        }
+                    }
+                    return 0;
+                });
+
+                const addonLocations = computed(() => {
+                    if (!selectedProduct.value) return [];
+                    const addons = PRODUCT_ADDONS[selectedProduct.value] || [];
+                    return LOCATIONS.map(loc => ({
+                        name: loc,
+                        addons: addons.map(type => ({ type }))
+                    }));
+                });
+
+                function addonKey(loc, type) { return `${loc}||${type}`; }
+
+                function getAddonState(loc, type) {
+                    const k = addonKey(loc, type);
+                    if (!addonStates[k]) {
+                        addonStates[k] = reactive({ enabled: false, width: 4, height: 4, colours: 1 });
+                    }
+                    return addonStates[k];
+                }
+
+                function isAddonEnabled(loc, type) {
+                    return getAddonState(loc, type).enabled;
+                }
+
+                function toggleAddon(loc, type) {
+                    const s = getAddonState(loc, type);
+                    s.enabled = !s.enabled;
+                }
+
+                function getSetupCharge(type) {
+                    return lookupRate('Setup Charge', type, totalQty.value);
+                }
+
+                function getRate(type) {
+                    return lookupRate('Rate', type, totalQty.value);
+                }
+
+                function getAddonTotal(loc, type) {
+                    const s = getAddonState(loc, type);
+                    if (!s.enabled) return 0;
+                    const qty = totalQty.value;
+                    const rate = getRate(type);
+
+                    if (type === 'DTG') {
+                        const area = (s.width || 4) * (s.height || 4);
+                        const raw = area * rate;
+                        return Math.max(80, raw);
+                    } else if (type === 'DTF') {
+                        const area = (s.width || 4) * (s.height || 4);
+                        const raw = area * rate;
+                        return Math.max(40, raw);
+                    } else if (type === 'Screen Print') {
+                        const area = (s.width || 4) * (s.height || 4);
+                        const raw = area * rate;
+                        return Math.max(20, raw);
+                    } else if (type === 'Embroidery (Standard)') {
+                        const area = (s.width || 4) * (s.height || 4);
+                        const stitches = area * 1000;
+                        const raw = (stitches / 1000) * rate;
+                        return Math.max(30, raw);
+                    } else if (type === 'Embroidery (Coloreel)') {
+                        const area = (s.width || 4) * (s.height || 4);
+                        const stitches = area * 1200;
+                        const raw = (stitches / 1000) * rate;
+                        return Math.max(40, raw);
+                    } else {
+                        // Label / patch etc: rate per piece
+                        return rate;
+                    }
+                }
+
+                const addonBreakdown = computed(() => {
+                    const rows = [];
+                    for (const loc of LOCATIONS) {
+                        for (const type of (PRODUCT_ADDONS[selectedProduct.value] || [])) {
+                            const t = getAddonTotal(loc, type);
+                            if (t > 0) {
+                                rows.push({
+                                    label: `${loc} — ${type}`,
+                                    perItem: t,
+                                    total: t * totalQty.value
+                                });
+                            }
+                        }
+                    }
+                    return rows;
+                });
+
+                const totalAddonPerItem = computed(() =>
+                    addonBreakdown.value.reduce((s, r) => s + r.perItem, 0)
+                );
+
+                const totalSetupCharges = computed(() => {
+                    let total = 0;
+                    for (const loc of LOCATIONS) {
+                        for (const type of (PRODUCT_ADDONS[selectedProduct.value] || [])) {
+                            const s = getAddonState(loc, type);
+                            if (s.enabled) {
+                                const setupCharge = getSetupCharge(type);
+                                if (type === 'Screen Print') {
+                                    total += setupCharge * (s.colours || 1);
+                                } else {
+                                    total += setupCharge;
+                                }
+                            }
+                        }
+                    }
+                    return total;
+                });
+
+                const grandTotal = computed(() => {
+                    const productTotal = pricePerItem.value * totalQty.value;
+                    const addonTotal = totalAddonPerItem.value * totalQty.value;
+                    return productTotal + addonTotal + totalSetupCharges.value + (shippingCharges.value || 0);
+                });
+
+                const finalPricePerItem = computed(() => {
+                    if (totalQty.value === 0) return 0;
+                    return grandTotal.value / totalQty.value;
+                });
+
+                function setCustomerType(ct) {
+                    customerType.value = ct;
+                }
+
+                function onProductChange() {
+                    // Reset addons
+                    Object.keys(addonStates).forEach(k => delete addonStates[k]);
+                }
+
+                function onQtyChange() { }
+                function recalc() { }
+
+                function fmt(val) {
+                    if (val === 0 || !val) return '0';
+                    return Number(val).toFixed(2).replace(/\.00$/, '');
+                }
+
+                return {
+                    customerTypes, customerType, setCustomerType,
+                    sizes, products, selectedProduct, quantities,
+                    step, totalQty, pricePerItem,
+                    addonLocations, addonStates,
+                    isAddonEnabled, toggleAddon, getAddonState,
+                    getSetupCharge, getRate, getAddonTotal,
+                    addonBreakdown, totalAddonPerItem, totalSetupCharges,
+                    shippingCharges, grandTotal, finalPricePerItem,
+                    onProductChange, onQtyChange, recalc, fmt
+                };
             }
-
-            // Restore saved preference
-            var saved = localStorage.getItem(storageKey);
-            if (saved) applyTheme(saved);
-
-            toggleBtn.addEventListener('click', function () {
-                var isLight = wrapper.classList.contains('yd-light');
-                var next = isLight ? 'dark' : 'light';
-                applyTheme(next);
-                localStorage.setItem(storageKey, next);
-            });
-
-            // ── SCROLL ANIMATIONS ──
-            // Scoped scroll animation only targets .yd-merch-store elements
-            const observer = new IntersectionObserver(function (entries) {
-                entries.forEach(function (e) {
-                    if (e.isIntersecting) {
-                        e.target.classList.add('yd-visible');
-                        observer.unobserve(e.target);
-                    }
-                });
-            }, { threshold: 0.08 });
-
-            document.querySelectorAll('.yd-merch-store .yd-fade-up').forEach(function (el) {
-                observer.observe(el);
-            });
-
-            // Smooth scroll for hero CTA → #yd-register
-            document.querySelectorAll('.yd-merch-store a[href="#yd-register"]').forEach(function (link) {
-                link.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    var target = document.getElementById('yd-register');
-                    if (target) {
-                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                });
-            });
-        })();
+        }).mount('#app');
     </script>
-
 </body>
 
 </html>
