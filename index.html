@@ -689,7 +689,7 @@
 
         .addon-row {
             display: grid;
-            grid-template-columns: 195px 1fr 110px 110px 90px 110px 130px;
+            grid-template-columns: 200px 110px 110px 90px 100px 100px 130px;
             gap: 10px;
             align-items: center;
             padding: 11px 6px;
@@ -809,6 +809,37 @@
         }
 
         .num-input:disabled {
+            opacity: .38;
+            cursor: not-allowed;
+        }
+
+        /* ─── COMPLEXITY SELECT ─────────────────────────────────── */
+        .complexity-select {
+            background: var(--surface);
+            border: 1.5px solid var(--border);
+            color: var(--text);
+            border-radius: 9px;
+            padding: 7px 24px 7px 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            outline: none;
+            width: 100%;
+            -webkit-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'%3E%3Cpath fill='%237b7fa0' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            transition: border-color .2s, box-shadow .2s;
+            cursor: pointer;
+        }
+
+        .complexity-select:focus {
+            border-color: var(--yblue);
+            box-shadow: 0 0 0 3px var(--ring);
+        }
+
+        .complexity-select:disabled {
             opacity: .38;
             cursor: not-allowed;
         }
@@ -1058,7 +1089,7 @@
         }
 
         .final-hero .f-val {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-size: 40px;
             font-weight: 800;
             color: #fff;
@@ -1254,7 +1285,8 @@
                                 <!-- Setup Charge -->
                                 <div class="field-group">
                                     <div class="col-label">Setup Charge</div>
-                                    <div class="info-val">₹{{getSetupCharge(addon.type) || '—'}}</div>
+                                    <div class="info-val">{{getSetupCharge(addon.type) > 0 ? '₹' +
+                                        getSetupCharge(addon.type) : '—'}}</div>
                                 </div>
 
                                 <!-- Rate -->
@@ -1284,7 +1316,7 @@
                                 <div class="field-group"
                                     v-if="['DTG','DTF','Screen Print'].includes(addon.type) || addon.type.startsWith('Embroidery')">
                                     <div class="col-label">W (cm)</div>
-                                    <input type="number" class="num-input" min="1"
+                                    <input type="number" class="num-input" min="0.1" step="0.1"
                                         :disabled="!isAddonEnabled(loc.name, addon.type)"
                                         v-model.number="getAddonState(loc.name, addon.type).width" />
                                 </div>
@@ -1294,9 +1326,19 @@
                                 <div class="field-group"
                                     v-if="['DTG','DTF','Screen Print'].includes(addon.type) || addon.type.startsWith('Embroidery')">
                                     <div class="col-label">H (cm)</div>
-                                    <input type="number" class="num-input" min="1"
+                                    <input type="number" class="num-input" min="0.1" step="0.1"
                                         :disabled="!isAddonEnabled(loc.name, addon.type)"
                                         v-model.number="getAddonState(loc.name, addon.type).height" />
+                                </div>
+                                <div v-else></div>
+
+                                <!-- Complexity (Embroidery only) -->
+                                <div class="field-group" v-if="addon.type.startsWith('Embroidery')">
+                                    <div class="col-label">Complexity</div>
+                                    <select class="complexity-select" :disabled="!isAddonEnabled(loc.name, addon.type)"
+                                        v-model="getAddonState(loc.name, addon.type).complexity">
+                                        <option v-for="c in complexityOptions" :key="c" :value="c">{{c}}</option>
+                                    </select>
                                 </div>
                                 <div v-else></div>
 
@@ -1398,169 +1440,185 @@
     <script>
         const { createApp, reactive, ref, computed } = Vue;
 
+        // ═══════════════════════════════════════════════════════════
+        // PRODUCT_DATA  — from Product_Data sheet (updated)
+        // [product, min, max, retail, corporate, reseller]
+        // Tiers now use 1-9 / 10-49 / 50-99 / 100+ breakpoints
+        // ═══════════════════════════════════════════════════════════
         const PRODUCT_DATA = [
-            ['Men Plain Crew Neck', 1, 10, 449, 349, 249],
-            ['Men Plain Crew Neck', 11, 100, 429, 329, 249],
-            ['Men Plain Crew Neck', 101, 500, 399, 299, 249],
-            ['Men Plain Crew Neck', 501, null, 369, 269, 249],
-            ['Men Amid Crew Neck', 1, 10, 499, 399, 299],
-            ['Men Amid Crew Neck', 11, 100, 479, 379, 299],
-            ['Men Amid Crew Neck', 101, 500, 449, 349, 299],
-            ['Men Amid Crew Neck', 501, null, 419, 319, 299],
-            ['Men SoftTouch Crew Neck', 1, 10, 599, 499, 399],
-            ['Men SoftTouch Crew Neck', 11, 100, 579, 479, 399],
-            ['Men SoftTouch Crew Neck', 101, 500, 549, 449, 399],
-            ['Men SoftTouch Crew Neck', 501, null, 519, 419, 399],
-            ['Men SoftTouch Oversized', 1, 10, 699, 599, 499],
-            ['Men SoftTouch Oversized', 11, 100, 679, 579, 499],
-            ['Men SoftTouch Oversized', 101, 500, 649, 549, 499],
-            ['Men SoftTouch Oversized', 501, null, 619, 519, 499],
+            ['Men Plain Crew Neck', 1, 9, 449, 349, 249],
+            ['Men Plain Crew Neck', 10, 49, 429, 329, 249],
+            ['Men Plain Crew Neck', 50, 99, 399, 299, 249],
+            ['Men Plain Crew Neck', 100, null, 369, 269, 249],
+            ['Men Amid Crew Neck', 1, 9, 499, 399, 299],
+            ['Men Amid Crew Neck', 10, 49, 479, 379, 299],
+            ['Men Amid Crew Neck', 50, 99, 449, 349, 299],
+            ['Men Amid Crew Neck', 100, null, 419, 319, 299],
+            ['Men SoftTouch Crew Neck', 1, 9, 599, 499, 399],
+            ['Men SoftTouch Crew Neck', 10, 49, 579, 479, 399],
+            ['Men SoftTouch Crew Neck', 50, 99, 549, 449, 399],
+            ['Men SoftTouch Crew Neck', 100, null, 519, 419, 399],
+            ['Men SoftTouch Oversized', 1, 9, 699, 599, 499],
+            ['Men SoftTouch Oversized', 10, 49, 679, 579, 499],
+            ['Men SoftTouch Oversized', 50, 99, 649, 549, 499],
+            ['Men SoftTouch Oversized', 100, null, 619, 519, 499],
             ['Men Brisk Polo', 1, 9, 549, 449, 349],
-            ['Men Brisk Polo', 11, 49, 529, 429, 349],
+            ['Men Brisk Polo', 10, 49, 529, 429, 349],
             ['Men Brisk Polo', 50, 99, 499, 399, 349],
             ['Men Brisk Polo', 100, null, 469, 369, 349],
             ['Men Plain Polo', 1, 9, 599, 499, 399],
-            ['Men Plain Polo', 11, 49, 579, 479, 399],
+            ['Men Plain Polo', 10, 49, 579, 479, 399],
             ['Men Plain Polo', 50, 99, 549, 449, 399],
             ['Men Plain Polo', 100, null, 519, 419, 399],
             ['Men Performance Polo', 1, 9, 649, 549, 449],
-            ['Men Performance Polo', 11, 49, 629, 529, 449],
+            ['Men Performance Polo', 10, 49, 629, 529, 449],
             ['Men Performance Polo', 50, 99, 599, 499, 449],
             ['Men Performance Polo', 100, null, 569, 469, 449],
             ['Men Flexi Polo', 1, 9, 699, 599, 499],
-            ['Men Flexi Polo', 11, 49, 679, 579, 499],
+            ['Men Flexi Polo', 10, 49, 679, 579, 499],
             ['Men Flexi Polo', 50, 99, 649, 549, 499],
             ['Men Flexi Polo', 100, null, 619, 519, 499],
             ['Men SoftTouch Polo', 1, 9, 749, 649, 549],
-            ['Men SoftTouch Polo', 11, 49, 729, 629, 549],
+            ['Men SoftTouch Polo', 10, 49, 729, 629, 549],
             ['Men SoftTouch Polo', 50, 99, 699, 599, 549],
             ['Men SoftTouch Polo', 100, null, 669, 569, 549],
             ['Men Printed Collar SoftTouch Polo', 1, 9, 799, 699, 599],
-            ['Men Printed Collar SoftTouch Polo', 11, 49, 779, 679, 599],
+            ['Men Printed Collar SoftTouch Polo', 10, 49, 779, 679, 599],
             ['Men Printed Collar SoftTouch Polo', 50, 99, 749, 649, 599],
             ['Men Printed Collar SoftTouch Polo', 100, null, 719, 619, 599],
-            ['Men Cozy Hoodie', 1, 10, 499, 424, 349],
-            ['Men Cozy Hoodie', 11, 100, 449, 382, 314],
-            ['Men Cozy Hoodie', 101, 500, 399, 339, 279],
-            ['Men Cozy Hoodie', 501, null, 349, 297, 244],
-            ['Men Cozy Zipper Hoodie', 1, 10, 499, 424, 349],
-            ['Men Cozy Zipper Hoodie', 11, 100, 449, 382, 314],
-            ['Men Cozy Zipper Hoodie', 101, 500, 399, 339, 279],
-            ['Men Cozy Zipper Hoodie', 501, null, 349, 297, 244],
-            ['Men Cozy Sweatshirt', 1, 10, 499, 424, 349],
-            ['Men Cozy Sweatshirt', 11, 100, 449, 382, 314],
-            ['Men Cozy Sweatshirt', 101, 500, 399, 339, 279],
-            ['Men Cozy Sweatshirt', 501, null, 349, 297, 244],
-            ['Men Cozy Varsity Jacket', 1, 10, 499, 424, 349],
-            ['Men Cozy Varsity Jacket', 11, 100, 449, 382, 314],
-            ['Men Cozy Varsity Jacket', 101, 500, 399, 339, 279],
-            ['Men Cozy Varsity Jacket', 501, null, 349, 297, 244],
-            ['Men Cozy Joggers', 1, 10, 499, 424, 349],
-            ['Men Cozy Joggers', 11, 100, 449, 382, 314],
-            ['Men Cozy Joggers', 101, 500, 399, 339, 279],
-            ['Men Cozy Joggers', 501, null, 349, 297, 244],
-            ['Men Cozy Shorts', 1, 10, 499, 424, 349],
-            ['Men Cozy Shorts', 11, 100, 449, 382, 314],
-            ['Men Cozy Shorts', 101, 500, 399, 339, 279],
-            ['Men Cozy Shorts', 501, null, 349, 297, 244],
-            ['Women Plain Crew Neck', 1, 10, 449, 349, 249],
-            ['Women Plain Crew Neck', 11, 100, 429, 329, 249],
-            ['Women Plain Crew Neck', 101, 500, 399, 299, 249],
-            ['Women Plain Crew Neck', 501, null, 369, 269, 249],
-            ['Women Amid Crop Top', 1, 10, 499, 399, 299],
-            ['Women Amid Crop Top', 11, 100, 479, 379, 299],
-            ['Women Amid Crop Top', 101, 500, 449, 349, 299],
-            ['Women Amid Crop Top', 501, null, 419, 319, 299],
-            ['Women Amid Crew Neck', 1, 10, 699, 560, 532],
-            ['Women Amid Crew Neck', 11, 25, 629, 504, 476],
-            ['Women Amid Crew Neck', 26, 50, 615, 493, 465],
-            ['Women Amid Crew Neck', 51, 100, 594, 476, 448],
-            ['Women Amid Crew Neck', 101, null, 559, 448, 420],
-            ['Women SoftTouch Crew Neck', 1, 10, 699, 560, 532],
-            ['Women SoftTouch Crew Neck', 11, 25, 629, 504, 476],
-            ['Women SoftTouch Crew Neck', 26, 50, 615, 493, 465],
-            ['Women SoftTouch Crew Neck', 51, 100, 594, 476, 448],
-            ['Women SoftTouch Crew Neck', 101, null, 559, 448, 420],
-            ['Women SoftTouch Oversized', 1, 10, 699, 599, 499],
-            ['Women SoftTouch Oversized', 11, 100, 679, 579, 499],
-            ['Women SoftTouch Oversized', 101, 500, 649, 549, 499],
-            ['Women SoftTouch Oversized', 501, null, 619, 519, 499],
+            ['Men Cozy Hoodie', 1, 9, 499, 424.15, 349.3],
+            ['Men Cozy Hoodie', 10, 49, 449, 381.65, 314.3],
+            ['Men Cozy Hoodie', 50, 99, 399, 339.15, 279.3],
+            ['Men Cozy Hoodie', 100, null, 349, 296.65, 244.3],
+            ['Men Cozy Zipper Hoodie', 1, 9, 499, 424.15, 349.3],
+            ['Men Cozy Zipper Hoodie', 10, 49, 449, 381.65, 314.3],
+            ['Men Cozy Zipper Hoodie', 50, 99, 399, 339.15, 279.3],
+            ['Men Cozy Zipper Hoodie', 100, null, 349, 296.65, 244.3],
+            ['Men Cozy Sweatshirt', 1, 9, 499, 424.15, 349.3],
+            ['Men Cozy Sweatshirt', 10, 49, 449, 381.65, 314.3],
+            ['Men Cozy Sweatshirt', 50, 99, 399, 339.15, 279.3],
+            ['Men Cozy Sweatshirt', 100, null, 349, 296.65, 244.3],
+            ['Men Cozy Varsity Jacket', 1, 9, 499, 424.15, 349.3],
+            ['Men Cozy Varsity Jacket', 10, 49, 449, 381.65, 314.3],
+            ['Men Cozy Varsity Jacket', 50, 99, 399, 339.15, 279.3],
+            ['Men Cozy Varsity Jacket', 100, null, 349, 296.65, 244.3],
+            ['Men Cozy Joggers', 1, 9, 499, 424.15, 349.3],
+            ['Men Cozy Joggers', 10, 49, 449, 381.65, 314.3],
+            ['Men Cozy Joggers', 50, 99, 399, 339.15, 279.3],
+            ['Men Cozy Joggers', 100, null, 349, 296.65, 244.3],
+            ['Men Cozy Shorts', 1, 9, 499, 424.15, 349.3],
+            ['Men Cozy Shorts', 10, 49, 449, 381.65, 314.3],
+            ['Men Cozy Shorts', 50, 99, 399, 339.15, 279.3],
+            ['Men Cozy Shorts', 100, null, 349, 296.65, 244.3],
+            ['Women Plain Crew Neck', 1, 9, 449, 349, 249],
+            ['Women Plain Crew Neck', 10, 49, 429, 329, 249],
+            ['Women Plain Crew Neck', 50, 99, 399, 299, 249],
+            ['Women Plain Crew Neck', 100, null, 369, 269, 249],
+            ['Women Amid Crop Top', 1, 9, 499, 399, 299],
+            ['Women Amid Crop Top', 10, 49, 479, 379, 299],
+            ['Women Amid Crop Top', 50, 99, 449, 349, 299],
+            ['Women Amid Crop Top', 100, null, 419, 319, 299],
+            ['Women Amid Crew Neck', 1, 9, 699, 560, 532],
+            ['Women Amid Crew Neck', 10, 49, 629, 504, 476],
+            ['Women Amid Crew Neck', 50, 99, 615, 493, 465],
+            ['Women Amid Crew Neck', 100, null, 594, 476, 448],
+            ['Women SoftTouch Crew Neck', 1, 9, 699, 560, 532],
+            ['Women SoftTouch Crew Neck', 10, 49, 629, 504, 476],
+            ['Women SoftTouch Crew Neck', 50, 99, 615, 493, 465],
+            ['Women SoftTouch Crew Neck', 100, null, 594, 476, 448],
+            ['Women SoftTouch Oversized', 1, 9, 699, 599, 499],
+            ['Women SoftTouch Oversized', 10, 49, 679, 579, 499],
+            ['Women SoftTouch Oversized', 50, 99, 649, 549, 499],
+            ['Women SoftTouch Oversized', 100, null, 619, 519, 499],
         ];
 
+        // ═══════════════════════════════════════════════════════════
+        // RATES — from Data sheet (updated)
+        // Key changes:
+        //   • Embroidery (Standard) setup: 200/100/0/0 (was 300/250/200)
+        //   • Embroidery rates now 8/6/5/4 (Standard) and 10/8/6/6 (Coloreel)
+        //   • Loop Label & Hang Tag REMOVED — only Textile Patch remains
+        //   • Textile Patch MOQ = 100
+        // [style, addon, min, max, retail, corporate, reseller]
+        // ═══════════════════════════════════════════════════════════
         const RATES = [
-            ['MOQ', 'DTG', 1, null, 1, 1, 1],
-            ['MOQ', 'DTF', 1, null, 1, 1, 1],
-            ['MOQ', 'Screen Print', 1, null, 50, 50, 50],
-            ['MOQ', 'Embroidery (Standard)', 1, null, 1, 1, 1],
-            ['MOQ', 'Embroidery (Coloreel)', 1, null, 1, 1, 1],
+            // Setup Charges
             ['Setup Charge', 'Screen Print', 1, 9, 1200, 1100, 1000],
             ['Setup Charge', 'Screen Print', 10, 49, 500, 500, 500],
             ['Setup Charge', 'Screen Print', 50, 99, 500, 500, 500],
             ['Setup Charge', 'Screen Print', 100, null, 500, 500, 500],
-            ['Setup Charge', 'Embroidery (Standard)', 1, 9, 300, 250, 200],
-            ['Setup Charge', 'Embroidery (Standard)', 10, 49, 300, 250, 200],
-            ['Setup Charge', 'Embroidery (Standard)', 50, 99, 300, 250, 200],
-            ['Setup Charge', 'Embroidery (Standard)', 100, null, 300, 250, 200],
+            ['Setup Charge', 'Embroidery (Standard)', 1, 9, 200, 200, 200],
+            ['Setup Charge', 'Embroidery (Standard)', 10, 49, 100, 100, 100],
+            ['Setup Charge', 'Embroidery (Standard)', 50, 99, 0, 0, 0],
+            ['Setup Charge', 'Embroidery (Standard)', 100, null, 0, 0, 0],
             ['Setup Charge', 'Embroidery (Coloreel)', 1, 9, 400, 350, 300],
             ['Setup Charge', 'Embroidery (Coloreel)', 10, 49, 400, 350, 300],
             ['Setup Charge', 'Embroidery (Coloreel)', 50, 99, 400, 350, 300],
             ['Setup Charge', 'Embroidery (Coloreel)', 100, null, 400, 350, 300],
+            // Rates
             ['Rate', 'DTG', 1, 9, 1.2, 1.1, 1],
-            ['Rate', 'DTG', 10, 99, 1.2, 1.1, 1],
-            ['Rate', 'DTG', 100, 499, 1.2, 1.1, 1],
-            ['Rate', 'DTG', 500, null, 1.2, 1.1, 1],
-            ['Rate', 'DTF', 1, 10, 0.5, 0.5, 0.5],
-            ['Rate', 'DTF', 11, 100, 0.5, 0.5, 0.5],
-            ['Rate', 'DTF', 101, 500, 0.5, 0.5, 0.5],
-            ['Rate', 'DTF', 501, null, 0.5, 0.5, 0.5],
+            ['Rate', 'DTG', 10, 49, 1.2, 1.1, 1],
+            ['Rate', 'DTG', 50, 99, 1.2, 1.1, 1],
+            ['Rate', 'DTG', 100, null, 1.2, 1.1, 1],
+            ['Rate', 'DTF', 1, 9, 0.5, 0.5, 0.5],
+            ['Rate', 'DTF', 10, 49, 0.5, 0.5, 0.5],
+            ['Rate', 'DTF', 50, 99, 0.5, 0.5, 0.5],
+            ['Rate', 'DTF', 100, null, 0.5, 0.5, 0.5],
             ['Rate', 'Screen Print', 1, 9, 4, 4, 4],
             ['Rate', 'Screen Print', 10, 49, 4, 4, 4],
             ['Rate', 'Screen Print', 50, 99, 4, 4, 4],
             ['Rate', 'Screen Print', 100, null, 4, 4, 4],
-            ['Rate', 'Embroidery (Standard)', 1, 9, 5, 5, 5],
-            ['Rate', 'Embroidery (Standard)', 10, 49, 4, 4, 4],
-            ['Rate', 'Embroidery (Standard)', 50, 99, 3, 3, 3],
-            ['Rate', 'Embroidery (Standard)', 100, null, 2, 2, 2],
-            ['Rate', 'Embroidery (Coloreel)', 1, 9, 6, 6, 6],
-            ['Rate', 'Embroidery (Coloreel)', 10, 49, 5, 5, 5],
-            ['Rate', 'Embroidery (Coloreel)', 50, 99, 4, 4, 4],
-            ['Rate', 'Embroidery (Coloreel)', 100, null, 3, 3, 3],
-            ['Rate', 'Loop Label', 1, 10, 20, 18, 16],
-            ['Rate', 'Loop Label', 11, 100, 15, 13, 11],
-            ['Rate', 'Loop Label', 101, 500, 10, 8, 6],
-            ['Rate', 'Loop Label', 501, null, 5, 4, 3],
-            ['Rate', 'Hang Tag', 1, 10, 25, 23, 20],
-            ['Rate', 'Hang Tag', 11, 100, 20, 18, 16],
-            ['Rate', 'Hang Tag', 101, 500, 10, 8, 7],
-            ['Rate', 'Hang Tag', 501, null, 8, 7, 6],
-            ['Rate', 'Textile Patch', 1, 10, 25, 23, 20],
-            ['Rate', 'Textile Patch', 11, 100, 20, 18, 16],
-            ['Rate', 'Textile Patch', 101, 500, 15, 13, 11],
-            ['Rate', 'Textile Patch', 501, null, 10, 8, 6],
+            ['Rate', 'Embroidery (Standard)', 1, 9, 8, 8, 8],
+            ['Rate', 'Embroidery (Standard)', 10, 49, 6, 6, 6],
+            ['Rate', 'Embroidery (Standard)', 50, 99, 5, 5, 5],
+            ['Rate', 'Embroidery (Standard)', 100, null, 4, 4, 4],
+            ['Rate', 'Embroidery (Coloreel)', 1, 9, 10, 10, 10],
+            ['Rate', 'Embroidery (Coloreel)', 10, 49, 8, 8, 8],
+            ['Rate', 'Embroidery (Coloreel)', 50, 99, 6, 6, 6],
+            ['Rate', 'Embroidery (Coloreel)', 100, null, 6, 6, 6],
+            ['Rate', 'Textile Patch', 1, 9, 25, 23, 20],
+            ['Rate', 'Textile Patch', 10, 49, 20, 18, 16],
+            ['Rate', 'Textile Patch', 50, 99, 15, 13, 11],
+            ['Rate', 'Textile Patch', 100, null, 10, 8, 6],
         ];
 
+        // ═══════════════════════════════════════════════════════════
+        // COMPLEXITY — from Data!J:K
+        // Used for Embroidery stitch count: Stitches = Area × 1000 × CoverageFactor
+        // Formula: =N*1000*VLOOKUP(Complexity, Data!J1:K5, 2, FALSE)
+        // ═══════════════════════════════════════════════════════════
+        const COMPLEXITY = {
+            'Light (text/outline)': 0.7,
+            'Medium (logo)': 0.85,
+            'Full Fill': 1.0,
+            'Patch/Badge Heavy': 1.2,
+        };
+
+        // ═══════════════════════════════════════════════════════════
+        // PRODUCT_ADDONS — from Product_Addon sheet (updated)
+        // Removed: Loop Label, Hang Tag
+        // Removed products: Men Plain Crew Neck, Women Plain Crew Neck (not in Product_Addon)
+        // ═══════════════════════════════════════════════════════════
         const PRODUCT_ADDONS = {
-            'Men Plain Crew Neck': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
-            'Men Amid Crew Neck': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
-            'Men SoftTouch Crew Neck': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
-            'Men SoftTouch Oversized': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
-            'Men Brisk Polo': ['DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
-            'Men Plain Polo': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
-            'Men Performance Polo': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
-            'Men Flexi Polo': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
-            'Men SoftTouch Polo': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
-            'Men Printed Collar SoftTouch Polo': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
-            'Men Cozy Hoodie': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
-            'Men Cozy Zipper Hoodie': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
-            'Men Cozy Sweatshirt': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
-            'Men Cozy Varsity Jacket': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
-            'Men Cozy Joggers': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
-            'Men Cozy Shorts': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
-            'Women Plain Crew Neck': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
-            'Women Amid Crop Top': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
-            'Women Amid Crew Neck': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
-            'Women SoftTouch Crew Neck': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
-            'Women SoftTouch Oversized': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Loop Label', 'Hang Tag', 'Textile Patch'],
+            'Men Amid Crew Neck': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Textile Patch'],
+            'Men SoftTouch Crew Neck': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Textile Patch'],
+            'Men SoftTouch Oversized': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Textile Patch'],
+            'Men Brisk Polo': ['DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Textile Patch'],
+            'Men Plain Polo': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Textile Patch'],
+            'Men Performance Polo': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Textile Patch'],
+            'Men Flexi Polo': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Textile Patch'],
+            'Men SoftTouch Polo': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Textile Patch'],
+            'Men Printed Collar SoftTouch Polo': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Textile Patch'],
+            'Men Cozy Hoodie': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Textile Patch'],
+            'Men Cozy Zipper Hoodie': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Textile Patch'],
+            'Men Cozy Sweatshirt': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Textile Patch'],
+            'Men Cozy Varsity Jacket': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Textile Patch'],
+            'Men Cozy Joggers': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Textile Patch'],
+            'Men Cozy Shorts': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Textile Patch'],
+            'Women Amid Crew Neck': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Textile Patch'],
+            'Women SoftTouch Crew Neck': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Textile Patch'],
+            'Women SoftTouch Oversized': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Textile Patch'],
+            'Women Amid Crop Top': ['DTG', 'DTF', 'Screen Print', 'Embroidery (Standard)', 'Embroidery (Coloreel)', 'Textile Patch'],
         };
 
         const LOCATIONS = ['FRONT', 'BACK', 'LEFT SLEEVE', 'RIGHT SLEEVE'];
@@ -1578,6 +1636,8 @@
                 const customerTypes = ['Retail', 'Corporate', 'Reseller'];
                 const customerType = ref('Retail');
 
+                // Sizes: Row1 = 36,38,40,42,44 | Row2 = 46,48,50,52,54
+                // totalQty = SUM(K2:O2, K5:O5) — both rows combined
                 const sizesRow1 = [36, 38, 40, 42, 44];
                 const sizesRow2 = [46, 48, 50, 52, 54];
                 const sizes = [...sizesRow1, ...sizesRow2];
@@ -1589,6 +1649,9 @@
 
                 const shippingCharges = ref(0);
                 const addonStates = reactive({});
+
+                // Complexity options from Data!J:K
+                const complexityOptions = Object.keys(COMPLEXITY);
 
                 // ── Computed ───────────────────────────────────
                 const totalQty = computed(() =>
@@ -1638,7 +1701,14 @@
                 function getAddonState(loc, type) {
                     const k = addonKey(loc, type);
                     if (!addonStates[k])
-                        addonStates[k] = reactive({ enabled: false, width: 4, height: 4, colours: 1 });
+                        addonStates[k] = reactive({
+                            enabled: false,
+                            width: 4,
+                            height: 4,
+                            colours: 1,
+                            // Default complexity = 'Light (text/outline)' (first in Data!J:K)
+                            complexity: 'Light (text/outline)'
+                        });
                     return addonStates[k];
                 }
 
@@ -1653,13 +1723,35 @@
                     if (!s.enabled) return 0;
                     const rate = getRate(type);
                     const w = s.width || 4, h = s.height || 4;
-                    const area = w * h;
-                    if (type === 'DTG') return Math.max(80, area * rate);
-                    if (type === 'DTF') return Math.max(40, area * rate);
-                    if (type === 'Screen Print') return Math.max(20, area * rate);
-                    if (type === 'Embroidery (Standard)') return Math.max(30, (area * 1000 / 1000) * rate);
-                    if (type === 'Embroidery (Coloreel)') return Math.max(40, (area * 1200 / 1000) * rate);
-                    return rate; // labels/patches flat rate
+                    const area = w * h;  // cm²
+
+                    if (type === 'DTG') {
+                        // =IF((N*F)<80, 80, (N*F))
+                        return Math.max(80, area * rate);
+                    }
+                    if (type === 'DTF') {
+                        // =IF((N*F)<40, 40, (N*F))
+                        return Math.max(40, area * rate);
+                    }
+                    if (type === 'Screen Print') {
+                        // =IF((N*F)<20, 20, (N*F))
+                        return Math.max(20, area * rate);
+                    }
+                    if (type === 'Embroidery (Standard)') {
+                        // Stitches = N*1000*VLOOKUP(Complexity, Data!J1:K5, 2, FALSE)
+                        // Total = IF(((Stitches/1000)*F)<30, 30, ((Stitches/1000)*F))
+                        const cf = COMPLEXITY[s.complexity] || 0.7;
+                        const stitches = area * 1000 * cf;
+                        return Math.max(30, (stitches / 1000) * rate);
+                    }
+                    if (type === 'Embroidery (Coloreel)') {
+                        // Same formula as Standard, min = 40
+                        const cf = COMPLEXITY[s.complexity] || 0.7;
+                        const stitches = area * 1000 * cf;
+                        return Math.max(40, (stitches / 1000) * rate);
+                    }
+                    // Textile Patch: flat rate per piece
+                    return rate;
                 }
 
                 const addonBreakdown = computed(() => {
@@ -1683,6 +1775,7 @@
                             const s = getAddonState(loc, type);
                             if (s.enabled) {
                                 const sc = getSetupCharge(type);
+                                // Screen Print: setup × colours; others: flat setup
                                 total += type === 'Screen Print' ? sc * (s.colours || 1) : sc;
                             }
                         }
@@ -1718,7 +1811,7 @@
                     sizesRow1, sizesRow2, sizes, quantities,
                     products, selectedProduct, onProductChange,
                     step, totalQty, pricePerItem,
-                    addonLocations,
+                    addonLocations, complexityOptions,
                     isAddonEnabled, toggleAddon, getAddonState,
                     getSetupCharge, getRate, getAddonTotal,
                     addonBreakdown, totalAddonPerItem, totalSetupCharges,
